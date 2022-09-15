@@ -1,21 +1,35 @@
-//
-//  ContentView.swift
-//  WeatherKitDemo
-//
-//  Created by Mark Volkmann on 9/15/22.
-//
-
 import SwiftUI
+import WeatherKit
 
 struct ContentView: View {
+    @StateObject private var locationManager = LocationManager()
+
+    let weatherService = WeatherService.shared
+    @State private var weather: Weather?
+
+    private var temperature: String {
+        guard let weather else { return "" }
+        let current = weather.currentWeather
+        print("current =", current)
+        return current.temperature.formatted()
+    }
+
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            Text("WeatherKitDemo").font(.headline)
+            Text("Temperature: \(temperature)")
         }
         .padding()
+        .task(id: locationManager.currentLocation) {
+            do {
+                if let location = locationManager.currentLocation {
+                    print("location =", location)
+                    weather = try await weatherService.weather(for: location)
+                }
+            } catch {
+                print("ContentView.body: error =", error)
+            }
+        }
     }
 }
 

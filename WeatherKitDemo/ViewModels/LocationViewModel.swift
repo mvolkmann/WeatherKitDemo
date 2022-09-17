@@ -7,6 +7,7 @@ import SwiftUI
 class LocationViewModel: NSObject, ObservableObject {
     @Published var city = ""
     @Published var location: CLLocation?
+    @Published var state = ""
 
     private let locationManager = CLLocationManager()
 
@@ -37,7 +38,10 @@ extension LocationViewModel: CLLocationManagerDelegate {
                     if let error {
                         print("LocationService: error =", error)
                     } else {
-                        self.city = placemark?.first?.locality ?? "city unknown"
+                        if let place = placemark?.first {
+                            self.city = place.locality ?? "unknown"
+                            self.state = place.administrativeArea ?? "unknown"
+                        }
                     }
                 }
         }

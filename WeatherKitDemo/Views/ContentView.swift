@@ -16,7 +16,7 @@ struct ContentView: View {
 
     @State private var summary: WeatherSummary?
 
-    @StateObject private var locationViewModel = LocationViewModel()
+    @StateObject private var locationVM = LocationViewModel()
 
     // MARK: - Properties
 
@@ -34,7 +34,7 @@ struct ContentView: View {
             Text("WeatherKitDemo").font(.largeTitle)
             if let summary {
                 Image.symbol(symbolName: summary.symbolName)
-                Text("City: \(locationViewModel.city)")
+                Text("Location: \(locationVM.city), \(locationVM.state)")
                 Text("Condition: \(summary.condition)")
                 Text("Temperature: \(formattedTemperature)")
                 Text("Winds \(summary.wind)")
@@ -60,8 +60,8 @@ struct ContentView: View {
         .padding()
 
         // Run this closure again the location is determined.
-        .task(id: locationViewModel.location) {
-            if let location = locationViewModel.location {
+        .task(id: locationVM.location) {
+            if let location = locationVM.location {
                 do {
                     summary = try await weatherService.summary(
                         for: location,

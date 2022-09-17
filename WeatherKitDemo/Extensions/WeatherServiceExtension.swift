@@ -35,7 +35,7 @@ extension WeatherService {
         return WeatherSummary(
             condition: current.condition.description,
             symbolName: current.symbolName,
-            temperature: current.temperature.formatted(),
+            temperature: current.temperature.converted(to: .fahrenheit),
             wind: wind,
             hourlyForecast: forecast,
             attributionLogoURL: logoURL,

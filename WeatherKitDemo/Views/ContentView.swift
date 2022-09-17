@@ -20,9 +20,14 @@ struct ContentView: View {
 
     // MARK: - Properties
 
-    let dateFormatter = DateFormatter()
+    private let dateFormatter = DateFormatter()
 
-    let weatherService = WeatherService.shared
+    private var formattedTemperature: String {
+        guard let temperature = summary?.temperature else { return "" }
+        return format(temperature: temperature)
+    }
+
+    private let weatherService = WeatherService.shared
 
     var body: some View {
         VStack {
@@ -30,7 +35,7 @@ struct ContentView: View {
             if let summary {
                 Image.symbol(symbolName: summary.symbolName)
                 Text("Condition: \(summary.condition)")
-                Text("Temperature: \(summary.temperature)")
+                Text("Temperature: \(formattedTemperature)")
                 Text("Winds \(summary.wind)")
                 Link(destination: summary.attributionPageURL) {
                     AsyncImage(
@@ -42,10 +47,7 @@ struct ContentView: View {
                     .frame(height: 20)
                 }
                 List {
-                    ForEach(
-                        summary.hourlyForecast,
-                        id: \.self
-                    ) { forecast in
+                    ForEach(summary.hourlyForecast, id: \.self) { forecast in
                         forecastView(forecast)
                     }
                 }
@@ -79,13 +81,18 @@ struct ContentView: View {
                 .frame(width: 100)
             Image.symbol(symbolName: forecast.symbolName, size: 30)
                 .frame(width: 40)
-            // Text(forecast.condition)
-            Text(forecast.temperature.formatted())
-                .frame(width: 60)
+            Text(format(
+                temperature: forecast.temperature.converted(to: .fahrenheit)
+            ))
+            .frame(width: 50)
             Text(forecast.wind.speed.formatted())
-                .frame(width: 60)
+                .frame(width: 70)
             Text(forecast.precipitationAmount.formatted())
                 .frame(width: 50)
         }
+    }
+
+    private func format(temperature: Measurement<UnitTemperature>) -> String {
+        String(format: "%.0f", temperature.value) + temperature.unit.symbol
     }
 }

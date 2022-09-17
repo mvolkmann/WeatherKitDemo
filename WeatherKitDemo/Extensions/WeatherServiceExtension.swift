@@ -16,9 +16,6 @@ extension WeatherService {
         colorScheme: ColorScheme
     ) async throws -> WeatherSummary {
         let weather = try await weather(for: location)
-
-        print("daily forecast =", weather.dailyForecast)
-
         let current = weather.currentWeather
 
         let wind = current.wind

@@ -7,6 +7,7 @@ struct WeatherSummary {
     let temperature: Measurement<UnitTemperature>
     let wind: String
     let hourlyForecast: [HourWeather]
-    let attributionLogoURL: URL
+    let attributionLightLogoURL: URL
+    let attributionDarkLogoURL: URL
     let attributionPageURL: URL
 }

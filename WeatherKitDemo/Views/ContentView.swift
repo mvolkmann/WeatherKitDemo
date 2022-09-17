@@ -20,6 +20,12 @@ struct ContentView: View {
 
     // MARK: - Properties
 
+    private var attributionLogoURL: URL? {
+        colorScheme == .light ?
+            summary?.attributionLightLogoURL :
+            summary?.attributionDarkLogoURL
+    }
+
     private let dateFormatter = DateFormatter()
 
     private var formattedTemperature: String {
@@ -46,10 +52,9 @@ struct ContentView: View {
                         Text("Condition: \(summary.condition)")
                         Text("Temperature: \(formattedTemperature)")
                         Text("Winds \(summary.wind)")
-                        // TODO: Why doesn't the color of this update when the colorScheme changes?
                         Link(destination: summary.attributionPageURL) {
                             AsyncImage(
-                                url: summary.attributionLogoURL,
+                                url: attributionLogoURL,
                                 content: { image in image.resizable() },
                                 placeholder: { ProgressView() }
                             )

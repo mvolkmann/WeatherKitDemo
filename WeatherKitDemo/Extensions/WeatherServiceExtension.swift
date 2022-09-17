@@ -13,7 +13,7 @@ extension WeatherService {
 
     func summary(
         for location: CLLocation,
-        colorScheme: ColorScheme
+        colorScheme _: ColorScheme
     ) async throws -> WeatherSummary {
         let weather = try await weather(for: location)
         let current = weather.currentWeather
@@ -31,8 +31,6 @@ extension WeatherService {
         }
 
         let attr = try await attribution
-        let logoURL = colorScheme == .light ?
-            attr.combinedMarkLightURL : attr.combinedMarkDarkURL
 
         return WeatherSummary(
             condition: current.condition.description,
@@ -40,7 +38,8 @@ extension WeatherService {
             temperature: current.temperature.converted(to: .fahrenheit),
             wind: "\(windSpeed) from \(windDirection)",
             hourlyForecast: futureForecast,
-            attributionLogoURL: logoURL,
+            attributionLightLogoURL: attr.combinedMarkLightURL,
+            attributionDarkLogoURL: attr.combinedMarkDarkURL,
             attributionPageURL: attr.legalPageURL
         )
     }

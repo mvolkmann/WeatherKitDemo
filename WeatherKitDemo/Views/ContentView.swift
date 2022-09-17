@@ -62,7 +62,7 @@ struct ContentView: View {
             Color("Background")
                 .ignoresSafeArea()
             VStack {
-                Text("WeatherKitDemo")
+                Text("WeatherKit Demo")
                     .font(.largeTitle)
                     .foregroundColor(.primary)
                 if let summary {

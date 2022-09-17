@@ -4,7 +4,7 @@ import SwiftUI
 // Add these keys in Info of each target that queries current location:
 // Privacy - Location When In Use Usage Description
 // Privacy - Location Always and When In Use Usage Description
-class LocationManager: NSObject, ObservableObject {
+class LocationService: NSObject, ObservableObject {
     @Published var currentLocation: CLLocation?
 
     private let locationManager = CLLocationManager()
@@ -19,7 +19,7 @@ class LocationManager: NSObject, ObservableObject {
     }
 }
 
-extension LocationManager: CLLocationManagerDelegate {
+extension LocationService: CLLocationManagerDelegate {
     func locationManager(
         _: CLLocationManager,
         didUpdateLocations locations: [CLLocation]

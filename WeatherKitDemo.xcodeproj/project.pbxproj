@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A36EDA728D68D6B00372EE1 /* WeatherKitDemo-dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 1A36EDA428D68D6B00372EE1 /* WeatherKitDemo-dark.png */; };
+		1A36EDA828D68D6B00372EE1 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 1A36EDA528D68D6B00372EE1 /* README.md */; };
+		1A36EDA928D68D6B00372EE1 /* WeatherKitDemo-light.png in Resources */ = {isa = PBXBuildFile; fileRef = 1A36EDA628D68D6B00372EE1 /* WeatherKitDemo-light.png */; };
 		1A50CC3228D381CC005B1D36 /* LocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A50CC3128D381CC005B1D36 /* LocationViewModel.swift */; };
 		1A84529228D37DA900C28047 /* WeatherKitDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A84529128D37DA900C28047 /* WeatherKitDemoApp.swift */; };
 		1A84529428D37DA900C28047 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A84529328D37DA900C28047 /* ContentView.swift */; };
@@ -19,6 +22,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1A36EDA428D68D6B00372EE1 /* WeatherKitDemo-dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WeatherKitDemo-dark.png"; sourceTree = "<group>"; };
+		1A36EDA528D68D6B00372EE1 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		1A36EDA628D68D6B00372EE1 /* WeatherKitDemo-light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WeatherKitDemo-light.png"; sourceTree = "<group>"; };
 		1A50CC3028D380C3005B1D36 /* WeatherKitDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WeatherKitDemo.entitlements; sourceTree = "<group>"; };
 		1A50CC3128D381CC005B1D36 /* LocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewModel.swift; sourceTree = "<group>"; };
 		1A84528E28D37DA900C28047 /* WeatherKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -46,6 +52,9 @@
 		1A84528528D37DA900C28047 = {
 			isa = PBXGroup;
 			children = (
+				1A36EDA528D68D6B00372EE1 /* README.md */,
+				1A36EDA428D68D6B00372EE1 /* WeatherKitDemo-dark.png */,
+				1A36EDA628D68D6B00372EE1 /* WeatherKitDemo-light.png */,
 				1A84529028D37DA900C28047 /* WeatherKitDemo */,
 				1A84528F28D37DA900C28047 /* Products */,
 			);
@@ -175,6 +184,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A84529928D37DAA00C28047 /* Preview Assets.xcassets in Resources */,
+				1A36EDA728D68D6B00372EE1 /* WeatherKitDemo-dark.png in Resources */,
+				1A36EDA828D68D6B00372EE1 /* README.md in Resources */,
+				1A36EDA928D68D6B00372EE1 /* WeatherKitDemo-light.png in Resources */,
 				1A84529628D37DAA00C28047 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

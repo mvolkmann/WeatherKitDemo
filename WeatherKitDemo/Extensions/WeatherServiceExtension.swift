@@ -23,9 +23,12 @@ extension WeatherService {
         let windDirection = wind.compassDirection
 
         let forecast = await hourlyForecast(for: location)
-        // Keep only the forecasts in the future.
-        let now = Date()
-        let futureForecast = forecast.filter { $0.date > now }
+        // Only keep forecasts in the future, not more than three days.
+        let startDate = Date()
+        let endDate = startDate.addingTimeInterval(3 * 24 * 60 * 60)
+        let futureForecast = forecast.filter {
+            startDate <= $0.date && $0.date <= endDate
+        }
 
         let attr = try await attribution
         let logoURL = colorScheme == .light ?

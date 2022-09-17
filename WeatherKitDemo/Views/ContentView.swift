@@ -30,34 +30,51 @@ struct ContentView: View {
     private let weatherService = WeatherService.shared
 
     var body: some View {
-        VStack {
-            Text("WeatherKitDemo").font(.largeTitle)
-            if let summary {
-                Image.symbol(symbolName: summary.symbolName)
-                Text("Location: \(locationVM.city), \(locationVM.state)")
-                Text("Condition: \(summary.condition)")
-                Text("Temperature: \(formattedTemperature)")
-                Text("Winds \(summary.wind)")
-                Link(destination: summary.attributionPageURL) {
-                    AsyncImage(
-                        url: summary.attributionLogoURL,
-                        content: { image in image.resizable() },
-                        placeholder: { ProgressView() }
-                    )
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: 20)
-                }
-                List {
-                    ForEach(summary.hourlyForecast, id: \.self) { forecast in
-                        forecastView(forecast)
+        ZStack {
+            Color("Background")
+                .ignoresSafeArea()
+            VStack {
+                Text("WeatherKitDemo")
+                    .font(.largeTitle)
+                    .foregroundColor(.primary)
+                if let summary {
+                    Group {
+                        Image.symbol(symbolName: summary.symbolName)
+                        Text(
+                            "Location: \(locationVM.city), \(locationVM.state)"
+                        )
+                        Text("Condition: \(summary.condition)")
+                        Text("Temperature: \(formattedTemperature)")
+                        Text("Winds \(summary.wind)")
+                        // TODO: Why doesn't the color of this update when the colorScheme changes?
+                        Link(destination: summary.attributionPageURL) {
+                            AsyncImage(
+                                url: summary.attributionLogoURL,
+                                content: { image in image.resizable() },
+                                placeholder: { ProgressView() }
+                            )
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 20)
+                        }
                     }
+                    .foregroundColor(.primary)
+                    List {
+                        ForEach(
+                            summary.hourlyForecast,
+                            id: \.self
+                        ) { forecast in
+                            forecastView(forecast)
+                        }
+                    }
+                    .listStyle(.plain)
+                    .cornerRadius(10)
+                    .padding(.top)
+                } else {
+                    ProgressView()
                 }
-                .listStyle(.plain)
-            } else {
-                ProgressView()
             }
+            .padding()
         }
-        .padding()
 
         // Run this closure again the location is determined.
         .task(id: locationVM.location) {

@@ -23,6 +23,9 @@ extension WeatherService {
         let windDirection = wind.compassDirection
 
         let forecast = await hourlyForecast(for: location)
+        // Keep only the forecasts in the future.
+        let now = Date()
+        let futureForecast = forecast.filter { $0.date > now }
 
         let attr = try await attribution
         let logoURL = colorScheme == .light ?
@@ -33,7 +36,7 @@ extension WeatherService {
             symbolName: current.symbolName,
             temperature: current.temperature.converted(to: .fahrenheit),
             wind: "\(windSpeed) from \(windDirection)",
-            hourlyForecast: forecast,
+            hourlyForecast: futureForecast,
             attributionLogoURL: logoURL,
             attributionPageURL: attr.legalPageURL
         )

@@ -21,10 +21,9 @@ extension WeatherService {
 
         let current = weather.currentWeather
 
-        let windDescription = current.wind.speed
-        let windDirection = current.wind.compassDirection
-        // let windDescription = current.wind.speed.convert(to: Unit("mi/hr"))
-        let wind = "\(windDescription) from the \(windDirection)"
+        let wind = current.wind
+        let windSpeed = wind.speed.formatted()
+        let windDirection = wind.compassDirection
 
         let forecast = await hourlyForecast(for: location)
 
@@ -36,7 +35,7 @@ extension WeatherService {
             condition: current.condition.description,
             symbolName: current.symbolName,
             temperature: current.temperature.converted(to: .fahrenheit),
-            wind: wind,
+            wind: "\(windSpeed) from \(windDirection)",
             hourlyForecast: forecast,
             attributionLogoURL: logoURL,
             attributionPageURL: attr.legalPageURL

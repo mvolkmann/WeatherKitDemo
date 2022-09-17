@@ -18,6 +18,14 @@ struct ContentView: View {
 
     @StateObject private var locationVM = LocationViewModel()
 
+    // MARK: - Constants
+
+    private let dateWidth = 95.0
+    private let symbolWidth = 30.0
+    private let temperatureWidth = 50.0
+    private let windWidth = 65.0
+    private let precipitationWidth = 45.0
+
     // MARK: - Properties
 
     private var attributionLogoURL: URL? {
@@ -31,6 +39,20 @@ struct ContentView: View {
     private var formattedTemperature: String {
         guard let temperature = summary?.temperature else { return "" }
         return format(temperature: temperature)
+    }
+
+    private var header: some View {
+        HStack(spacing: 8) {
+            Text("Day/Time").frame(width: dateWidth)
+            Text("").frame(width: symbolWidth)
+            Text("Temp").frame(width: temperatureWidth)
+            Text("Wind").frame(width: windWidth)
+            Text("Prec").frame(width: precipitationWidth)
+            Spacer()
+        }
+        .fontWeight(.bold)
+        .padding(.leading)
+        .frame(maxWidth: .infinity)
     }
 
     private let weatherService = WeatherService.shared
@@ -63,6 +85,8 @@ struct ContentView: View {
                         }
                     }
                     .foregroundColor(.primary)
+
+                    header.padding(.top)
                     List {
                         ForEach(
                             summary.hourlyForecast,
@@ -73,7 +97,6 @@ struct ContentView: View {
                     }
                     .listStyle(.plain)
                     .cornerRadius(10)
-                    .padding(.top)
                 } else {
                     ProgressView()
                 }
@@ -101,18 +124,23 @@ struct ContentView: View {
     private func forecastView(_ forecast: HourWeather) -> some View {
         HStack {
             Text(dateFormatter.string(from: forecast.date))
-                .frame(width: 100)
+                .frame(width: dateWidth)
             Image.symbol(symbolName: forecast.symbolName, size: 30)
-                .frame(width: 40)
+                .frame(width: symbolWidth)
             Text(format(
                 temperature: forecast.temperature.converted(to: .fahrenheit)
             ))
-            .frame(width: 50)
+            .frame(width: temperatureWidth)
             Text(forecast.wind.speed.formatted())
-                .frame(width: 70)
-            Text(forecast.precipitationAmount.formatted())
-                .frame(width: 50)
+                .frame(width: windWidth)
+            Text(format(precipitation: forecast.precipitationAmount))
+                .frame(width: precipitationWidth)
         }
+    }
+
+    private func format(precipitation: Measurement<UnitLength>) -> String {
+        let converted = precipitation.converted(to: .inches)
+        return String(format: "%.1f", converted.value) + converted.unit.symbol
     }
 
     private func format(temperature: Measurement<UnitTemperature>) -> String {

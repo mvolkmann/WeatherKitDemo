@@ -7,7 +7,7 @@ struct ContentView: View {
 
     @Environment(\.colorScheme) private var colorScheme
 
-    @State private var selectedTab: String = "chart"
+    @State private var selectedTab: String = "current"
     @State private var summary: WeatherSummary?
 
     @StateObject private var locationVM = LocationViewModel.shared
@@ -19,9 +19,12 @@ struct ContentView: View {
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            SummaryScreen()
-                .tabItem { Label("Summary", systemImage: "tablecells") }
-                .tag("summary")
+            CurrentScreen()
+                .tabItem { Label("Current", systemImage: "clock") }
+                .tag("current")
+            ForecastScreen()
+                .tabItem { Label("Forecast", systemImage: "tablecells") }
+                .tag("forecast")
             ChartScreen()
                 .tabItem { Label("Chart", systemImage: "chart.xyaxis.line") }
                 .tag("chart")

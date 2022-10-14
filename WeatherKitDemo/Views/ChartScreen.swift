@@ -35,63 +35,51 @@ struct ChartScreen: View {
     }
 
     var body: some View {
-        ZStack {
-            Color("Background")
-                .ignoresSafeArea()
-            VStack {
-                Text("WeatherKit Demo")
-                    .font(.largeTitle)
-                    .foregroundColor(.primary)
-                Text(
-                    "Location: \(locationVM.city), \(locationVM.state)"
-                )
+        Template {
+            if let summary = weatherVM.summary {
+                Chart {
+                    ForEach(
+                        summary.hourlyForecast.indices,
+                        id: \.self
+                    ) { index in
+                        let forecast = summary.hourlyForecast[index]
+                        let date = PlottableValue.value(
+                            "Date",
+                            forecast.date
+                        )
+                        let temperature = PlottableValue.value(
+                            "Temperature",
+                            forecast.temperature.converted(to: .fahrenheit)
+                                .value
+                        )
+                        LineMark(x: date, y: temperature)
+                            .interpolationMethod(.catmullRom)
+                        PointMark(x: date, y: temperature)
+                        AreaMark(x: date, y: temperature)
+                            .foregroundStyle(.yellow.opacity(0.2))
 
-                if let summary = weatherVM.summary {
-                    Chart {
-                        ForEach(
-                            summary.hourlyForecast.indices,
-                            id: \.self
-                        ) { index in
-                            let forecast = summary.hourlyForecast[index]
-                            let date = PlottableValue.value(
-                                "Date",
-                                forecast.date
-                            )
-                            let temperature = PlottableValue.value(
-                                "Temperature",
-                                forecast.temperature.converted(to: .fahrenheit)
-                                    .value
-                            )
-                            LineMark(x: date, y: temperature)
-                                .interpolationMethod(.catmullRom)
-                            PointMark(x: date, y: temperature)
-                            AreaMark(x: date, y: temperature)
-                                .foregroundStyle(.yellow.opacity(0.2))
-
-                            if selectedDate == forecast.date {
-                                RuleMark(x: date)
-                                    .annotation(
-                                        position: annotationPosition(index),
-                                        content: { annotation }
-                                    )
-                                    // Display a red, dashed, vertical line.
-                                    .foregroundStyle(.red)
-                                    .lineStyle(StrokeStyle(dash: [10, 5]))
-                            }
+                        if selectedDate == forecast.date {
+                            RuleMark(x: date)
+                                .annotation(
+                                    position: annotationPosition(index),
+                                    content: { annotation }
+                                )
+                                // Display a red, dashed, vertical line.
+                                .foregroundStyle(.red)
+                                .lineStyle(StrokeStyle(dash: [10, 5]))
                         }
                     }
-                    .padding(.top, 70) // leaves room for top annotation
-                    .chartYAxis {
-                        AxisMarks(position: .leading)
-                    }
-                    .chartOverlay { proxy in chartOverlay(proxy: proxy) }
-                } else {
-                    Spacer()
-                    Text("Waiting for weather forecast ...")
-                    Spacer()
                 }
+                .padding(.top, 70) // leaves room for top annotation
+                .chartYAxis {
+                    AxisMarks(position: .leading)
+                }
+                .chartOverlay { proxy in chartOverlay(proxy: proxy) }
+            } else {
+                Spacer()
+                ProgressView()
+                Spacer()
             }
-            .padding()
         }
     }
 
@@ -123,7 +111,7 @@ struct ChartScreen: View {
                             )
                             if let (date, _) = proxy.value(
                                 at: location,
-                                as: (Date, Double).self
+                                as: (Date, Double).self // date and temperature
                             ) {
                                 selectedDate = date.removeSeconds()
                             }

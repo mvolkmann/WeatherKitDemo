@@ -30,7 +30,6 @@ struct ContentView: View {
         // Run this closure again after the location is determined.
         .task(id: locationVM.location) {
             if let location = locationVM.location {
-                print("location =", location)
                 do {
                     weatherVM.summary = try await weatherService.summary(
                         for: location,

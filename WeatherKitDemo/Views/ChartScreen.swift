@@ -13,9 +13,10 @@ struct ChartScreen: View {
 
     private var annotation: some View {
         VStack {
-            if let selectedDate, let selectedTemperature {
-                Text(selectedDate.formatted())
-                Text("\(selectedTemperature)")
+            if let date = selectedDate, let fahrenheit = selectedTemperature {
+                Text(date.formatted(.dateTime.month().day()))
+                Text(date.formatted(.dateTime.hour()))
+                Text(String(format: "%.0f℉", fahrenheit))
             }
         }
         .padding(5)
@@ -78,7 +79,10 @@ struct ChartScreen: View {
                             }
                         }
                     }
-                    .padding(.top, 60) // leaves room for top annotation
+                    .padding(.top, 70) // leaves room for top annotation
+                    .chartYAxis {
+                        AxisMarks(position: .leading)
+                    }
                     .chartOverlay { proxy in chartOverlay(proxy: proxy) }
                 } else {
                     Spacer()
@@ -97,7 +101,7 @@ struct ChartScreen: View {
 
         let percent = Double(index) / Double(summary.hourlyForecast.count)
         return percent < 0.1 ? .topTrailing :
-            percent > 0.95 ? .topLeading :
+            percent >= 0.9 ? .topLeading :
             .top
     }
 
@@ -116,16 +120,19 @@ struct ChartScreen: View {
                                 x: value.location.x - origin.x,
                                 y: value.location.y - origin.y
                             )
-                            if let (date, temperature) = proxy.value(
+                            if let (date, _) = proxy.value(
                                 at: location,
                                 as: (Date, Double).self
                             ) {
                                 selectedDate = date.removeSeconds()
-                                selectedTemperature = temperature
+                                if let selectedDate {
+                                    selectedTemperature =
+                                        weatherVM
+                                            .dateToFahrenheitMap[selectedDate]
+                                }
                             }
                         }
                         .onEnded { _ in
-                            print("drag ended")
                             selectedDate = nil
                             selectedTemperature = nil
                         }

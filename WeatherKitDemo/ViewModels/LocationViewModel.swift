@@ -35,9 +35,7 @@ extension LocationViewModel: CLLocationManagerDelegate {
         // If no location is currently available, return.
 
         if let newLocation = locations.last {
-            print("LocationViewModel: newLocation =", newLocation)
             DispatchQueue.main.async { self.location = newLocation }
-            print("LocationViewModel: calling reverseGeocodeLocation")
             CLGeocoder()
                 .reverseGeocodeLocation(newLocation) { placemark, error in
                     if let error {

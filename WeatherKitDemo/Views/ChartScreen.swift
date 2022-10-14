@@ -14,7 +14,8 @@ struct ChartScreen: View {
     private var annotation: some View {
         VStack {
             if let date = selectedDate, let fahrenheit = selectedTemperature {
-                Text(date.formatted(.dateTime.month().day()))
+                // Text(date.formatted(.dateTime.month().day()))
+                Text(date.formatted(.dateTime.weekday(.wide)))
                 Text(date.formatted(.dateTime.hour()))
                 Text(String(format: "%.0f℉", fahrenheit))
             }

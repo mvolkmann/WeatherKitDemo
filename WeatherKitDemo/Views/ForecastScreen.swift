@@ -5,12 +5,12 @@ struct ForecastScreen: View {
     // MARK: - Initializer
 
     init() {
+        // Abbreviated day of week, hour AM/PM
         dateFormatter.setLocalizedDateFormatFromTemplate("EEE h:a")
     }
 
     // MARK: - State
 
-    @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
 
     // MARK: - Constants
@@ -24,12 +24,6 @@ struct ForecastScreen: View {
     // MARK: - Properties
 
     private let dateFormatter = DateFormatter()
-
-    private var formattedTemperature: String {
-        guard let temperature = weatherVM.summary?.temperature
-        else { return "" }
-        return format(temperature: temperature)
-    }
 
     private var header: some View {
         HStack(spacing: 8) {
@@ -59,10 +53,6 @@ struct ForecastScreen: View {
                 }
                 .listStyle(.plain)
                 .cornerRadius(10)
-            } else {
-                Spacer()
-                ProgressView()
-                Spacer()
             }
         }
     }
@@ -75,10 +65,8 @@ struct ForecastScreen: View {
                 .frame(width: dateWidth)
             Image.symbol(symbolName: forecast.symbolName, size: 30)
                 .frame(width: symbolWidth)
-            Text(format(
-                temperature: forecast.temperature.converted(to: .fahrenheit)
-            ))
-            .frame(width: temperatureWidth)
+            Text(format(temperature: forecast.temperature))
+                .frame(width: temperatureWidth)
             Text(forecast.wind.speed.formatted())
                 .frame(width: windWidth)
             Text(forecast.precipitation.description)
@@ -87,6 +75,7 @@ struct ForecastScreen: View {
     }
 
     private func format(temperature: Measurement<UnitTemperature>) -> String {
-        String(format: "%.0f", temperature.value) + temperature.unit.symbol
+        let fahrenheit = temperature.converted(to: .fahrenheit)
+        return String(format: "%.0f", fahrenheit.value) + fahrenheit.unit.symbol
     }
 }

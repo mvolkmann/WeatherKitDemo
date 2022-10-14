@@ -7,7 +7,7 @@ struct ContentView: View {
 
     @Environment(\.colorScheme) private var colorScheme
 
-    @State private var selectedTab: String = "current"
+    @State private var selectedTab: String = "summary"
     @State private var summary: WeatherSummary?
 
     @StateObject private var locationVM = LocationViewModel.shared

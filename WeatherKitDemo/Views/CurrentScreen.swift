@@ -6,7 +6,6 @@ struct CurrentScreen: View {
 
     @Environment(\.colorScheme) private var colorScheme
 
-    @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
 
     // MARK: - Properties
@@ -44,9 +43,6 @@ struct CurrentScreen: View {
                     }
                 }
                 .foregroundColor(.primary)
-            } else {
-                Spacer()
-                ProgressView()
             }
         }
     }

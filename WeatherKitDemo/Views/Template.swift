@@ -2,6 +2,7 @@ import SwiftUI
 
 struct Template<Content: View>: View {
     @StateObject private var locationVM = LocationViewModel.shared
+    @StateObject private var weatherVM = WeatherViewModel.shared
 
     let content: Content
 
@@ -19,7 +20,12 @@ struct Template<Content: View>: View {
                     .font(.largeTitle)
                     .foregroundColor(.primary)
                 Text("Location: \(locationVM.city), \(locationVM.state)")
-                self.content
+                if weatherVM.summary == nil {
+                    Spacer()
+                    ProgressView()
+                } else {
+                    self.content
+                }
                 Spacer()
             }
             .padding()

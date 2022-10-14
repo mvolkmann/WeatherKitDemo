@@ -75,10 +75,6 @@ struct ChartScreen: View {
                     AxisMarks(position: .leading)
                 }
                 .chartOverlay { proxy in chartOverlay(proxy: proxy) }
-            } else {
-                Spacer()
-                ProgressView()
-                Spacer()
             }
         }
     }

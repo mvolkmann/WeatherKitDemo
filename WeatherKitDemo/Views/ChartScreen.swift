@@ -6,14 +6,14 @@ struct ChartScreen: View {
     @Environment(\.colorScheme) private var colorScheme
 
     @State private var selectedDate: Date?
-    @State private var selectedTemperature: Double?
 
     @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
 
     private var annotation: some View {
         VStack {
-            if let date = selectedDate, let fahrenheit = selectedTemperature {
+            if let date = selectedDate,
+               let fahrenheit = weatherVM.dateToFahrenheitMap[date] {
                 // Text(date.formatted(.dateTime.month().day()))
                 Text(date.formatted(.dateTime.weekday(.wide)))
                 Text(date.formatted(.dateTime.hour()))
@@ -126,16 +126,10 @@ struct ChartScreen: View {
                                 as: (Date, Double).self
                             ) {
                                 selectedDate = date.removeSeconds()
-                                if let selectedDate {
-                                    selectedTemperature =
-                                        weatherVM
-                                            .dateToFahrenheitMap[selectedDate]
-                                }
                             }
                         }
                         .onEnded { _ in
                             selectedDate = nil
-                            selectedTemperature = nil
                         }
                 )
         }

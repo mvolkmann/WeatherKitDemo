@@ -31,8 +31,13 @@ struct CurrentScreen: View {
                     Image.symbol(symbolName: summary.symbolName)
                     Text("Condition: \(summary.condition)")
                     Text("Temperature: \(formattedTemperature)")
-                    // Text("Humidity: \(summary.)")
+
+                    let firstForecast = summary.hourlyForecast.first!
+                    let humidity = firstForecast.humidity * 100
+                    Text("Humidity: \(String(format: "%.0f", humidity))%")
+
                     Text("Winds \(summary.wind)")
+
                     Link(destination: summary.attributionPageURL) {
                         AsyncImage(
                             url: attributionLogoURL,

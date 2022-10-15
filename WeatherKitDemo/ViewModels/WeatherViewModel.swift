@@ -16,7 +16,7 @@ class WeatherViewModel: NSObject, ObservableObject {
             for: location,
             colorScheme: colorScheme
         )
-        // print("summary =", weatherVM.summary)
+        // print("weatherSummary =", weatherSummary)
 
         await MainActor.run {
             summary = weatherSummary

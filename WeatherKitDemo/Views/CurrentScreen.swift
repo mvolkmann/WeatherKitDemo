@@ -31,6 +31,7 @@ struct CurrentScreen: View {
                     Image.symbol(symbolName: summary.symbolName)
                     Text("Condition: \(summary.condition)")
                     Text("Temperature: \(formattedTemperature)")
+                    // Text("Humidity: \(summary.currentWeather.humidity)")
                     Text("Winds \(summary.wind)")
                     Link(destination: summary.attributionPageURL) {
                         AsyncImage(

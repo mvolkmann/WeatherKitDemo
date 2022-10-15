@@ -5,17 +5,12 @@ import WeatherKit
 struct ContentView: View {
     // MARK: - State
 
-    @Environment(\.colorScheme) private var colorScheme
-
     @State private var selectedTab: String = "summary"
-    @State private var summary: WeatherSummary?
 
     @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
 
     // MARK: - Properties
-
-    private let weatherService = WeatherService.shared
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -34,13 +29,9 @@ struct ContentView: View {
         .task(id: locationVM.location) {
             if let location = locationVM.location {
                 do {
-                    weatherVM.summary = try await weatherService.summary(
-                        for: location,
-                        colorScheme: colorScheme
-                    )
-                    // print("summary =", weatherVM.summary)
+                    try await weatherVM.load(location: location)
                 } catch {
-                    print("ContentView error:", error)
+                    print("error loading weather forecast:", error)
                 }
             }
         }

@@ -31,7 +31,7 @@ struct CurrentScreen: View {
                     Image.symbol(symbolName: summary.symbolName)
                     Text("Condition: \(summary.condition)")
                     Text("Temperature: \(formattedTemperature)")
-                    // Text("Humidity: \(summary.currentWeather.humidity)")
+                    // Text("Humidity: \(summary.)")
                     Text("Winds \(summary.wind)")
                     Link(destination: summary.attributionPageURL) {
                         AsyncImage(
@@ -45,6 +45,8 @@ struct CurrentScreen: View {
                 }
                 .foregroundColor(.primary)
             }
+
+            // TODO: Add ability to enter a new location.
         }
     }
 }

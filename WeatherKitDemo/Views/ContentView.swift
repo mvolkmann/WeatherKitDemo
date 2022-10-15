@@ -3,6 +3,8 @@ import SwiftUI
 import WeatherKit
 
 struct ContentView: View {
+    @Environment(\.colorScheme) private var colorScheme
+
     @State private var selectedTab: String = "summary"
 
     @StateObject private var locationVM = LocationViewModel.shared
@@ -25,7 +27,10 @@ struct ContentView: View {
         .task(id: locationVM.location) {
             if let location = locationVM.location {
                 do {
-                    try await weatherVM.load(location: location)
+                    try await weatherVM.load(
+                        location: location,
+                        colorScheme: colorScheme
+                    )
                 } catch {
                     print("error loading weather forecast:", error)
                 }

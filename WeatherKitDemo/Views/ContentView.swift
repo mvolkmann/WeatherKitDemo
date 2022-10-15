@@ -3,14 +3,10 @@ import SwiftUI
 import WeatherKit
 
 struct ContentView: View {
-    // MARK: - State
-
     @State private var selectedTab: String = "summary"
 
     @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
-
-    // MARK: - Properties
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -25,7 +21,7 @@ struct ContentView: View {
                 .tag("chart")
         }
 
-        // Run this closure again after the location is determined.
+        // Run this closure again every time the location changes.
         .task(id: locationVM.location) {
             if let location = locationVM.location {
                 do {

@@ -12,6 +12,10 @@ class WeatherViewModel: NSObject, ObservableObject {
     override private init() {}
 
     func load(location: CLLocation, colorScheme: ColorScheme) async throws {
+        await MainActor.run {
+            summary = nil
+        }
+
         let weatherSummary = try await WeatherService.shared.summary(
             for: location,
             colorScheme: colorScheme

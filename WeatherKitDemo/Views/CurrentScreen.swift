@@ -56,21 +56,14 @@ struct CurrentScreen: View {
                     .foregroundColor(.primary)
                 }
 
-                TextField("Location", text: $addressString)
-                    .focused($isTextFieldFocused)
-                    .padding(10)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(.white)
-                    )
-                    .padding(.top)
-
-                HStack {
-                    if !locationVM.usingCurrent {
-                        Button("Current Location") {
-                            locationVM.resetPlacemark()
-                        }
-                    }
+                HStack(alignment: .center) {
+                    TextField("Location", text: $addressString)
+                        .focused($isTextFieldFocused)
+                        .padding(10)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(.white)
+                        )
                     if isTextFieldFocused {
                         Button(action: dismissKeyboard) {
                             Image(
@@ -80,6 +73,14 @@ struct CurrentScreen: View {
                         .font(.title)
                     }
                 }
+                .padding(.top)
+
+                if !locationVM.usingCurrent {
+                    Button("Current Location") {
+                        locationVM.resetPlacemark()
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
 
                 ForEach(placemarks, id: \.self) { placemark in
                     if let city = placemark.locality {
@@ -87,6 +88,7 @@ struct CurrentScreen: View {
                         Button("\(city), \(state)") {
                             selectPlacemark(placemark)
                         }
+                        .buttonStyle(.borderedProminent)
                     }
                 }
             }

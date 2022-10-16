@@ -1,3 +1,4 @@
+import CoreLocation
 import SwiftUI
 import WeatherKit
 
@@ -5,7 +6,10 @@ struct CurrentScreen: View {
     // MARK: - State
 
     @Environment(\.colorScheme) private var colorScheme
-
+    @FocusState private var isTextFieldFocused: Bool
+    @State private var addressString = ""
+    @State private var placemarks: [CLPlacemark] = []
+    @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
 
     // MARK: - Properties
@@ -26,32 +30,81 @@ struct CurrentScreen: View {
 
     var body: some View {
         Template {
-            if let summary = weatherVM.summary {
-                VStack {
-                    Image.symbol(symbolName: summary.symbolName)
-                    Text("Condition: \(summary.condition)")
-                    Text("Temperature: \(formattedTemperature)")
+            VStack {
+                if let summary = weatherVM.summary {
+                    VStack {
+                        Image.symbol(symbolName: summary.symbolName)
+                        Text("Condition: \(summary.condition)")
+                        Text("Temperature: \(formattedTemperature)")
 
-                    let firstForecast = summary.hourlyForecast.first!
-                    let humidity = firstForecast.humidity * 100
-                    Text("Humidity: \(String(format: "%.0f", humidity))%")
+                        let firstForecast = summary.hourlyForecast.first!
+                        let humidity = firstForecast.humidity * 100
+                        Text("Humidity: \(String(format: "%.0f", humidity))%")
 
-                    Text("Winds \(summary.wind)")
+                        Text("Winds \(summary.wind)")
 
-                    Link(destination: summary.attributionPageURL) {
-                        AsyncImage(
-                            url: attributionLogoURL,
-                            content: { image in image.resizable() },
-                            placeholder: { ProgressView() }
-                        )
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: 20)
+                        Link(destination: summary.attributionPageURL) {
+                            AsyncImage(
+                                url: attributionLogoURL,
+                                content: { image in image.resizable() },
+                                placeholder: { ProgressView() }
+                            )
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 20)
+                        }
+                    }
+                    .foregroundColor(.primary)
+                }
+
+                TextField("Location", text: $addressString)
+                    .focused($isTextFieldFocused)
+                    .padding(10)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(.white)
+                    )
+                    .padding(.top)
+
+                HStack {
+                    if !locationVM.usingCurrent {
+                        Button("Current Location") {
+                            locationVM.resetPlacemark()
+                        }
+                    }
+                    if isTextFieldFocused {
+                        Button(action: dismissKeyboard) {
+                            Image(
+                                systemName: "keyboard.chevron.compact.down"
+                            )
+                        }
+                        .font(.title)
                     }
                 }
-                .foregroundColor(.primary)
+
+                ForEach(placemarks, id: \.self) { placemark in
+                    if let city = placemark.locality {
+                        let state = placemark.administrativeArea ?? "unknown"
+                        Button("\(city), \(state)") {
+                            selectPlacemark(placemark)
+                        }
+                    }
+                }
             }
 
-            // TODO: Add ability to enter a new location.
+            .onChange(of: addressString) { _ in
+                Task {
+                    placemarks = try await LocationViewModel.getPlacemarks(
+                        addressString: addressString
+                    )
+                }
+            }
         }
+    }
+
+    private func selectPlacemark(_ placemark: CLPlacemark) {
+        locationVM.selectedPlacemark = placemark
+        addressString = ""
+        placemarks = []
+        dismissKeyboard()
     }
 }

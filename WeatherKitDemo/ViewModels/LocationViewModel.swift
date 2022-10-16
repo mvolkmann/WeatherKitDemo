@@ -5,14 +5,12 @@ import SwiftUI
 // Privacy - Location When In Use Usage Description
 // Privacy - Location Always and When In Use Usage Description
 class LocationViewModel: NSObject, ObservableObject {
-    @Published var city = "unknown"
-    @Published var location: CLLocation?
-    @Published var state = "unknown"
+    // MARK: - State
 
-    private let locationManager = CLLocationManager()
+    @Published var currentPlacemark: CLPlacemark?
+    @Published var selectedPlacemark: CLPlacemark?
 
-    // This is a singleton class.
-    static let shared = LocationViewModel()
+    // MARK: - Initializer
 
     override init() {
         super.init()
@@ -22,6 +20,67 @@ class LocationViewModel: NSObject, ObservableObject {
         locationManager.startUpdatingLocation()
         locationManager.delegate = self
     }
+
+    // MARK: - Properites
+
+    static let shared = LocationViewModel()
+
+    private let locationManager = CLLocationManager()
+
+    var city: String {
+        selectedPlacemark?.locality ?? "unknown"
+    }
+
+    var state: String {
+        selectedPlacemark?.administrativeArea ?? "unknown"
+    }
+
+    var usingCurrent: Bool {
+        selectedPlacemark != nil && selectedPlacemark == currentPlacemark
+    }
+
+    // MARK: - Methods
+
+    static func getPlacemark(location: CLLocation) async throws
+        -> CLPlacemark? {
+        try await withCheckedThrowingContinuation { continuation in
+            CLGeocoder().reverseGeocodeLocation(location) { placemark, error in
+                if let error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: placemark?.first)
+                }
+            }
+        }
+    }
+
+    static func getPlacemarks(addressString: String) async throws
+        -> [CLPlacemark] {
+        try await withCheckedThrowingContinuation { continuation in
+            let geocoder = CLGeocoder()
+            print(
+                "LocationViewModel.getPlacemarks: addressString =",
+                addressString
+            )
+            geocoder.geocodeAddressString(addressString) { placemarks, error in
+                if let error {
+                    continuation.resume(throwing: error)
+                } else if let placemarks {
+                    print(
+                        "LocationViewModel.getPlacemarks: placemarks =",
+                        placemarks
+                    )
+                    continuation.resume(returning: placemarks)
+                } else {
+                    continuation.resume(throwing: "no placemarks found")
+                }
+            }
+        }
+    }
+
+    func resetPlacemark() {
+        selectedPlacemark = currentPlacemark
+    }
 }
 
 extension LocationViewModel: CLLocationManagerDelegate {
@@ -29,22 +88,18 @@ extension LocationViewModel: CLLocationManagerDelegate {
         _: CLLocationManager,
         didUpdateLocations locations: [CLLocation]
     ) {
-        // If we already have the location, return.
-        guard location == nil else { return }
+        // If we already have the placemark, return.
+        guard currentPlacemark == nil else { return }
 
-        // If no location is currently available, return.
-
-        if let newLocation = locations.last {
-            DispatchQueue.main.async { self.location = newLocation }
+        // TODO: Why last instead of first?
+        if let location = locations.last {
             CLGeocoder()
-                .reverseGeocodeLocation(newLocation) { placemark, error in
+                .reverseGeocodeLocation(location) { placemarks, error in
                     if let error {
                         print("LocationService: error =", error)
                     } else {
-                        if let place = placemark?.first {
-                            self.city = place.locality ?? "unknown"
-                            self.state = place.administrativeArea ?? "unknown"
-                        }
+                        self.currentPlacemark = placemarks?.first
+                        self.selectedPlacemark = self.currentPlacemark
                     }
                 }
         }

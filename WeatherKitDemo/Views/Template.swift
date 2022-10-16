@@ -16,10 +16,11 @@ struct Template<Content: View>: View {
             Color("Background")
                 .ignoresSafeArea()
             VStack {
-                Text("WeatherKit Demo")
+                Text("Feather Weather")
                     .font(.largeTitle)
                     .foregroundColor(.primary)
-                Text("Location: \(locationVM.city), \(locationVM.state)")
+                Text("\(locationVM.city), \(locationVM.state)")
+                    .font(.title2)
                 if weatherVM.summary == nil {
                     Spacer()
                     ProgressView()

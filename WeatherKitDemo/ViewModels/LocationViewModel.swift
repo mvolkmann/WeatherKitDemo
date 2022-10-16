@@ -57,7 +57,7 @@ extension LocationViewModel: CLLocationManagerDelegate {
                 location
             ) { [weak self] placemarks, error in
                 if let error {
-                    print("LocationService: error =", error)
+                    print("LocationViewModel: error =", error)
                 } else if let self {
                     self.currentPlacemark = placemarks?.first
                     self.selectedPlacemark = self.currentPlacemark

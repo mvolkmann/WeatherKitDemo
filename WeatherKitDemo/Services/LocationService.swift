@@ -7,7 +7,13 @@ struct LocationService {
         let city = Self.city(from: placemark)
         let state = Self.state(from: placemark)
         let country = Self.country(from: placemark)
-        return state == city ? "\(city), \(country)" : "\(city), \(state)"
+        if city == "" {
+            return state == "" ? country : "\(state), \(country)"
+        } else if city == state {
+            return "\(city), \(country)"
+        } else {
+            return "\(city), \(state)"
+        }
     }
 
     static func city(from placemark: CLPlacemark?) -> String {
@@ -35,10 +41,6 @@ struct LocationService {
         -> [CLPlacemark] {
         try await withCheckedThrowingContinuation { continuation in
             let geocoder = CLGeocoder()
-            print(
-                "LocationViewModel.getPlacemarks: addressString =",
-                addressString
-            )
             geocoder.geocodeAddressString(addressString) { placemarks, error in
                 if let error {
                     continuation.resume(throwing: error)

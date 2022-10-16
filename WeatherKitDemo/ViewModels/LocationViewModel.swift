@@ -52,8 +52,7 @@ extension LocationViewModel: CLLocationManagerDelegate {
         // If we already have the placemark, return.
         guard currentPlacemark == nil else { return }
 
-        // TODO: Why last instead of first?
-        if let location = locations.last {
+        if let location = locations.first {
             CLGeocoder()
                 .reverseGeocodeLocation(location) { placemarks, error in
                     if let error {

@@ -4,7 +4,13 @@ struct Template<Content: View>: View {
     @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
 
-    let content: Content
+    private let backgroundColor = LinearGradient(
+        gradient: Gradient(colors: [.blue, .purple]),
+        startPoint: .top,
+        endPoint: .bottom
+    )
+
+    private let content: Content
 
     // This is needed to use @ViewBuilder.
     init(@ViewBuilder content: () -> Content) {
@@ -13,7 +19,9 @@ struct Template<Content: View>: View {
 
     var body: some View {
         ZStack {
-            Color("Background")
+            Rectangle()
+                .fill(backgroundColor)
+                .opacity(0.3)
                 .ignoresSafeArea()
             VStack {
                 Text("Feather Weather")

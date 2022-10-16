@@ -43,6 +43,7 @@ struct ChartScreen: View {
     var body: some View {
         Template {
             if let summary = weatherVM.summary {
+                Text("Drag across the chart to see hourly details.")
                 Chart {
                     ForEach(
                         summary.hourlyForecast.indices,

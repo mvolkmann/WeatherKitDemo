@@ -102,7 +102,7 @@ struct CurrentScreen: View {
         }
     }
 
-    private func selectPlacemark(_ placemark: CLPlacemark) {
+    private func selectPlacemark(_ placemark: CLPlacemark?) {
         locationVM.selectedPlacemark = placemark
         addressString = ""
         placemarks = []

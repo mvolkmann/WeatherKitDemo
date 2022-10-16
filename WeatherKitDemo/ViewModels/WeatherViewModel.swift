@@ -4,7 +4,6 @@ import WeatherKit
 
 class WeatherViewModel: NSObject, ObservableObject {
     @Published var dateToFahrenheitMap: [Date: Double] = [:]
-
     @Published var summary: WeatherSummary?
 
     // This is a singleton class.

@@ -1,4 +1,5 @@
 import CoreLocation
+import CoreLocationUI // for LocationButton
 import SwiftUI
 import WeatherKit
 
@@ -31,30 +32,7 @@ struct CurrentScreen: View {
     var body: some View {
         Template {
             VStack {
-                if let summary = weatherVM.summary {
-                    VStack {
-                        Image.symbol(symbolName: summary.symbolName)
-                        Text("Condition: \(summary.condition)")
-                        Text("Temperature: \(formattedTemperature)")
-
-                        let firstForecast = summary.hourlyForecast.first!
-                        let humidity = firstForecast.humidity * 100
-                        Text("Humidity: \(String(format: "%.0f", humidity))%")
-
-                        Text("Winds \(summary.wind)")
-
-                        Link(destination: summary.attributionPageURL) {
-                            AsyncImage(
-                                url: attributionLogoURL,
-                                content: { image in image.resizable() },
-                                placeholder: { ProgressView() }
-                            )
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 20)
-                        }
-                    }
-                    .foregroundColor(.primary)
-                }
+                currentData()
 
                 HStack(alignment: .center) {
                     TextField("Location", text: $addressString)
@@ -76,10 +54,11 @@ struct CurrentScreen: View {
                 .padding(.top)
 
                 if !locationVM.usingCurrent {
-                    Button("Current Location") {
+                    LocationButton {
                         selectPlacemark(locationVM.currentPlacemark)
                     }
-                    .buttonStyle(.borderedProminent)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
                 }
 
                 ForEach(placemarks, id: \.self) { placemark in
@@ -90,6 +69,10 @@ struct CurrentScreen: View {
                     }
                     .buttonStyle(.borderedProminent)
                 }
+
+                Spacer()
+
+                attributionLink()
             }
 
             .onChange(of: addressString) { _ in
@@ -99,6 +82,44 @@ struct CurrentScreen: View {
                     )
                 }
             }
+        }
+    }
+
+    @ViewBuilder
+    private func attributionLink() -> some View {
+        if let summary = weatherVM.summary {
+            Link(destination: summary.attributionPageURL) {
+                AsyncImage(
+                    url: attributionLogoURL,
+                    content: { image in image.resizable() },
+                    placeholder: { ProgressView() }
+                )
+                .aspectRatio(contentMode: .fit)
+                .frame(height: 20)
+            }
+        } else {
+            EmptyView()
+        }
+    }
+
+    // Cannot return different kinds of views from a computed property.
+    @ViewBuilder
+    private func currentData() -> some View {
+        if let summary = weatherVM.summary {
+            VStack {
+                Image.symbol(symbolName: summary.symbolName)
+                Text("Condition: \(summary.condition)")
+                Text("Temperature: \(formattedTemperature)")
+
+                let firstForecast = summary.hourlyForecast.first!
+                let humidity = firstForecast.humidity * 100
+                Text("Humidity: \(String(format: "%.0f", humidity))%")
+
+                Text("Winds \(summary.wind)")
+            }
+            .foregroundColor(.primary)
+        } else {
+            EmptyView()
         }
     }
 

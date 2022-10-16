@@ -24,7 +24,7 @@ struct ContentView: View {
         }
 
         // Run this closure again every time the selected placemark changes.
-        .task(id: locationVM.selectedPlacemark) {
+        .task(id: locationVM.selectedPlacemark, priority: .background) {
             if let location = locationVM.selectedPlacemark?.location {
                 do {
                     try await weatherVM.load(

@@ -53,15 +53,18 @@ extension LocationViewModel: CLLocationManagerDelegate {
         guard currentPlacemark == nil else { return }
 
         if let location = locations.first {
-            CLGeocoder()
-                .reverseGeocodeLocation(location) { placemarks, error in
-                    if let error {
-                        print("LocationService: error =", error)
-                    } else {
-                        self.currentPlacemark = placemarks?.first
-                        self.selectedPlacemark = self.currentPlacemark
-                    }
+            CLGeocoder().reverseGeocodeLocation(
+                location
+            ) { [weak self] placemarks, error in
+                if let error {
+                    print("LocationService: error =", error)
+                } else if let self {
+                    self.currentPlacemark = placemarks?.first
+                    self.selectedPlacemark = self.currentPlacemark
+                    // Once we have the location, stop trying to update it.
+                    self.locationManager.stopUpdatingLocation()
                 }
+            }
         }
     }
 }

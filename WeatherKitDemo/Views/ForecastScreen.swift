@@ -2,6 +2,12 @@ import SwiftUI
 import WeatherKit
 
 struct ForecastScreen: View {
+    @Environment(
+        \.verticalSizeClass
+    ) var verticalSizeClass: UserInterfaceSizeClass?
+
+    @State private var orientation = UIDeviceOrientation.unknown
+
     // MARK: - Initializer
 
     init() {
@@ -39,22 +45,30 @@ struct ForecastScreen: View {
         .frame(maxWidth: .infinity)
     }
 
+    private var width: CGFloat {
+        verticalSizeClass == .compact ? 350 : .infinity
+    }
+
     var body: some View {
         Template {
             if let summary = weatherVM.summary {
-                header.padding(.top)
-                List {
-                    ForEach(
-                        summary.hourlyForecast,
-                        id: \.self
-                    ) { forecast in
-                        forecastView(forecast)
+                VStack {
+                    header.padding(.top)
+                    List {
+                        ForEach(
+                            summary.hourlyForecast,
+                            id: \.self
+                        ) { forecast in
+                            forecastView(forecast)
+                        }
                     }
+                    .listStyle(.plain)
+                    .cornerRadius(10)
                 }
-                .listStyle(.plain)
-                .cornerRadius(10)
+                .frame(maxWidth: width)
             }
         }
+        .onRotate { orientation = $0 }
     }
 
     // MARK: - Methods

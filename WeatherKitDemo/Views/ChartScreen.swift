@@ -10,6 +10,12 @@ struct ChartScreen: View {
     @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
 
+    private let areaColor = LinearGradient(
+        gradient: Gradient(colors: [.red, .yellow]),
+        startPoint: .top,
+        endPoint: .bottom
+    )
+
     private var annotation: some View {
         VStack {
             if let date = selectedDate,
@@ -52,11 +58,15 @@ struct ChartScreen: View {
                             forecast.temperature.converted(to: .fahrenheit)
                                 .value
                         )
+
                         LineMark(x: date, y: temperature)
                             .interpolationMethod(.catmullRom)
-                        PointMark(x: date, y: temperature)
+                            .lineStyle(StrokeStyle(lineWidth: 6))
+
+                        // PointMark(x: date, y: temperature)
+
                         AreaMark(x: date, y: temperature)
-                            .foregroundStyle(.yellow.opacity(0.2))
+                            .foregroundStyle(areaColor.opacity(1.0))
 
                         if selectedDate == forecast.date {
                             RuleMark(x: date)

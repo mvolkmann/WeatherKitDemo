@@ -28,58 +28,19 @@ class LocationViewModel: NSObject, ObservableObject {
     private let locationManager = CLLocationManager()
 
     var city: String {
-        selectedPlacemark?.locality ?? "unknown"
+        LocationService.city(from: selectedPlacemark)
+    }
+
+    var country: String {
+        LocationService.country(from: selectedPlacemark)
     }
 
     var state: String {
-        selectedPlacemark?.administrativeArea ?? "unknown"
+        LocationService.state(from: selectedPlacemark)
     }
 
     var usingCurrent: Bool {
         selectedPlacemark != nil && selectedPlacemark == currentPlacemark
-    }
-
-    // MARK: - Methods
-
-    static func getPlacemark(location: CLLocation) async throws
-        -> CLPlacemark? {
-        try await withCheckedThrowingContinuation { continuation in
-            CLGeocoder().reverseGeocodeLocation(location) { placemark, error in
-                if let error {
-                    continuation.resume(throwing: error)
-                } else {
-                    continuation.resume(returning: placemark?.first)
-                }
-            }
-        }
-    }
-
-    static func getPlacemarks(addressString: String) async throws
-        -> [CLPlacemark] {
-        try await withCheckedThrowingContinuation { continuation in
-            let geocoder = CLGeocoder()
-            print(
-                "LocationViewModel.getPlacemarks: addressString =",
-                addressString
-            )
-            geocoder.geocodeAddressString(addressString) { placemarks, error in
-                if let error {
-                    continuation.resume(throwing: error)
-                } else if let placemarks {
-                    print(
-                        "LocationViewModel.getPlacemarks: placemarks =",
-                        placemarks
-                    )
-                    continuation.resume(returning: placemarks)
-                } else {
-                    continuation.resume(throwing: "no placemarks found")
-                }
-            }
-        }
-    }
-
-    func resetPlacemark() {
-        selectedPlacemark = currentPlacemark
     }
 }
 

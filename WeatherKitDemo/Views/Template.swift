@@ -27,8 +27,12 @@ struct Template<Content: View>: View {
                 Text("Feather Weather")
                     .font(.largeTitle)
                     .foregroundColor(.primary)
-                Text("\(locationVM.city), \(locationVM.state)")
-                    .font(.title2)
+
+                Text(LocationService.description(
+                    from: locationVM.selectedPlacemark
+                ))
+                .font(.title2)
+
                 if weatherVM.summary == nil {
                     Spacer()
                     ProgressView()

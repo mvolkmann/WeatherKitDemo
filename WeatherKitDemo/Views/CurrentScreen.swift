@@ -77,26 +77,25 @@ struct CurrentScreen: View {
 
                 if !locationVM.usingCurrent {
                     Button("Current Location") {
-                        locationVM.resetPlacemark()
+                        selectPlacemark(locationVM.currentPlacemark)
                     }
                     .buttonStyle(.borderedProminent)
                 }
 
                 ForEach(placemarks, id: \.self) { placemark in
-                    if let city = placemark.locality {
-                        let state = placemark.administrativeArea ?? "unknown"
-                        Button("\(city), \(state)") {
-                            selectPlacemark(placemark)
-                        }
-                        .buttonStyle(.borderedProminent)
+                    Button(
+                        LocationService.description(from: placemark)
+                    ) {
+                        selectPlacemark(placemark)
                     }
+                    .buttonStyle(.borderedProminent)
                 }
             }
 
             .onChange(of: addressString) { _ in
                 Task {
-                    placemarks = try await LocationViewModel.getPlacemarks(
-                        addressString: addressString
+                    placemarks = try await LocationService.getPlacemarks(
+                        from: addressString
                     )
                 }
             }

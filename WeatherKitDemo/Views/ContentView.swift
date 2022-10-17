@@ -21,6 +21,9 @@ struct ContentView: View {
             ChartScreen()
                 .tabItem { Label("Chart", systemImage: "chart.xyaxis.line") }
                 .tag("chart")
+            HeatMapScreen()
+                .tabItem { Label("Heat Map", systemImage: "thermometer.sun") }
+                .tag("chart")
         }
 
         // Run this closure again every time the selected placemark changes.

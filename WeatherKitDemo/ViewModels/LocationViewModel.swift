@@ -94,11 +94,13 @@ extension LocationViewModel: CLLocationManagerDelegate {
 extension LocationViewModel: MKLocalSearchCompleterDelegate {
 
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        // Don't search for placemarks unless
+        // at least three characters have been entered.
+        guard searchQuery.count >= 3 else { return }
+
         Task {
             do {
-                let placemarks = try await loadPlacemarks(
-                    completions: completer.results
-                )
+                let placemarks = try await getPlacemarks(for: completer.results)
                 await MainActor.run { searchPlacemarks = placemarks }
             } catch {
                 print("LocationViewModel error:", error)
@@ -106,13 +108,16 @@ extension LocationViewModel: MKLocalSearchCompleterDelegate {
         }
     }
 
-    private func loadPlacemarks(
-        completions: [MKLocalSearchCompletion]
+    private func getPlacemarks(
+        for completions: [MKLocalSearchCompletion]
     ) async throws -> [CLPlacemark] {
         try await withThrowingTaskGroup(of: CLPlacemark?.self) { group in
+            // Create an array to hold the results.
             var placemarks: [CLPlacemark] = []
             placemarks.reserveCapacity(completions.count)
 
+            // Create a task for each search completion
+            // that gets the corresponding placemark.
             for completion in completions {
                 group.addTask {
                     try? await LocationService.getPlacemark(
@@ -121,12 +126,14 @@ extension LocationViewModel: MKLocalSearchCompleterDelegate {
                 }
             }
 
+            // As each task completes, gather the placemarks.
             for try await placemark in group {
                 if let placemark {
                     placemarks.append(placemark)
                 }
             }
 
+            // After all the tasks have completed, sort the placemarks.
             placemarks.sort(by: {
                 let description0 = LocationService.description(from: $0)
                 let description1 = LocationService.description(from: $1)

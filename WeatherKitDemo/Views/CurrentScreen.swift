@@ -74,16 +74,12 @@ struct CurrentScreen: View {
                     .cornerRadius(10)
                 }
 
-                if !locationVM.searchPlacemarks.isEmpty {
+                if !locationVM.searchLocations.isEmpty {
                     List {
-                        ForEach(
-                            locationVM.searchPlacemarks,
-                            id: \.self
-                        ) { placemark in
-                            Button(
-                                LocationService.description(from: placemark)
-                            ) {
-                                selectPlacemark(placemark)
+                        ForEach(locationVM.searchLocations, id: \.self) { location in
+                            Button(location) {
+                                // selectPlacemark(placemark)
+                                selectLocation(location)
                             }
                         }
                     }
@@ -133,6 +129,19 @@ struct CurrentScreen: View {
             .foregroundColor(.primary)
         } else {
             EmptyView()
+        }
+    }
+
+    private func selectLocation(_ location: String) {
+        print("CurrentScreen.selectLocation: location =", location)
+        Task {
+            do {
+                let placemark = try await LocationService.getPlacemark(from: location)
+                locationVM.select(placemark: placemark)
+                dismissKeyboard()
+            } catch {
+                print("CurrentScreen.selectLocation error:", error)
+            }
         }
     }
 

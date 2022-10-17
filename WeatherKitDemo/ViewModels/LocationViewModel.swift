@@ -9,7 +9,7 @@ import SwiftUI
 class LocationViewModel: NSObject, ObservableObject {
     // MARK: - State
 
-    @Published var searchPlacemarks: [CLPlacemark] = []
+    @Published var searchLocations: [String] = []
     @Published var currentPlacemark: CLPlacemark?
     @Published var searchQuery = ""
     @Published var selectedPlacemark: CLPlacemark?
@@ -31,6 +31,8 @@ class LocationViewModel: NSObject, ObservableObject {
 
         cancellable = $searchQuery.assign(to: \.queryFragment, on: completer)
         completer.delegate = self
+        // Does this prevent getting points of interest like restaurants?
+        completer.resultTypes = .address
     }
 
     // MARK: - Properites
@@ -62,7 +64,7 @@ class LocationViewModel: NSObject, ObservableObject {
     func select(placemark: CLPlacemark) {
         selectedPlacemark = placemark
         searchQuery = ""
-        searchPlacemarks = []
+        searchLocations = []
     }
 }
 
@@ -94,6 +96,7 @@ extension LocationViewModel: CLLocationManagerDelegate {
 extension LocationViewModel: MKLocalSearchCompleterDelegate {
 
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        /* SAVE THIS FOR AN EXAMPLE OF USING A TaskGroup!
         // Don't search for placemarks unless
         // at least three characters have been entered.
         guard searchQuery.count >= 3 else { return }
@@ -106,8 +109,16 @@ extension LocationViewModel: MKLocalSearchCompleterDelegate {
                 print("LocationViewModel error:", error)
             }
         }
+        */
+
+        var locations = completer.results.map { result in
+            result.title + ", " + result.subtitle
+        }
+        locations.sort()
+        searchLocations = locations
     }
 
+    /* SAVE THIS FOR AN EXAMPLE OF USING A TaskGroup!
     private func getPlacemarks(
         for completions: [MKLocalSearchCompletion]
     ) async throws -> [CLPlacemark] {
@@ -149,4 +160,5 @@ extension LocationViewModel: MKLocalSearchCompleterDelegate {
             return placemarks
         }
     }
+    */
 }

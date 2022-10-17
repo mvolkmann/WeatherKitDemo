@@ -27,6 +27,7 @@ struct LocationService {
     static func getPlacemark(from location: CLLocation) async throws
         -> CLPlacemark? {
         try await withCheckedThrowingContinuation { continuation in
+            // Cannot call more than 50 times per second!
             CLGeocoder().reverseGeocodeLocation(location) { placemark, error in
                 if let error {
                     continuation.resume(throwing: error)
@@ -41,6 +42,7 @@ struct LocationService {
         -> CLPlacemark {
         try await withCheckedThrowingContinuation { continuation in
             let geocoder = CLGeocoder()
+            // Cannot call more than 50 times per second!
             geocoder.geocodeAddressString(addressString) { placemarks, error in
                 if let error {
                     continuation.resume(throwing: error)

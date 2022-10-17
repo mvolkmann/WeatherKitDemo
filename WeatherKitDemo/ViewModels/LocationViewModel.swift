@@ -120,9 +120,15 @@ extension LocationViewModel: MKLocalSearchCompleterDelegate {
             // that gets the corresponding placemark.
             for completion in completions {
                 group.addTask {
-                    try? await LocationService.getPlacemark(
-                        from: completion.title
-                    )
+                    do {
+                        // Cannot make more than 50 requests per second!
+                        return try await LocationService.getPlacemark(
+                            from: completion.title
+                        )
+                    } catch {
+                        print("LocationViewModel.getPlacemarks error:", error)
+                        return nil
+                    }
                 }
             }
 

@@ -2,6 +2,14 @@ import CoreLocation
 import SwiftUI
 
 struct LocationService {
+    static func city(from placemark: CLPlacemark?) -> String {
+        placemark?.locality ?? ""
+    }
+
+    static func country(from placemark: CLPlacemark?) -> String {
+        placemark?.country ?? ""
+    }
+
     static func description(from placemark: CLPlacemark?) -> String {
         guard let placemark else { return "" }
         let city = Self.city(from: placemark)
@@ -14,14 +22,6 @@ struct LocationService {
         } else {
             return "\(city), \(state)"
         }
-    }
-
-    static func city(from placemark: CLPlacemark?) -> String {
-        placemark?.locality ?? ""
-    }
-
-    static func country(from placemark: CLPlacemark?) -> String {
-        placemark?.country ?? ""
     }
 
     static func getPlacemark(from location: CLLocation) async throws

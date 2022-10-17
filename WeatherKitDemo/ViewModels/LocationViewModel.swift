@@ -110,8 +110,8 @@ extension LocationViewModel: MKLocalSearchCompleterDelegate {
         completions: [MKLocalSearchCompletion]
     ) async throws -> [CLPlacemark] {
         try await withThrowingTaskGroup(of: CLPlacemark?.self) { group in
-            var resultPlacemarks: [CLPlacemark] = []
-            resultPlacemarks.reserveCapacity(completions.count)
+            var placemarks: [CLPlacemark] = []
+            placemarks.reserveCapacity(completions.count)
 
             for completion in completions {
                 group.addTask {
@@ -123,12 +123,17 @@ extension LocationViewModel: MKLocalSearchCompleterDelegate {
 
             for try await placemark in group {
                 if let placemark {
-                    resultPlacemarks.append(placemark)
+                    placemarks.append(placemark)
                 }
             }
 
-            resultPlacemarks.sort(by: { $0.description < $1.description })
-            return resultPlacemarks
+            placemarks.sort(by: {
+                let description0 = LocationService.description(from: $0)
+                let description1 = LocationService.description(from: $1)
+                return description0 < description1
+            })
+
+            return placemarks
         }
     }
 }

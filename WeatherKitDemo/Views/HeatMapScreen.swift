@@ -32,8 +32,27 @@ struct HeatMapScreen: View {
 
     // MARK: - Methods
 
+    private func emptyMark(day: String, hour: Int) -> some ChartContent {
+        return Plot {
+            RectangleMark(
+                x: .value("Time", "\(hour)"),
+                y: .value("Day", day),
+                width: .ratio(1),
+                height: .ratio(1)
+            )
+            .foregroundStyle(.white)
+        }
+    }
+
     private func heatMap(hourlyForecast: [HourWeather]) -> some View {
         Chart {
+            let firstDate = hourlyForecast.first?.date ?? Date()
+            let day = firstDate.dayOfWeek
+            let firstHour = firstDate.hour
+            ForEach(0 ..< firstHour, id: \.self) { hour in
+                emptyMark(day: day, hour: hour)
+            }
+
             ForEach(hourlyForecast.indices, id: \.self) { index in
                 let forecast = hourlyForecast[index]
                 mark(forecast: forecast)
@@ -81,26 +100,15 @@ struct HeatMapScreen: View {
         let fahrenheit = forecast.temperature.converted(to: .fahrenheit).value
 
         return Plot {
-            let day = date.dayOfWeek
-            let hour = date.h
             RectangleMark(
-                // This approach loses the x-axis labels.
-                /*
-                 xStart: PlottableValue.value("xStart", 0),
-                 xEnd: PlottableValue.value("xEnd", 1),
-                 yStart: PlottableValue.value("yStart", index),
-                 yEnd: PlottableValue.value("yEnd", index + 1)
-                 */
-
-                x: .value("Time", hour),
-                y: .value("Day", day),
+                x: .value("Time", "\(date.hour)"),
+                y: .value("Day", date.dayOfWeek),
                 width: .ratio(1),
                 height: .ratio(1)
             )
             .foregroundStyle(by: .value("Temperature", fahrenheit))
             .annotation(position: .overlay) {
-                // let foo = print("\(day) \(hour)")
-                Text("\(day) \(hour)")
+                Text("\(date.dayOfWeek) \(date.h)")
                     .rotationEffect(.degrees(-90))
                     .font(.body)
                     .frame(width: 100)

@@ -7,6 +7,7 @@ struct HeatMapScreen: View {
 
     private static let gradientColors: [Color] =
         [.blue, .green, .yellow, .orange, .red]
+    // The above looks better than using [.blue, .yellow, .red].
 
     private let weatherVM = WeatherViewModel.shared
 
@@ -40,7 +41,7 @@ struct HeatMapScreen: View {
                 width: .ratio(1),
                 height: .ratio(1)
             )
-            .foregroundStyle(.white)
+            .foregroundStyle(.clear)
         }
     }
 
@@ -111,7 +112,7 @@ struct HeatMapScreen: View {
                 Text("\(date.dayOfWeek) \(date.h)")
                     .rotationEffect(.degrees(-90))
                     .font(.body)
-                    .frame(width: 100)
+                    .frame(width: 90)
             }
         }
         .accessibilityLabel("\(date.md) \(date.h)")

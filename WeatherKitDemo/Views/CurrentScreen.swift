@@ -1,5 +1,6 @@
 import CoreLocation
 import CoreLocationUI // for LocationButton
+import MapKit
 import SwiftUI
 import WeatherKit
 
@@ -13,7 +14,6 @@ struct CurrentScreen: View {
 
     @FocusState private var isTextFieldFocused: Bool
 
-    @State private var addressString = ""
     @State private var placemarks: [CLPlacemark] = []
 
     @StateObject private var locationVM = LocationViewModel.shared
@@ -45,7 +45,7 @@ struct CurrentScreen: View {
                 currentData()
 
                 HStack(alignment: .center) {
-                    TextField("Location", text: $addressString)
+                    TextField("Location", text: $locationVM.searchQuery)
                         .focused($isTextFieldFocused)
                         .padding(10)
                         .background(
@@ -66,32 +66,33 @@ struct CurrentScreen: View {
 
                 if !locationVM.usingCurrent {
                     LocationButton {
-                        selectPlacemark(locationVM.currentPlacemark)
+                        if let placemark = locationVM.currentPlacemark {
+                            selectPlacemark(placemark)
+                        }
                     }
                     .foregroundColor(.white)
                     .cornerRadius(10)
                 }
 
-                ForEach(placemarks, id: \.self) { placemark in
-                    Button(
-                        LocationService.description(from: placemark)
-                    ) {
-                        selectPlacemark(placemark)
+                if locationVM.searchPlacemarks.count > 0 {
+                    List {
+                        ForEach(
+                            locationVM.searchPlacemarks,
+                            id: \.self
+                        ) { placemark in
+                            Button(
+                                LocationService.description(from: placemark)
+                            ) {
+                                selectPlacemark(placemark)
+                            }
+                        }
                     }
-                    .buttonStyle(.borderedProminent)
+                    .listStyle(.plain)
                 }
 
                 Spacer()
 
                 attributionLink()
-            }
-
-            .onChange(of: addressString) { _ in
-                Task {
-                    placemarks = try await LocationService.getPlacemarks(
-                        from: addressString
-                    )
-                }
             }
         }
     }
@@ -135,10 +136,8 @@ struct CurrentScreen: View {
         }
     }
 
-    private func selectPlacemark(_ placemark: CLPlacemark?) {
-        locationVM.selectedPlacemark = placemark
-        addressString = ""
-        placemarks = []
+    private func selectPlacemark(_ placemark: CLPlacemark) {
+        locationVM.select(placemark: placemark)
         dismissKeyboard()
     }
 }

@@ -45,10 +45,6 @@ struct LocationService {
                 if let error {
                     continuation.resume(throwing: error)
                 } else if let placemarks {
-                    print(
-                        "LocationViewModel.getPlacemarks: placemarks =",
-                        placemarks
-                    )
                     continuation.resume(returning: placemarks)
                 } else {
                     continuation.resume(throwing: "no placemarks found")

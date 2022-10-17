@@ -1,4 +1,6 @@
+import Combine // TODO: really need this?
 import CoreLocation
+import MapKit
 import SwiftUI
 
 // Add these keys in Info of each target that queries current location:
@@ -7,25 +9,36 @@ import SwiftUI
 class LocationViewModel: NSObject, ObservableObject {
     // MARK: - State
 
+    @Published var searchPlacemarks: [CLPlacemark] = []
     @Published var currentPlacemark: CLPlacemark?
+    @Published var searchQuery = ""
     @Published var selectedPlacemark: CLPlacemark?
 
     // MARK: - Initializer
 
     override init() {
+        // This must precede the call to super.init.
+        completer = MKLocalSearchCompleter()
+
         super.init()
+
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.distanceFilter = kCLDistanceFilterNone
         // locationManager.requestAlwaysAuthorization()
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
         locationManager.delegate = self
+
+        cancellable = $searchQuery.assign(to: \.queryFragment, on: completer)
+        completer.delegate = self
     }
 
     // MARK: - Properites
 
     static let shared = LocationViewModel()
 
+    private var cancellable: AnyCancellable?
+    private var completer: MKLocalSearchCompleter
     private let locationManager = CLLocationManager()
 
     var city: String {
@@ -42,6 +55,14 @@ class LocationViewModel: NSObject, ObservableObject {
 
     var usingCurrent: Bool {
         selectedPlacemark != nil && selectedPlacemark == currentPlacemark
+    }
+
+    // MARK: - Methods
+
+    func select(placemark: CLPlacemark) {
+        selectedPlacemark = placemark
+        searchQuery = ""
+        searchPlacemarks = []
     }
 }
 
@@ -69,3 +90,28 @@ extension LocationViewModel: CLLocationManagerDelegate {
         }
     }
 }
+
+extension LocationViewModel: MKLocalSearchCompleterDelegate {
+
+    @MainActor
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        let searchCompletions = completer.results
+        searchPlacemarks = []
+        Task {
+            do {
+                for completion in searchCompletions {
+                    let placemarks = try await LocationService.getPlacemarks(
+                        from: completion.title
+                    )
+                    if let placemark = placemarks.first {
+                        searchPlacemarks.append(placemark)
+                    }
+                }
+            } catch {
+                print("LocationViewModel error:", error)
+            }
+        }
+    }
+}
+
+extension MKLocalSearchCompletion: Identifiable {}

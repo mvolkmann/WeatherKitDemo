@@ -42,7 +42,9 @@ struct CurrentScreen: View {
     var body: some View {
         Template {
             VStack {
-                currentData()
+                if locationVM.searchLocations.isEmpty {
+                    currentData()
+                }
 
                 HStack(alignment: .center) {
                     TextField("Location", text: $locationVM.searchQuery)
@@ -133,7 +135,6 @@ struct CurrentScreen: View {
     }
 
     private func selectLocation(_ location: String) {
-        print("CurrentScreen.selectLocation: location =", location)
         Task {
             do {
                 let placemark = try await LocationService.getPlacemark(from: location)

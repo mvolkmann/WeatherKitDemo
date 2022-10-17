@@ -5,7 +5,7 @@ import WeatherKit
 struct ContentView: View {
     @Environment(\.colorScheme) private var colorScheme
 
-    @State private var selectedTab: String = "summary"
+    @State private var selectedTab: String = "current"
 
     @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
@@ -23,7 +23,7 @@ struct ContentView: View {
                 .tag("chart")
             HeatMapScreen()
                 .tabItem { Label("Heat Map", systemImage: "thermometer.sun") }
-                .tag("chart")
+                .tag("heatmap")
         }
 
         // Run this closure again every time the selected placemark changes.

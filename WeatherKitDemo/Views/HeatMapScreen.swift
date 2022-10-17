@@ -3,17 +3,29 @@ import SwiftUI
 import WeatherKit
 
 struct HeatMapScreen: View {
+    @State private var hourlyForecast: [HourWeather] = []
+
     private static let gradientColors: [Color] =
         [.blue, .green, .yellow, .orange, .red]
 
-    private let vm = WeatherViewModel.shared
+    private let weatherVM = WeatherViewModel.shared
 
     var body: some View {
         Template {
-            if let hourlyForecast = vm.summary?.hourlyForecast {
-                heatMap(hourlyForecast: hourlyForecast)
+            Text("Heat Map").font(.title2)
+            if !hourlyForecast.isEmpty {
+                ScrollView(.horizontal) {
+                    heatMap(hourlyForecast: hourlyForecast)
+                }
             } else {
                 Text("Forecast data is not available.")
+            }
+        }
+        // Run this closure again every time the selected placemark changes.
+        .task(id: weatherVM.summary) {
+            // .onChange(of: weatherVM.summary) { summary in
+            if let summary = weatherVM.summary {
+                hourlyForecast = summary.hourlyForecast
             }
         }
     }
@@ -28,14 +40,12 @@ struct HeatMapScreen: View {
             }
         }
 
-        .padding(.leading, 60) // leaves room for y-axis labels
-        .padding(.trailing, 20)
-
         .chartForegroundStyleScale(
             range: Gradient(colors: Self.gradientColors)
         )
 
-        // .chartYAxis(.hidden)
+        .chartXAxis(.hidden)
+        .chartYAxis(.hidden)
 
         // This changes the rectangle heights so they
         // no longer cover the entire plot area.
@@ -63,7 +73,7 @@ struct HeatMapScreen: View {
          }
           */
 
-        .frame(height: 500)
+        .frame(width: 800, height: 500)
     }
 
     private func mark(forecast: HourWeather) -> some ChartContent {
@@ -71,6 +81,8 @@ struct HeatMapScreen: View {
         let fahrenheit = forecast.temperature.converted(to: .fahrenheit).value
 
         return Plot {
+            let day = date.dayOfWeek
+            let hour = date.h
             RectangleMark(
                 // This approach loses the x-axis labels.
                 /*
@@ -80,12 +92,19 @@ struct HeatMapScreen: View {
                  yEnd: PlottableValue.value("yEnd", index + 1)
                  */
 
-                x: .value("Time", date.h),
-                y: .value("Date", date.md),
+                x: .value("Time", hour),
+                y: .value("Day", day),
                 width: .ratio(1),
                 height: .ratio(1)
             )
             .foregroundStyle(by: .value("Temperature", fahrenheit))
+            .annotation(position: .overlay) {
+                // let foo = print("\(day) \(hour)")
+                Text("\(day) \(hour)")
+                    .rotationEffect(.degrees(-90))
+                    .font(.body)
+                    .frame(width: 100)
+            }
         }
         .accessibilityLabel("\(date.md) \(date.h)")
         .accessibilityValue("\(fahrenheit)")

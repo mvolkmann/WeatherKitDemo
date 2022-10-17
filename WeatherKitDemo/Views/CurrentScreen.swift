@@ -74,7 +74,7 @@ struct CurrentScreen: View {
                     .cornerRadius(10)
                 }
 
-                if locationVM.searchPlacemarks.count > 0 {
+                if !locationVM.searchPlacemarks.isEmpty {
                     List {
                         ForEach(
                             locationVM.searchPlacemarks,

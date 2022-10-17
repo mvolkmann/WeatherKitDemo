@@ -37,15 +37,15 @@ struct LocationService {
         }
     }
 
-    static func getPlacemarks(from addressString: String) async throws
-        -> [CLPlacemark] {
+    static func getPlacemark(from addressString: String) async throws
+        -> CLPlacemark {
         try await withCheckedThrowingContinuation { continuation in
             let geocoder = CLGeocoder()
             geocoder.geocodeAddressString(addressString) { placemarks, error in
                 if let error {
                     continuation.resume(throwing: error)
-                } else if let placemarks {
-                    continuation.resume(returning: placemarks)
+                } else if let placemark = placemarks?.first {
+                    continuation.resume(returning: placemark)
                 } else {
                     continuation.resume(throwing: "no placemarks found")
                 }

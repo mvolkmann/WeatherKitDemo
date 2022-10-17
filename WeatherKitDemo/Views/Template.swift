@@ -36,6 +36,7 @@ struct Template<Content: View>: View {
                 if weatherVM.summary == nil {
                     Spacer()
                     ProgressView()
+                        .frame(width: 100, height: 100)
                 } else {
                     self.content
                 }

@@ -93,25 +93,42 @@ extension LocationViewModel: CLLocationManagerDelegate {
 
 extension LocationViewModel: MKLocalSearchCompleterDelegate {
 
-    @MainActor
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        let searchCompletions = completer.results
-        searchPlacemarks = []
         Task {
             do {
-                for completion in searchCompletions {
-                    let placemarks = try await LocationService.getPlacemarks(
-                        from: completion.title
-                    )
-                    if let placemark = placemarks.first {
-                        searchPlacemarks.append(placemark)
-                    }
-                }
+                let placemarks = try await loadPlacemarks(
+                    completions: completer.results
+                )
+                await MainActor.run { searchPlacemarks = placemarks }
             } catch {
                 print("LocationViewModel error:", error)
             }
         }
     }
-}
 
-extension MKLocalSearchCompletion: Identifiable {}
+    private func loadPlacemarks(
+        completions: [MKLocalSearchCompletion]
+    ) async throws -> [CLPlacemark] {
+        try await withThrowingTaskGroup(of: CLPlacemark?.self) { group in
+            var resultPlacemarks: [CLPlacemark] = []
+            resultPlacemarks.reserveCapacity(completions.count)
+
+            for completion in completions {
+                group.addTask {
+                    try? await LocationService.getPlacemark(
+                        from: completion.title
+                    )
+                }
+            }
+
+            for try await placemark in group {
+                if let placemark {
+                    resultPlacemarks.append(placemark)
+                }
+            }
+
+            resultPlacemarks.sort(by: { $0.description < $1.description })
+            return resultPlacemarks
+        }
+    }
+}

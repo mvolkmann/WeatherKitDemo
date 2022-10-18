@@ -3,6 +3,8 @@ import SwiftUI
 import WeatherKit
 
 extension WeatherService {
+    static let days = 5.0
+
     func hourlyForecast(for location: CLLocation) async -> [HourWeather] {
         let forecast = try? await weather(
             for: location,
@@ -23,9 +25,11 @@ extension WeatherService {
         let windDirection = wind.compassDirection
 
         let forecast = await hourlyForecast(for: location)
-        // Only keep forecasts in the future, not more than three days.
+
+        // Only keep forecasts in the future, not more a given number of days.
         let startDate = Date()
-        let endDate = startDate.addingTimeInterval(3 * 24 * 60 * 60)
+        let endDate = startDate.addingTimeInterval(Self.days * 24 * 60 * 60)
+
         let futureForecast = forecast.filter {
             startDate <= $0.date && $0.date <= endDate
         }

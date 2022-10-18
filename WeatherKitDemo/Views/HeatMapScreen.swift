@@ -16,10 +16,13 @@ struct HeatMapScreen: View {
             if !hourlyForecast.isEmpty {
                 HStack(alignment: .top, spacing: 0) {
                     VStack {
+                        // TODO: Dynamically determine these!
                         dayLabel("Tue")
                         dayLabel("Wed")
                         dayLabel("Thu")
                         dayLabel("Fri")
+                        dayLabel("Sat")
+                        dayLabel("Sun")
                     }
                     .padding(.top, 7)
 
@@ -45,7 +48,7 @@ struct HeatMapScreen: View {
     private func dayLabel(_ day: String) -> some View {
         Text(day)
             .rotationEffect(Angle.degrees(-90))
-            .frame(height: 47)
+            .frame(height: 55)
     }
 
     private func emptyMark(day: String, hour: Int) -> some ChartContent {
@@ -102,7 +105,7 @@ struct HeatMapScreen: View {
          }
          */
 
-        .frame(width: 800, height: 300)
+        .frame(width: 800, height: WeatherService.days * 90)
     }
 
     private func mark(forecast: HourWeather) -> some ChartContent {
@@ -123,7 +126,7 @@ struct HeatMapScreen: View {
                 Text("\(String(format: "%.0f", fahrenheit))℉")
                     .rotationEffect(.degrees(-90))
                     .font(.body)
-                    .frame(width: 50)
+                    .frame(width: 55)
             }
         }
         .accessibilityLabel("\(date.md) \(date.h)")

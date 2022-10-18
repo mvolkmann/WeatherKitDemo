@@ -15,6 +15,7 @@ class WeatherViewModel: NSObject, ObservableObject {
             summary = nil
         }
 
+        // This method is defined in WeatherServiceExtension.swift.
         let weatherSummary = try await WeatherService.shared.summary(
             for: location,
             colorScheme: colorScheme

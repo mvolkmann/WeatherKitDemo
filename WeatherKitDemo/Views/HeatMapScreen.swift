@@ -65,7 +65,6 @@ struct HeatMapScreen: View {
             range: Gradient(colors: Self.gradientColors)
         )
 
-        // .chartXAxis(.hidden)
         .chartXAxis {
             AxisMarks(position: .bottom, values: .automatic) { axisValue in
                 AxisTick()
@@ -80,34 +79,15 @@ struct HeatMapScreen: View {
         }
 
         .chartYAxis(.hidden)
-
-        // This changes the rectangle heights so they
-        // no longer cover the entire plot area.
         /*
-          .chartYAxis {
-          AxisMarks { _ in
-          AxisGridLine()
-          AxisTick()
-          // Oddly .trailing causes the labels to be
-          // displayed on the leading edge of the chart.
-          AxisValueLabel(anchor: .topTrailing)
-          }
-          }
-
+         // I can't get the labels to appear to the left of each row.
+         // They display above each row.
          .chartYAxis {
-             AxisMarks(values: .automatic(
-                 desiredCount: vm.statistics.count,
-                 roundLowerBound: false,
-                 roundUpperBound: false
-             )) { _ in
-                 AxisGridLine()
-                 AxisTick()
-                 AxisValueLabel(centered: true)
-             }
+             AxisMarks() // displays day of week abbreviations
          }
-          */
+         */
 
-        .frame(width: 800, height: 500)
+        .frame(width: 800, height: 300)
     }
 
     private func mark(forecast: HourWeather) -> some ChartContent {

@@ -13,7 +13,6 @@ struct HeatMapScreen: View {
 
     var body: some View {
         Template {
-            Text("Heat Map").font(.title2)
             if !hourlyForecast.isEmpty {
                 HStack(alignment: .top, spacing: 0) {
                     VStack {

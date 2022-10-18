@@ -5,6 +5,9 @@ import WeatherKit
 struct HeatMapScreen: View {
     @State private var hourlyForecast: [HourWeather] = []
 
+    private static let daysOfWeek =
+        ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+
     private static let gradientColors: [Color] =
         [.blue, .green, .yellow, .orange, .red]
     // The above looks better than using [.blue, .yellow, .red].
@@ -16,13 +19,12 @@ struct HeatMapScreen: View {
             if !hourlyForecast.isEmpty {
                 HStack(alignment: .top, spacing: 0) {
                     VStack {
-                        // TODO: Dynamically determine these!
-                        dayLabel("Tue")
-                        dayLabel("Wed")
-                        dayLabel("Thu")
-                        dayLabel("Fri")
-                        dayLabel("Sat")
-                        dayLabel("Sun")
+                        let startIndex = Date().dayOfWeekNumber - 1
+                        let range =
+                            startIndex ..< startIndex + WeatherService.days + 1
+                        ForEach(range, id: \.self) { index in
+                            dayLabel(Self.daysOfWeek[index % 7])
+                        }
                     }
                     .padding(.top, 7)
 
@@ -96,16 +98,11 @@ struct HeatMapScreen: View {
             }
         }
 
+        // I can't get the y-axis labels to appear to the left of each row.
+        // They display above each row.
         .chartYAxis(.hidden)
-        /*
-         // I can't get the labels to appear to the left of each row.
-         // They display above each row.
-         .chartYAxis {
-             AxisMarks() // displays day of week abbreviations
-         }
-         */
 
-        .frame(width: 800, height: WeatherService.days * 90)
+        .frame(width: 800, height: Double(WeatherService.days * 90))
     }
 
     private func mark(forecast: HourWeather) -> some ChartContent {

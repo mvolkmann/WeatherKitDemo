@@ -15,8 +15,18 @@ struct HeatMapScreen: View {
         Template {
             Text("Heat Map").font(.title2)
             if !hourlyForecast.isEmpty {
-                ScrollView(.horizontal) {
-                    heatMap(hourlyForecast: hourlyForecast)
+                HStack(alignment: .top, spacing: 0) {
+                    VStack {
+                        dayLabel("Tue")
+                        dayLabel("Wed")
+                        dayLabel("Thu")
+                        dayLabel("Fri")
+                    }
+                    .padding(.top, 7)
+
+                    ScrollView(.horizontal) {
+                        heatMap(hourlyForecast: hourlyForecast)
+                    }
                 }
             } else {
                 Text("Forecast data is not available.")
@@ -32,6 +42,12 @@ struct HeatMapScreen: View {
     }
 
     // MARK: - Methods
+
+    private func dayLabel(_ day: String) -> some View {
+        Text(day)
+            .rotationEffect(Angle.degrees(-90))
+            .frame(height: 47)
+    }
 
     private func emptyMark(day: String, hour: Int) -> some ChartContent {
         return Plot {
@@ -104,7 +120,8 @@ struct HeatMapScreen: View {
             )
             .foregroundStyle(by: .value("Temperature", fahrenheit))
             .annotation(position: .overlay) {
-                Text("\(date.dayOfWeek)")
+                // Text("\(date.dayOfWeek)")
+                Text("\(String(format: "%.0f", fahrenheit))℉")
                     .rotationEffect(.degrees(-90))
                     .font(.body)
                     .frame(width: 50)

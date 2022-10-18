@@ -36,6 +36,7 @@ struct HeatMapScreen: View {
     private func emptyMark(day: String, hour: Int) -> some ChartContent {
         return Plot {
             RectangleMark(
+                // Why do String values work, but Int values do not?
                 x: .value("Time", "\(hour)"),
                 y: .value("Day", day),
                 width: .ratio(1),
@@ -64,7 +65,20 @@ struct HeatMapScreen: View {
             range: Gradient(colors: Self.gradientColors)
         )
 
-        .chartXAxis(.hidden)
+        // .chartXAxis(.hidden)
+        .chartXAxis {
+            AxisMarks(position: .bottom, values: .automatic) { axisValue in
+                AxisTick()
+                AxisValueLabel(centered: true) {
+                    let index = axisValue.index
+                    let mod = index % 12
+                    let hour = mod == 0 ? 12 : mod
+                    Text("\(hour)\n\(index < 12 ? "AM" : "PM")")
+                        .multilineTextAlignment(.center)
+                }
+            }
+        }
+
         .chartYAxis(.hidden)
 
         // This changes the rectangle heights so they
@@ -102,6 +116,7 @@ struct HeatMapScreen: View {
 
         return Plot {
             RectangleMark(
+                // Why do String values work, but Int values do not?
                 x: .value("Time", "\(date.hour)"),
                 y: .value("Day", date.dayOfWeek),
                 width: .ratio(1),
@@ -109,10 +124,10 @@ struct HeatMapScreen: View {
             )
             .foregroundStyle(by: .value("Temperature", fahrenheit))
             .annotation(position: .overlay) {
-                Text("\(date.dayOfWeek) \(date.h)")
+                Text("\(date.dayOfWeek)")
                     .rotationEffect(.degrees(-90))
                     .font(.body)
-                    .frame(width: 90)
+                    .frame(width: 50)
             }
         }
         .accessibilityLabel("\(date.md) \(date.h)")

@@ -14,19 +14,23 @@ struct HeatMapScreen: View {
 
     private let weatherVM = WeatherViewModel.shared
 
+    private var dayLabels: some View {
+        VStack(spacing: 21) {
+            let startIndex = Date().dayOfWeekNumber - 1
+            let range =
+                startIndex ..< startIndex + WeatherService.days
+            ForEach(range, id: \.self) { index in
+                dayLabel(Self.daysOfWeek[index % 7])
+            }
+        }
+        .padding(.top, 11)
+    }
+
     var body: some View {
         Template {
             if !hourlyForecast.isEmpty {
                 HStack(alignment: .top, spacing: 0) {
-                    VStack {
-                        let startIndex = Date().dayOfWeekNumber - 1
-                        let range =
-                            startIndex ..< startIndex + WeatherService.days + 1
-                        ForEach(range, id: \.self) { index in
-                            dayLabel(Self.daysOfWeek[index % 7])
-                        }
-                    }
-                    .padding(.top, 7)
+                    dayLabels
 
                     ScrollView(.horizontal) {
                         heatMap(hourlyForecast: hourlyForecast)
@@ -72,9 +76,9 @@ struct HeatMapScreen: View {
     private func heatMap(hourlyForecast: [HourWeather]) -> some View {
         Chart {
             let firstDate = hourlyForecast.first?.date ?? Date()
-            let day = firstDate.dayOfWeek
 
             /*
+             let day = firstDate.dayOfWeek
              let firstHour = firstDate.hour
              ForEach(0 ..< firstHour, id: \.self) { hour in
                  emptyMark(day: day, hour: hour)

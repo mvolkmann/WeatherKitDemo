@@ -50,6 +50,7 @@ struct CurrentScreen: View {
             }
         }
         .listStyle(.plain)
+    }
 
     private var formattedTemperature: String {
         guard let temp = weatherVM.summary?.temperature else { return "" }

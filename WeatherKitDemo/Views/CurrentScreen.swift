@@ -29,10 +29,34 @@ struct CurrentScreen: View {
             summary.attributionDarkLogoURL
     }
 
+    private var currentLocationButton: some View {
+        LocationButton {
+            if let placemark = locationVM.currentPlacemark {
+                selectPlacemark(placemark)
+            }
+        }
+        .cornerRadius(10)
+    }
+
     private var formattedTemperature: String {
         guard let temp = weatherVM.summary?.temperature else { return "" }
         // return temp.description // too many decimal places
         return String(format: "%.0f", temp.value) + temp.unit.symbol
+    }
+
+    private var locationList: some View {
+        List {
+            ForEach(
+                locationVM.searchLocations,
+                id: \.self
+            ) { location in
+                Button(location) {
+                    // selectPlacemark(placemark)
+                    selectLocation(location)
+                }
+            }
+        }
+        .listStyle(.plain)
     }
 
     private var searchArea: some View {
@@ -71,27 +95,11 @@ struct CurrentScreen: View {
                 searchArea
 
                 if !locationVM.usingCurrent {
-                    LocationButton {
-                        if let placemark = locationVM.currentPlacemark {
-                            selectPlacemark(placemark)
-                        }
-                    }
-                    .cornerRadius(10)
+                    currentLocationButton
                 }
 
                 if !locationVM.searchLocations.isEmpty {
-                    List {
-                        ForEach(
-                            locationVM.searchLocations,
-                            id: \.self
-                        ) { location in
-                            Button(location) {
-                                // selectPlacemark(placemark)
-                                selectLocation(location)
-                            }
-                        }
-                    }
-                    .listStyle(.plain)
+                    locationList
                 }
 
                 Spacer()

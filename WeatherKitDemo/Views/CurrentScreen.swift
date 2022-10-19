@@ -87,7 +87,7 @@ struct CurrentScreen: View {
 
     private var searchArea: some View {
         HStack(alignment: .center) {
-            TextField("Location", text: $locationVM.searchQuery)
+            TextField("New Location", text: $locationVM.searchQuery)
                 .focused($isTextFieldFocused)
                 .padding(10)
                 .background(
@@ -104,7 +104,7 @@ struct CurrentScreen: View {
             }
         }
         .frame(maxWidth: width)
-        .padding(.top)
+        .padding(.top, 10)
     }
 
     private var width: CGFloat {
@@ -118,21 +118,20 @@ struct CurrentScreen: View {
                     currentData()
                 }
 
-                searchArea
-
                 if !locationVM.usingCurrent {
                     currentLocationButton
-                        .padding(.top, 10)
                 }
 
+                searchArea
+
                 HStack {
-                    if !locationVM.searchLocations.isEmpty {
+                    if !locationVM.searchQuery.isEmpty,
+                       !locationVM.searchLocations.isEmpty {
                         VStack {
                             Text("Matched Locations").font(.headline)
                             matchedLocations
                         }
-                    }
-                    if !locationVM.likedLocations.isEmpty {
+                    } else if !locationVM.likedLocations.isEmpty {
                         VStack {
                             Text("Favorite Locations").font(.headline)
                             favoriteLocations

@@ -26,13 +26,14 @@ extension WeatherService {
 
         let forecast = await hourlyForecast(for: location)
 
-        // Only keep forecasts in the future, not more a given number of days.
-        let startDate = Date()
+        // Only keep forecasts from midnight this morning
+        // to a given number of days in the future.
+        let startDate = Date().startOfDay
         let endDate = startDate.addingTimeInterval(
-            Double(Self.days * 24 * 60 * 60)
+            Double((Self.days * 24 - 1) * 60 * 60)
         )
 
-        let futureForecast = forecast.filter {
+        let keepForecast = forecast.filter {
             startDate <= $0.date && $0.date <= endDate
         }
 
@@ -43,7 +44,7 @@ extension WeatherService {
             symbolName: current.symbolName,
             temperature: current.temperature.converted(to: .fahrenheit),
             wind: "\(windSpeed) from \(windDirection)",
-            hourlyForecast: futureForecast,
+            hourlyForecast: keepForecast,
             attributionLightLogoURL: attr.combinedMarkLightURL,
             attributionDarkLogoURL: attr.combinedMarkDarkURL,
             attributionPageURL: attr.legalPageURL

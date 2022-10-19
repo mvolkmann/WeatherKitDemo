@@ -51,22 +51,20 @@ struct ForecastScreen: View {
 
     var body: some View {
         Template {
-            if let summary = weatherVM.summary {
-                VStack {
-                    header.padding(.top)
-                    List {
-                        ForEach(
-                            summary.hourlyForecast,
-                            id: \.self
-                        ) { forecast in
-                            forecastView(forecast)
-                        }
+            VStack {
+                header.padding(.top)
+                List {
+                    ForEach(
+                        weatherVM.futureForecast,
+                        id: \.self
+                    ) { forecast in
+                        forecastView(forecast)
                     }
-                    .listStyle(.plain)
-                    .cornerRadius(10)
                 }
-                .frame(maxWidth: width)
+                .listStyle(.plain)
+                .cornerRadius(10)
             }
+            .frame(maxWidth: width)
         }
         .onRotate { orientation = $0 }
     }

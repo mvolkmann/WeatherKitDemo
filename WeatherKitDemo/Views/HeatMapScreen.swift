@@ -30,6 +30,8 @@ struct HeatMapScreen: View {
 
                     ScrollView(.horizontal) {
                         heatMap(hourlyForecast: hourlyForecast)
+                            // Prevent scrollbar from overlapping legend.
+                            .padding(.bottom, 10)
                     }
                 }
             } else {
@@ -38,7 +40,6 @@ struct HeatMapScreen: View {
         }
         // Run this closure again every time the selected placemark changes.
         .task(id: weatherVM.summary) {
-            // .onChange(of: weatherVM.summary) { summary in
             if let summary = weatherVM.summary {
                 hourlyForecast = summary.hourlyForecast
             }
@@ -53,27 +54,32 @@ struct HeatMapScreen: View {
             .frame(height: 55)
     }
 
-    private func emptyMark(day: String, hour: Int) -> some ChartContent {
-        return Plot {
-            RectangleMark(
-                // Why do String values work, but Int values do not?
-                x: .value("Time", "\(hour)"),
-                y: .value("Day", day),
-                width: .ratio(1),
-                height: .ratio(1)
-            )
-            .foregroundStyle(.clear)
-        }
-    }
+    /*
+     private func emptyMark(day: String, hour: Int) -> some ChartContent {
+         return Plot {
+             RectangleMark(
+                 // Why do String values work, but Int values do not?
+                 x: .value("Time", "\(hour)"),
+                 y: .value("Day", day),
+                 width: .ratio(1),
+                 height: .ratio(1)
+             )
+             .foregroundStyle(.clear)
+         }
+     }
+     */
 
     private func heatMap(hourlyForecast: [HourWeather]) -> some View {
         Chart {
             let firstDate = hourlyForecast.first?.date ?? Date()
             let day = firstDate.dayOfWeek
-            let firstHour = firstDate.hour
-            ForEach(0 ..< firstHour, id: \.self) { hour in
-                emptyMark(day: day, hour: hour)
-            }
+
+            /*
+             let firstHour = firstDate.hour
+             ForEach(0 ..< firstHour, id: \.self) { hour in
+                 emptyMark(day: day, hour: hour)
+             }
+             */
 
             ForEach(hourlyForecast.indices, id: \.self) { index in
                 let forecast = hourlyForecast[index]

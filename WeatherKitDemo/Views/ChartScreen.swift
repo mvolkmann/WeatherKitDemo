@@ -42,51 +42,47 @@ struct ChartScreen: View {
 
     var body: some View {
         Template {
-            if let summary = weatherVM.summary {
-                Text("Drag across the chart to see hourly details.")
-                Chart {
-                    ForEach(
-                        summary.hourlyForecast.indices,
-                        id: \.self
-                    ) { index in
-                        let forecast = summary.hourlyForecast[index]
-                        let date = PlottableValue.value(
-                            "Date",
-                            forecast.date
-                        )
-                        let temperature = PlottableValue.value(
-                            "Temperature",
-                            forecast.temperature.converted(to: .fahrenheit)
-                                .value
-                        )
+            let futureForecast = weatherVM.futureForecast
+            Text("Drag across the chart to see hourly details.")
+            Chart {
+                ForEach(futureForecast.indices, id: \.self) { index in
+                    let forecast = futureForecast[index]
+                    let date = PlottableValue.value(
+                        "Date",
+                        forecast.date
+                    )
+                    let temperature = PlottableValue.value(
+                        "Temperature",
+                        forecast.temperature.converted(to: .fahrenheit)
+                            .value
+                    )
 
-                        LineMark(x: date, y: temperature)
-                            .interpolationMethod(.catmullRom)
-                            .lineStyle(StrokeStyle(lineWidth: 3))
+                    LineMark(x: date, y: temperature)
+                        .interpolationMethod(.catmullRom)
+                        .lineStyle(StrokeStyle(lineWidth: 3))
 
-                        // PointMark(x: date, y: temperature)
+                    // PointMark(x: date, y: temperature)
 
-                        AreaMark(x: date, y: temperature)
-                            .foregroundStyle(areaColor.opacity(0.6))
+                    AreaMark(x: date, y: temperature)
+                        .foregroundStyle(areaColor.opacity(0.6))
 
-                        if selectedDate == forecast.date {
-                            RuleMark(x: date)
-                                .annotation(
-                                    position: annotationPosition(index),
-                                    content: { annotation }
-                                )
-                                // Display a red, dashed, vertical line.
-                                .foregroundStyle(.red)
-                                .lineStyle(StrokeStyle(dash: [10, 5]))
-                        }
+                    if selectedDate == forecast.date {
+                        RuleMark(x: date)
+                            .annotation(
+                                position: annotationPosition(index),
+                                content: { annotation }
+                            )
+                            // Display a red, dashed, vertical line.
+                            .foregroundStyle(.red)
+                            .lineStyle(StrokeStyle(dash: [10, 5]))
                     }
                 }
-                .padding(.top, 70) // leaves room for top annotation
-                .chartYAxis {
-                    AxisMarks(position: .leading)
-                }
-                .chartOverlay { proxy in chartOverlay(proxy: proxy) }
             }
+            .padding(.top, 70) // leaves room for top annotation
+            .chartYAxis {
+                AxisMarks(position: .leading)
+            }
+            .chartOverlay { proxy in chartOverlay(proxy: proxy) }
         }
     }
 

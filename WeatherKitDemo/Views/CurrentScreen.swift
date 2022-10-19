@@ -35,6 +35,28 @@ struct CurrentScreen: View {
         return String(format: "%.0f", temp.value) + temp.unit.symbol
     }
 
+    private var searchArea: some View {
+        HStack(alignment: .center) {
+            TextField("Location", text: $locationVM.searchQuery)
+                .focused($isTextFieldFocused)
+                .padding(10)
+                .background(
+                    RoundedRectangle(cornerRadius: 10).fill(.background)
+                )
+                .foregroundColor(.primary)
+            if isTextFieldFocused {
+                Button(action: dismissKeyboard) {
+                    Image(
+                        systemName: "keyboard.chevron.compact.down"
+                    )
+                }
+                .font(.title)
+            }
+        }
+        .frame(maxWidth: width)
+        .padding(.top)
+    }
+
     private var width: CGFloat {
         verticalSizeClass == .compact ? 350 : .infinity
     }
@@ -46,25 +68,7 @@ struct CurrentScreen: View {
                     currentData()
                 }
 
-                HStack(alignment: .center) {
-                    TextField("Location", text: $locationVM.searchQuery)
-                        .focused($isTextFieldFocused)
-                        .padding(10)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(.white)
-                        )
-                    if isTextFieldFocused {
-                        Button(action: dismissKeyboard) {
-                            Image(
-                                systemName: "keyboard.chevron.compact.down"
-                            )
-                        }
-                        .font(.title)
-                    }
-                }
-                .frame(maxWidth: width)
-                .padding(.top)
+                searchArea
 
                 if !locationVM.usingCurrent {
                     LocationButton {
@@ -72,13 +76,15 @@ struct CurrentScreen: View {
                             selectPlacemark(placemark)
                         }
                     }
-                    .foregroundColor(.white)
                     .cornerRadius(10)
                 }
 
                 if !locationVM.searchLocations.isEmpty {
                     List {
-                        ForEach(locationVM.searchLocations, id: \.self) { location in
+                        ForEach(
+                            locationVM.searchLocations,
+                            id: \.self
+                        ) { location in
                             Button(location) {
                                 // selectPlacemark(placemark)
                                 selectLocation(location)
@@ -137,7 +143,8 @@ struct CurrentScreen: View {
     private func selectLocation(_ location: String) {
         Task {
             do {
-                let placemark = try await LocationService.getPlacemark(from: location)
+                let placemark = try await LocationService
+                    .getPlacemark(from: location)
                 locationVM.select(placemark: placemark)
                 dismissKeyboard()
             } catch {

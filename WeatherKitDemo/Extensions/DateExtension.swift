@@ -31,6 +31,10 @@ extension Date {
         return dateFormatter.string(from: self)
     }
 
+    var startOfDay: Date {
+        Calendar.current.startOfDay(for: self)
+    }
+
     func removeSeconds() -> Date {
         let components = Calendar.current.dateComponents(
             [.year, .month, .day, .hour], // not seconds or nanoseconds

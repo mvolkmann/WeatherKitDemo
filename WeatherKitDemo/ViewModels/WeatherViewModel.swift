@@ -10,6 +10,12 @@ class WeatherViewModel: NSObject, ObservableObject {
     static let shared = WeatherViewModel()
     override private init() {}
 
+    var futureForecast: [HourWeather] {
+        let now = Date()
+        guard let summary else { return [] }
+        return summary.hourlyForecast.filter { $0.date >= now }
+    }
+
     func load(location: CLLocation, colorScheme: ColorScheme) async throws {
         await MainActor.run {
             summary = nil

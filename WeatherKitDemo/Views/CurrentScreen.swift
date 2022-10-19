@@ -7,6 +7,8 @@ import WeatherKit
 struct CurrentScreen: View {
     // MARK: - State
 
+    @AppStorage("likedLocations") var likedLocations: String = ""
+
     @Environment(\.colorScheme) private var colorScheme
     @Environment(
         \.verticalSizeClass
@@ -47,6 +49,17 @@ struct CurrentScreen: View {
                 Button(location) {
                     selectLocation(location)
                 }
+            }
+            .onDelete { offsets in
+                for offset in offsets {
+                    let location = locationVM.likedLocations[offset]
+                    locationVM.unlikeLocation(location)
+                }
+
+                // Persist in AppStorage.   We cannot use comma for
+                // separator because some locations contain commas.
+                likedLocations =
+                    locationVM.likedLocations.joined(separator: "|")
             }
         }
         .listStyle(.plain)
@@ -113,16 +126,16 @@ struct CurrentScreen: View {
                 }
 
                 HStack {
-                    if !locationVM.likedLocations.isEmpty {
-                        VStack {
-                            Text("Favorite Locations").font(.headline)
-                            favoriteLocations
-                        }
-                    }
                     if !locationVM.searchLocations.isEmpty {
                         VStack {
                             Text("Matched Locations").font(.headline)
                             matchedLocations
+                        }
+                    }
+                    if !locationVM.likedLocations.isEmpty {
+                        VStack {
+                            Text("Favorite Locations").font(.headline)
+                            favoriteLocations
                         }
                     }
                 }

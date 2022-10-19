@@ -72,13 +72,6 @@ struct Template<Content: View>: View {
                     likeButton
                 }
 
-                VStack {
-                    Text("You like these:")
-                    ForEach(locationVM.likedPlaces, id: \.self) {
-                        Text($0)
-                    }
-                }
-
                 if weatherVM.summary == nil {
                     Spacer()
                     ProgressView()

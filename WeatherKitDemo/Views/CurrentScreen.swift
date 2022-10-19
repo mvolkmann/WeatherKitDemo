@@ -51,7 +51,6 @@ struct CurrentScreen: View {
                 id: \.self
             ) { location in
                 Button(location) {
-                    // selectPlacemark(placemark)
                     selectLocation(location)
                 }
             }
@@ -96,6 +95,15 @@ struct CurrentScreen: View {
 
                 if !locationVM.usingCurrent {
                     currentLocationButton
+                    ForEach(
+                        locationVM.likedPlaces,
+                        id: \.self
+                    ) { placeDescription in
+                        Button(placeDescription) {
+                            selectLocation(placeDescription)
+                        }
+                        .buttonStyle(.bordered)
+                    }
                 }
 
                 if !locationVM.searchLocations.isEmpty {

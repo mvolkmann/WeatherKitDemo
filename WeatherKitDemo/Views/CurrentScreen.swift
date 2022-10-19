@@ -38,13 +38,26 @@ struct CurrentScreen: View {
         .cornerRadius(10)
     }
 
+    private var favoriteLocations: some View {
+        List {
+            ForEach(
+                locationVM.likedLocations,
+                id: \.self
+            ) { location in
+                Button(location) {
+                    selectLocation(location)
+                }
+            }
+        }
+        .listStyle(.plain)
+
     private var formattedTemperature: String {
         guard let temp = weatherVM.summary?.temperature else { return "" }
         // return temp.description // too many decimal places
         return String(format: "%.0f", temp.value) + temp.unit.symbol
     }
 
-    private var locationList: some View {
+    private var matchedLocations: some View {
         List {
             ForEach(
                 locationVM.searchLocations,
@@ -95,19 +108,22 @@ struct CurrentScreen: View {
 
                 if !locationVM.usingCurrent {
                     currentLocationButton
-                    ForEach(
-                        locationVM.likedPlaces,
-                        id: \.self
-                    ) { placeDescription in
-                        Button(placeDescription) {
-                            selectLocation(placeDescription)
-                        }
-                        .buttonStyle(.bordered)
-                    }
+                        .padding(.top, 10)
                 }
 
-                if !locationVM.searchLocations.isEmpty {
-                    locationList
+                HStack {
+                    if !locationVM.likedLocations.isEmpty {
+                        VStack {
+                            Text("Favorite Locations").font(.headline)
+                            favoriteLocations
+                        }
+                    }
+                    if !locationVM.searchLocations.isEmpty {
+                        VStack {
+                            Text("Matched Locations").font(.headline)
+                            matchedLocations
+                        }
+                    }
                 }
 
                 Spacer()

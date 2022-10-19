@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct Template<Content: View>: View {
-    @State private var description: String = ""
+    @AppStorage("likedLocations") var likedLocations: String = ""
+
+    @State private var location: String = ""
     @State private var isLiked: Bool = false
 
     @StateObject private var locationVM = LocationViewModel.shared
@@ -33,12 +35,18 @@ struct Template<Content: View>: View {
                 isLiked.toggle()
 
                 if let place = locationVM.selectedPlacemark {
-                    let description = LocationService.description(from: place)
+                    let location = LocationService.description(from: place)
+
                     if isLiked {
-                        locationVM.likePlace(description)
+                        locationVM.likeLocation(location)
                     } else {
-                        locationVM.unlikePlace(description)
+                        locationVM.unlikeLocation(location)
                     }
+
+                    // Persist in AppStorage.   We cannot use comma for
+                    // separator because some locations contain commas.
+                    likedLocations =
+                        locationVM.likedLocations.joined(separator: "|")
                 }
             },
             label: {
@@ -52,7 +60,7 @@ struct Template<Content: View>: View {
     }
 
     private var place: some View {
-        Text(description).font(.title2)
+        Text(location).font(.title2)
     }
 
     private var title: some View {
@@ -86,10 +94,18 @@ struct Template<Content: View>: View {
         }
         // Using task instead of onAppear so we can specify a dependency.
         .task(id: locationVM.selectedPlacemark) {
-            description = LocationService.description(
+            // likedLocations = "" // uncomment to reset AppStorage
+
+            location = LocationService.description(
                 from: locationVM.selectedPlacemark
             )
-            isLiked = locationVM.isLikedPlace(description)
+            isLiked = locationVM.isLikedLocation(location)
+
+            if locationVM.likedLocations.isEmpty {
+                // Restore from AppStorage.
+                locationVM.likedLocations =
+                    likedLocations.split(separator: "|").map(String.init)
+            }
         }
     }
 }

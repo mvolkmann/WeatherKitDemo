@@ -11,7 +11,7 @@ class LocationViewModel: NSObject, ObservableObject {
 
     @Published var searchLocations: [String] = []
     @Published var currentPlacemark: CLPlacemark?
-    @Published var likedPlaces: [String] = []
+    @Published var likedLocations: [String] = []
     @Published var searchQuery = ""
     @Published var selectedPlacemark: CLPlacemark?
 
@@ -62,13 +62,13 @@ class LocationViewModel: NSObject, ObservableObject {
 
     // MARK: - Methods
 
-    func isLikedPlace(_ description: String) -> Bool {
-        likedPlaces.contains(description)
+    func isLikedLocation(_ location: String) -> Bool {
+        likedLocations.contains(location)
     }
 
-    func likePlace(_ description: String) {
-        likedPlaces.append(description)
-        likedPlaces.sort()
+    func likeLocation(_ location: String) {
+        likedLocations.append(location)
+        likedLocations.sort()
     }
 
     func select(placemark: CLPlacemark) {
@@ -77,8 +77,8 @@ class LocationViewModel: NSObject, ObservableObject {
         searchLocations = []
     }
 
-    func unlikePlace(_ description: String) {
-        likedPlaces.removeAll(where: { $0 == description })
+    func unlikeLocation(_ location: String) {
+        likedLocations.removeAll(where: { $0 == location })
     }
 }
 

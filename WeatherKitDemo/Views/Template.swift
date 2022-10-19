@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct Template<Content: View>: View {
-    @State private var liked: Bool = false
+    @State private var description: String = ""
+    @State private var isLiked: Bool = false
+
     @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
 
@@ -27,9 +29,20 @@ struct Template<Content: View>: View {
 
     private var likeButton: some View {
         Button(
-            action: { liked.toggle() },
+            action: {
+                isLiked.toggle()
+
+                if let place = locationVM.selectedPlacemark {
+                    let description = LocationService.description(from: place)
+                    if isLiked {
+                        locationVM.likePlace(description)
+                    } else {
+                        locationVM.unlikePlace(description)
+                    }
+                }
+            },
             label: {
-                Image(systemName: liked ? "heart.fill" : "heart")
+                Image(systemName: isLiked ? "heart.fill" : "heart")
                     .resizable()
                     .scaledToFit()
                     .frame(height: 20)
@@ -39,10 +52,7 @@ struct Template<Content: View>: View {
     }
 
     private var place: some View {
-        Text(LocationService.description(
-            from: locationVM.selectedPlacemark
-        ))
-        .font(.title2)
+        Text(description).font(.title2)
     }
 
     private var title: some View {
@@ -62,6 +72,13 @@ struct Template<Content: View>: View {
                     likeButton
                 }
 
+                VStack {
+                    Text("You like these:")
+                    ForEach(locationVM.likedPlaces, id: \.self) {
+                        Text($0)
+                    }
+                }
+
                 if weatherVM.summary == nil {
                     Spacer()
                     ProgressView()
@@ -73,6 +90,13 @@ struct Template<Content: View>: View {
                 Spacer()
             }
             .padding()
+        }
+        // Using task instead of onAppear so we can specify a dependency.
+        .task(id: locationVM.selectedPlacemark) {
+            description = LocationService.description(
+                from: locationVM.selectedPlacemark
+            )
+            isLiked = locationVM.isLikedPlace(description)
         }
     }
 }

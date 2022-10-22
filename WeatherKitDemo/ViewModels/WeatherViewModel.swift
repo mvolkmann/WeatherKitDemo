@@ -16,7 +16,7 @@ class WeatherViewModel: NSObject, ObservableObject {
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .short
+        dateFormatter.timeStyle = .medium
         return dateFormatter.string(from: timestamp)
     }
 

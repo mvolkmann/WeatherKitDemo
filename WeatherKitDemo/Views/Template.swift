@@ -1,7 +1,11 @@
 import SwiftUI
 
 struct Template<Content: View>: View {
+    // MARK: - State
+
     @AppStorage("likedLocations") var likedLocations: String = ""
+
+    @Environment(\.colorScheme) private var colorScheme
 
     @State private var location: String = ""
     @State private var isLiked: Bool = false
@@ -9,18 +13,14 @@ struct Template<Content: View>: View {
     @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
 
-    private let backgroundColor = LinearGradient(
-        gradient: Gradient(colors: [.blue, .purple]),
-        startPoint: .top,
-        endPoint: .bottom
-    )
-
-    private let content: Content
+    // MARK: - Initializer
 
     // This is needed to use @ViewBuilder.
     init(@ViewBuilder content: () -> Content) {
         self.content = content()
     }
+
+    // MARK: - Properties
 
     private var background: some View {
         Rectangle()
@@ -28,6 +28,16 @@ struct Template<Content: View>: View {
             .opacity(0.3)
             .ignoresSafeArea()
     }
+
+    // Static stored properties are not supported in generic types,
+    // so we cannot make this a static constant.
+    private let backgroundColor = LinearGradient(
+        gradient: Gradient(colors: [.blue, .purple]),
+        startPoint: .top,
+        endPoint: .bottom
+    )
+
+    private let content: Content
 
     private var likeButton: some View {
         Button(
@@ -67,9 +77,13 @@ struct Template<Content: View>: View {
         VStack {
             Text("Feather Weather")
                 .font(.largeTitle)
+                .fontWeight(.bold)
                 .foregroundColor(.primary)
             if weatherVM.timestamp != nil {
-                Text("last updated \(weatherVM.formattedTimestamp)")
+                HStack {
+                    Text("last updated \(weatherVM.formattedTimestamp)")
+                    Button("Refresh") { refresh() }
+                }
             }
         }
     }
@@ -111,6 +125,20 @@ struct Template<Content: View>: View {
                 locationVM.likedLocations =
                     likedLocations.split(separator: "|").map(String.init)
             }
+        }
+    }
+
+    // MARK: - Methods
+
+    private func refresh() {
+        guard let location = locationVM.selectedPlacemark?.location
+        else { return }
+
+        Task {
+            try? await weatherVM.load(
+                location: location,
+                colorScheme: colorScheme
+            )
         }
     }
 }

@@ -64,9 +64,14 @@ struct Template<Content: View>: View {
     }
 
     private var title: some View {
-        Text("Feather Weather")
-            .font(.largeTitle)
-            .foregroundColor(.primary)
+        VStack {
+            Text("Feather Weather")
+                .font(.largeTitle)
+                .foregroundColor(.primary)
+            if weatherVM.timestamp != nil {
+                Text("last updated \(weatherVM.formattedTimestamp)")
+            }
+        }
     }
 
     var body: some View {

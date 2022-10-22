@@ -5,10 +5,20 @@ import WeatherKit
 class WeatherViewModel: NSObject, ObservableObject {
     @Published var dateToFahrenheitMap: [Date: Double] = [:]
     @Published var summary: WeatherSummary?
+    @Published var timestamp: Date?
 
     // This is a singleton class.
     static let shared = WeatherViewModel()
     override private init() {}
+
+    var formattedTimestamp: String {
+        guard let timestamp else { return "" }
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short
+        return dateFormatter.string(from: timestamp)
+    }
 
     var futureForecast: [HourWeather] {
         let now = Date()
@@ -40,6 +50,10 @@ class WeatherViewModel: NSObject, ObservableObject {
                     ).value
                 }
             }
+        }
+
+        Task {
+            await MainActor.run { self.timestamp = Date() }
         }
     }
 }

@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1A36EDA728D68D6B00372EE1 /* WeatherKitDemo-dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 1A36EDA428D68D6B00372EE1 /* WeatherKitDemo-dark.png */; };
 		1A36EDA828D68D6B00372EE1 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 1A36EDA528D68D6B00372EE1 /* README.md */; };
-		1A36EDA928D68D6B00372EE1 /* WeatherKitDemo-light.png in Resources */ = {isa = PBXBuildFile; fileRef = 1A36EDA628D68D6B00372EE1 /* WeatherKitDemo-light.png */; };
 		1A50CC3228D381CC005B1D36 /* LocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A50CC3128D381CC005B1D36 /* LocationViewModel.swift */; };
 		1A713EB528F9DCDA00AEA66B /* CurrentScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A713EB428F9DCDA00AEA66B /* CurrentScreen.swift */; };
 		1A713EB728F9DD4100AEA66B /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A713EB628F9DD4100AEA66B /* WeatherViewModel.swift */; };
@@ -222,9 +220,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A84529928D37DAA00C28047 /* Preview Assets.xcassets in Resources */,
-				1A36EDA728D68D6B00372EE1 /* WeatherKitDemo-dark.png in Resources */,
 				1A36EDA828D68D6B00372EE1 /* README.md in Resources */,
-				1A36EDA928D68D6B00372EE1 /* WeatherKitDemo-light.png in Resources */,
 				1A84529628D37DAA00C28047 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

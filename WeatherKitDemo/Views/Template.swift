@@ -6,6 +6,7 @@ struct Template<Content: View>: View {
     @AppStorage("likedLocations") var likedLocations: String = ""
 
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.scenePhase) var scenePhase
 
     @State private var location: String = ""
     @State private var isLiked: Bool = false
@@ -111,7 +112,12 @@ struct Template<Content: View>: View {
             }
             .padding()
         }
-        // Using task instead of onAppear so we can specify a dependency.
+
+        .onChange(of: scenePhase) { newPhase in
+            if newPhase == .active { refresh() }
+        }
+
+        // We are using task instead of onAppear so we can specify a dependency.
         .task(id: locationVM.selectedPlacemark) {
             // likedLocations = "" // uncomment to reset AppStorage
 

@@ -30,9 +30,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1A36EDA428D68D6B00372EE1 /* WeatherKitDemo-dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WeatherKitDemo-dark.png"; sourceTree = "<group>"; };
 		1A36EDA528D68D6B00372EE1 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		1A36EDA628D68D6B00372EE1 /* WeatherKitDemo-light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WeatherKitDemo-light.png"; sourceTree = "<group>"; };
 		1A50CC3028D380C3005B1D36 /* WeatherKitDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WeatherKitDemo.entitlements; sourceTree = "<group>"; };
 		1A50CC3128D381CC005B1D36 /* LocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewModel.swift; sourceTree = "<group>"; };
 		1A713EB428F9DCDA00AEA66B /* CurrentScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentScreen.swift; sourceTree = "<group>"; };
@@ -79,8 +77,6 @@
 			isa = PBXGroup;
 			children = (
 				1A36EDA528D68D6B00372EE1 /* README.md */,
-				1A36EDA428D68D6B00372EE1 /* WeatherKitDemo-dark.png */,
-				1A36EDA628D68D6B00372EE1 /* WeatherKitDemo-light.png */,
 				1A84529028D37DA900C28047 /* WeatherKitDemo */,
 				1A84528F28D37DA900C28047 /* Products */,
 			);

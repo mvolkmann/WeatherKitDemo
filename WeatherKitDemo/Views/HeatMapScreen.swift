@@ -75,16 +75,6 @@ struct HeatMapScreen: View {
 
     private func heatMap(hourlyForecast: [HourWeather]) -> some View {
         Chart {
-            let firstDate = hourlyForecast.first?.date ?? Date()
-
-            /*
-             let day = firstDate.dayOfWeek
-             let firstHour = firstDate.hour
-             ForEach(0 ..< firstHour, id: \.self) { hour in
-                 emptyMark(day: day, hour: hour)
-             }
-             */
-
             ForEach(hourlyForecast.indices, id: \.self) { index in
                 let forecast = hourlyForecast[index]
                 mark(forecast: forecast)
@@ -115,6 +105,7 @@ struct HeatMapScreen: View {
         .frame(width: 800, height: Double(WeatherService.days * 90))
     }
 
+    // This creates an individual cell in the heat map.
     private func mark(forecast: HourWeather) -> some ChartContent {
         let date = forecast.date
         let fahrenheit = forecast.temperature.converted(to: .fahrenheit).value
@@ -127,9 +118,10 @@ struct HeatMapScreen: View {
                 width: .ratio(1),
                 height: .ratio(1)
             )
+            // Choose a cell color based on the temperature.
             .foregroundStyle(by: .value("Temperature", fahrenheit))
+            // Display the temperature on top of the cell.
             .annotation(position: .overlay) {
-                // Text("\(date.dayOfWeek)")
                 Text("\(String(format: "%.0f", fahrenheit))℉")
                     .rotationEffect(.degrees(-90))
                     .font(.body)

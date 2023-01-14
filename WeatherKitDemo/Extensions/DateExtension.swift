@@ -1,13 +1,14 @@
 import Foundation
 
 extension Date {
+    // Returns an abbreviated day of the week (ex. Sun).
     var dayOfWeek: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEE"
         return dateFormatter.string(from: self)
     }
 
-    // This returns 1 for Sunday and 7 for Saturday.
+    // Returns 1 for Sunday and 7 for Saturday.
     var dayOfWeekNumber: Int {
         Calendar.current.dateComponents([.weekday], from: self).weekday!
     }
@@ -20,6 +21,7 @@ extension Date {
         return dateFormatter.string(from: self)
     }
 
+    // Returns the hour of a `Date`.
     var hour: Int {
         Calendar.current.component(.hour, from: self)
     }

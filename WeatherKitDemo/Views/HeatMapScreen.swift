@@ -3,7 +3,11 @@ import SwiftUI
 import WeatherKit
 
 struct HeatMapScreen: View {
+    // MARK: - State
+
     @State private var hourlyForecast: [HourWeather] = []
+
+    // MARK: - Constants
 
     private static let daysOfWeek =
         ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -12,7 +16,7 @@ struct HeatMapScreen: View {
         [.blue, .green, .yellow, .orange, .red]
     // The above looks better than using [.blue, .yellow, .red].
 
-    private let weatherVM = WeatherViewModel.shared
+    // MARK: - Variables
 
     private var dayLabels: some View {
         VStack(spacing: 21) {
@@ -25,6 +29,8 @@ struct HeatMapScreen: View {
         }
         .padding(.top, 11)
     }
+
+    private let weatherVM = WeatherViewModel.shared
 
     var body: some View {
         Template {

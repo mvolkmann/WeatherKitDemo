@@ -94,14 +94,14 @@
 			isa = PBXGroup;
 			children = (
 				1A84529128D37DA900C28047 /* WeatherKitDemoApp.swift */,
-				1A50CC3028D380C3005B1D36 /* WeatherKitDemo.entitlements */,
 				1A84529528D37DAA00C28047 /* Assets.xcassets */,
+				1A50CC3028D380C3005B1D36 /* WeatherKitDemo.entitlements */,
 				1AB0621128D64CB100602C7B /* Extensions */,
 				1AB0621628D6571200602C7B /* Models */,
-				1A713EC628FC5C4000AEA66B /* Services */,
-				1AB0621028D64C3900602C7B /* Views */,
-				1AB0620F28D64C1A00602C7B /* ViewModels */,
 				1A84529728D37DAA00C28047 /* Preview Content */,
+				1A713EC628FC5C4000AEA66B /* Services */,
+				1AB0620F28D64C1A00602C7B /* ViewModels */,
+				1AB0621028D64C3900602C7B /* Views */,
 			);
 			path = WeatherKitDemo;
 			sourceTree = "<group>";
@@ -129,8 +129,8 @@
 				1A713EBA28F9DFD000AEA66B /* ChartScreen.swift */,
 				1A84529328D37DA900C28047 /* ContentView.swift */,
 				1A713EB428F9DCDA00AEA66B /* CurrentScreen.swift */,
-				1A79703528FDE9BC00569E68 /* HeatMapScreen.swift */,
 				1A713EBE28FA0A4B00AEA66B /* ForecastScreen.swift */,
+				1A79703528FDE9BC00569E68 /* HeatMapScreen.swift */,
 				1A713EC028FA0CD500AEA66B /* Template.swift */,
 			);
 			path = Views;

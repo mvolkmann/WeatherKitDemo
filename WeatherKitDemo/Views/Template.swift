@@ -71,7 +71,7 @@ struct Template<Content: View>: View {
     }
 
     private var place: some View {
-        Text(location).font(.title2)
+        Text(location).font(.title2).bold()
     }
 
     private var title: some View {

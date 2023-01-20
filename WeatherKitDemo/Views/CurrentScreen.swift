@@ -170,15 +170,18 @@ struct CurrentScreen: View {
         if let summary = weatherVM.summary {
             VStack {
                 Image.symbol(symbolName: summary.symbolName)
-                Text("Condition: \(summary.condition)")
-                Text("Temperature: \(formattedTemperature)")
-
+                LabeledContent("Condition", value: summary.condition)
+                LabeledContent("Temperature", value: formattedTemperature)
                 let firstForecast = summary.hourlyForecast.first!
                 let humidity = firstForecast.humidity * 100
-                Text("Humidity: \(String(format: "%.0f", humidity))%")
-
-                Text("Winds \(summary.wind)")
+                LabeledContent(
+                    "Humidity",
+                    value: "\(String(format: "%.0f", humidity))%"
+                )
+                LabeledContent("Winds", value: summary.wind)
             }
+            .font(.title3)
+            .bold()
             .foregroundColor(.primary)
         } else {
             EmptyView()

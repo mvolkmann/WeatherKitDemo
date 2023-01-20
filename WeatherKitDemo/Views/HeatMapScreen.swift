@@ -2,19 +2,26 @@ import Charts
 import SwiftUI
 import WeatherKit
 
+// Red is 0% through the gradient and is where we want to start.
+// Blue is 70% through the gradient and is where we want to stop.
+private let redPercent = 0.0
+private let bluePercent = 0.65
+
 struct HeatMapScreen: View {
     // MARK: - State
 
     @State private var hourlyForecast: [HourWeather] = []
+    @State private var showAbsolute = false
 
     // MARK: - Constants
 
     private static let daysOfWeek =
         ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
-    private static let gradientColors: [Color] =
-        [.blue, .green, .yellow, .orange, .red]
+    // private static let gradientColors: [Color] =
+    //     [.blue, .green, .yellow, .orange, .red]
     // The above looks better than using [.blue, .yellow, .red].
+    // private static let gradient = Gradient(colors: hueColors)
 
     // MARK: - Variables
 
@@ -30,11 +37,36 @@ struct HeatMapScreen: View {
         .padding(.top, 11)
     }
 
+    private var gradient: Gradient {
+        let forecastMin = hourlyForecast
+            .min { $0.temperature.value < $1.temperature.value }
+        let forecastMax = hourlyForecast // also uses < !
+            .max { $0.temperature.value < $1.temperature.value }
+
+        let tempMin = fahrenheit(forecastMin!)
+        let tempMax = fahrenheit(forecastMax!)
+
+        let realStart = showAbsolute ? bluePercent * tempMin / 100 : redPercent
+        let realEnd = showAbsolute ? bluePercent * tempMax / 100 : bluePercent
+
+        // "by" is negative so the gradient goes from blue to red.
+        let hueColors = stride(
+            from: realEnd, // redish
+            to: realStart, // bluish
+            by: -0.01
+        ).map {
+            Color(hue: $0, saturation: 0.8, brightness: 0.8)
+        }
+        return Gradient(colors: hueColors)
+    }
+
     private let weatherVM = WeatherViewModel.shared
 
     var body: some View {
         Template {
-            if !hourlyForecast.isEmpty {
+            if hourlyForecast.isEmpty {
+                Text("Forecast data is not available.")
+            } else {
                 HStack(alignment: .top, spacing: 0) {
                     dayLabels
 
@@ -44,8 +76,24 @@ struct HeatMapScreen: View {
                             .padding(.bottom, 10)
                     }
                 }
-            } else {
-                Text("Forecast data is not available.")
+
+                HStack {
+                    Text("Colors:")
+                    Text("Relative")
+                    Toggle("", isOn: $showAbsolute).labelsHidden()
+                    Text("Absolute")
+                    Spacer()
+                }
+                .bold()
+
+                /*
+                 // TODO: This is only for verifying the desired gradient range.
+                 LinearGradient(
+                     gradient: gradient,
+                     startPoint: .leading,
+                     endPoint: .trailing
+                 )
+                 */
             }
         }
         // Run this closure again every time the selected placemark changes.
@@ -79,6 +127,10 @@ struct HeatMapScreen: View {
      }
      */
 
+    private func fahrenheit(_ forecast: HourWeather) -> Double {
+        forecast.temperature.converted(to: .fahrenheit).value
+    }
+
     private func heatMap(hourlyForecast: [HourWeather]) -> some View {
         Chart {
             ForEach(hourlyForecast.indices, id: \.self) { index in
@@ -87,9 +139,7 @@ struct HeatMapScreen: View {
             }
         }
 
-        .chartForegroundStyleScale(
-            range: Gradient(colors: Self.gradientColors)
-        )
+        .chartForegroundStyleScale(range: gradient)
 
         .chartXAxis {
             AxisMarks(position: .bottom, values: .automatic) { axisValue in
@@ -114,7 +164,7 @@ struct HeatMapScreen: View {
     // This creates an individual cell in the heat map.
     private func mark(forecast: HourWeather) -> some ChartContent {
         let date = forecast.date
-        let fahrenheit = forecast.temperature.converted(to: .fahrenheit).value
+        let temperature = fahrenheit(forecast)
 
         return Plot {
             RectangleMark(
@@ -124,18 +174,19 @@ struct HeatMapScreen: View {
                 width: .ratio(1),
                 height: .ratio(1)
             )
-            // Choose a cell color based on the temperature.
-            .foregroundStyle(by: .value("Temperature", fahrenheit))
+
+            .foregroundStyle(by: .value("Temperature", temperature))
+
             // Display the temperature on top of the cell.
             .annotation(position: .overlay) {
-                Text("\(String(format: "%.0f", fahrenheit))℉")
+                Text("\(String(format: "%.0f", temperature))℉")
                     .rotationEffect(.degrees(-90))
                     .font(.body)
                     .frame(width: 55)
             }
         }
         .accessibilityLabel("\(date.md) \(date.h)")
-        .accessibilityValue("\(fahrenheit)")
+        .accessibilityValue("\(temperature)℉")
         .accessibilityHidden(false)
     }
 }

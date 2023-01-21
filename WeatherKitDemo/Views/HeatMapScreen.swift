@@ -7,6 +7,18 @@ import WeatherKit
 private let redPercent = 0.0
 private let bluePercent = 0.65
 
+private let absoluteHelp = """
+In absolute move, \
+blue represents 0℉" or less and \
+red represents 100℉" or more.
+"""
+
+private let relativeHelp = """
+In relative mode, \
+blue represents the lowest temperature over the next five days and \
+red represents the highest temperature over the next five days.
+"""
+
 struct HeatMapScreen: View {
     // MARK: - State
 
@@ -86,6 +98,9 @@ struct HeatMapScreen: View {
                 }
                 .bold()
 
+                Text(showAbsolute ? absoluteHelp : relativeHelp)
+                    .font(.footnote)
+
                 /*
                  // TODO: This is only for verifying the desired gradient range.
                  LinearGradient(
@@ -109,7 +124,7 @@ struct HeatMapScreen: View {
     private func dayLabel(_ day: String) -> some View {
         Text(day)
             .rotationEffect(Angle.degrees(-90))
-            .frame(height: 55)
+            .frame(height: 50)
     }
 
     /*
@@ -158,7 +173,7 @@ struct HeatMapScreen: View {
         // They display above each row.
         .chartYAxis(.hidden)
 
-        .frame(width: 800, height: Double(WeatherService.days * 90))
+        .frame(width: 800, height: Double(WeatherService.days * 85))
     }
 
     // This creates an individual cell in the heat map.

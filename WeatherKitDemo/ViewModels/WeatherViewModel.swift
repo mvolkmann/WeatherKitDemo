@@ -21,7 +21,6 @@ class WeatherViewModel: NSObject, ObservableObject {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
         formatter.timeStyle = .medium
-        print("identifier =", Locale.current.identifier)
         return formatter.string(from: timestamp)
     }
 

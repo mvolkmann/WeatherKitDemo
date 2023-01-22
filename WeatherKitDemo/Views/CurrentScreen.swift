@@ -144,10 +144,6 @@ struct CurrentScreen: View {
                 attributionLink()
             }
         }
-        .onAppear {
-            // TODO: Use this value to determine the default temperature unit.
-            print("Locale =", Locale.current)
-        }
     }
 
     @ViewBuilder

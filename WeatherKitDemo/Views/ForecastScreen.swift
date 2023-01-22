@@ -11,8 +11,12 @@ struct ForecastScreen: View {
     // MARK: - Initializer
 
     init() {
-        // Abbreviated day of week, hour AM/PM
-        dateFormatter.setLocalizedDateFormatFromTemplate("EEE h:a")
+        // For dates, show the abbreviated day of week and time.
+        let use24Hour = Locale.current.identifier.starts(with: "fr")
+        let pattern = "EEE " + (use24Hour ? "H" : "h:a")
+        dateFormatter.setLocalizedDateFormatFromTemplate(pattern)
+
+        measurementFormatter.numberFormatter.maximumFractionDigits = 0
     }
 
     // MARK: - State
@@ -30,6 +34,7 @@ struct ForecastScreen: View {
     // MARK: - Properties
 
     private let dateFormatter = DateFormatter()
+    private let measurementFormatter = MeasurementFormatter()
 
     private var header: some View {
         HStack(spacing: 8) {
@@ -75,14 +80,20 @@ struct ForecastScreen: View {
         HStack {
             // TODO: Use 24-hour clock in French without AM/PM.
             Text(dateFormatter.string(from: forecast.date))
-                .frame(width: dateWidth)
+                .frame(width: dateWidth, alignment: .leading)
+
             Image.symbol(symbolName: forecast.symbolName, size: 30)
                 .frame(width: symbolWidth)
+
             Text(format(forecast: forecast))
                 .frame(width: temperatureWidth)
-            Text(forecast.wind.speed.formatted())
+
+            // Text(forecast.wind.speed.formatted())
+            Text(measurementFormatter.string(from: forecast.wind.speed))
                 .frame(width: windWidth)
-            Text(forecast.precipitation.description)
+
+            let prec = forecast.precipitation.description
+            Text(prec.isEmpty ? "none".localized : prec)
                 .frame(width: precipitationWidth)
         }
     }

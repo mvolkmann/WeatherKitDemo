@@ -3,7 +3,11 @@ import SwiftUI
 import WeatherKit
 
 class WeatherViewModel: NSObject, ObservableObject {
-    @Published var dateToFahrenheitMap: [Date: Double] = [:]
+    @AppStorage("showFahrenheit") var showFahrenheit = false
+
+    @Published var dateToTemperatureMap: [Date: Measurement<UnitTemperature>] =
+        [:]
+    @Published var useFahrenheit = false
     @Published var summary: WeatherSummary?
     @Published var timestamp: Date?
 
@@ -28,6 +32,9 @@ class WeatherViewModel: NSObject, ObservableObject {
 
     func load(location: CLLocation, colorScheme: ColorScheme) async throws {
         await MainActor.run {
+            // Initialize to value from AppStorage.
+            useFahrenheit = showFahrenheit
+
             summary = nil
         }
 
@@ -41,13 +48,10 @@ class WeatherViewModel: NSObject, ObservableObject {
         await MainActor.run {
             summary = weatherSummary
 
-            dateToFahrenheitMap = [:]
-            if let hours = summary?.hourlyForecast {
-                for hour in hours {
-                    let celsius = hour.temperature
-                    dateToFahrenheitMap[hour.date] = celsius.converted(
-                        to: UnitTemperature.fahrenheit
-                    ).value
+            dateToTemperatureMap = [:]
+            if let forecasts = summary?.hourlyForecast {
+                for forecast in forecasts {
+                    dateToTemperatureMap[forecast.date] = forecast.temperature
                 }
             }
         }

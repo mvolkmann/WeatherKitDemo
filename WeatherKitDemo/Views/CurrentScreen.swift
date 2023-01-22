@@ -67,8 +67,8 @@ struct CurrentScreen: View {
 
     private var formattedTemperature: String {
         guard let temp = weatherVM.summary?.temperature else { return "" }
-        // return temp.description // too many decimal places
-        return String(format: "%.0f", temp.value) + temp.unit.symbol
+        return String(format: "%.0f", Temperature.toDouble(temp)) +
+            Temperature.unit
     }
 
     private var matchedLocations: some View {
@@ -169,6 +169,7 @@ struct CurrentScreen: View {
     private func currentData() -> some View {
         if let summary = weatherVM.summary {
             VStack {
+                TemperatureUnitToggle()
                 Image.symbol(symbolName: summary.symbolName)
                 LabeledContent("Condition", value: summary.condition)
                 LabeledContent("Temperature", value: formattedTemperature)

@@ -77,7 +77,7 @@ struct ForecastScreen: View {
                 .frame(width: dateWidth)
             Image.symbol(symbolName: forecast.symbolName, size: 30)
                 .frame(width: symbolWidth)
-            Text(format(temperature: forecast.temperature))
+            Text(format(forecast: forecast))
                 .frame(width: temperatureWidth)
             Text(forecast.wind.speed.formatted())
                 .frame(width: windWidth)
@@ -86,8 +86,8 @@ struct ForecastScreen: View {
         }
     }
 
-    private func format(temperature: Measurement<UnitTemperature>) -> String {
-        let fahrenheit = temperature.converted(to: .fahrenheit)
-        return String(format: "%.0f", fahrenheit.value) + fahrenheit.unit.symbol
+    private func format(forecast: HourWeather) -> String {
+        let temperature = Temperature.toDouble(forecast)
+        return String(format: "%.0f", temperature) + Temperature.unit
     }
 }

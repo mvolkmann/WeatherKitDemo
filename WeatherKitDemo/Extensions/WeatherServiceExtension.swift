@@ -42,7 +42,7 @@ extension WeatherService {
         return WeatherSummary(
             condition: current.condition.description,
             symbolName: current.symbolName,
-            temperature: current.temperature.converted(to: .fahrenheit),
+            temperature: current.temperature,
             wind: "\(windSpeed) from \(windDirection)",
             hourlyForecast: keepForecast,
             attributionLightLogoURL: attr.combinedMarkLightURL,

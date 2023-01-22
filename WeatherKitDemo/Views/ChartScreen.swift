@@ -19,11 +19,14 @@ struct ChartScreen: View {
     private var annotation: some View {
         VStack {
             if let date = selectedDate,
-               let fahrenheit = weatherVM.dateToFahrenheitMap[date] {
+               let temperature = weatherVM.dateToTemperatureMap[date] {
                 // Text(date.formatted(.dateTime.month().day()))
                 Text(date.formatted(.dateTime.weekday(.wide)))
                 Text(date.formatted(.dateTime.hour()))
-                Text(String(format: "%.0f℉", fahrenheit))
+                Text(
+                    String(format: "%.0f", Temperature.toDouble(temperature)) +
+                        Temperature.unit
+                )
             }
         }
         .padding(5)
@@ -53,8 +56,7 @@ struct ChartScreen: View {
                     )
                     let temperature = PlottableValue.value(
                         "Temperature",
-                        forecast.temperature.converted(to: .fahrenheit)
-                            .value
+                        Temperature.toDouble(forecast)
                     )
 
                     LineMark(x: date, y: temperature)

@@ -55,8 +55,8 @@ struct HeatMapScreen: View {
         let forecastMax = hourlyForecast // also uses < !
             .max { $0.temperature.value < $1.temperature.value }
 
-        let tempMin = fahrenheit(forecastMin!)
-        let tempMax = fahrenheit(forecastMax!)
+        let tempMin = Temperature.toFahrenheit(forecastMin!)
+        let tempMax = Temperature.toFahrenheit(forecastMax!)
 
         let realStart = showAbsolute ? bluePercent * tempMin / 100 : redPercent
         let realEnd = showAbsolute ? bluePercent * tempMax / 100 : bluePercent
@@ -91,9 +91,11 @@ struct HeatMapScreen: View {
 
                 HStack {
                     Text("Colors:")
-                    Text("Relative")
-                    Toggle("", isOn: $showAbsolute).labelsHidden()
-                    Text("Absolute")
+                    Toggle2(
+                        off: "Relative",
+                        on: "Absolute",
+                        isOn: $showAbsolute
+                    )
                     Spacer()
                 }
                 .bold()
@@ -142,10 +144,6 @@ struct HeatMapScreen: View {
      }
      */
 
-    private func fahrenheit(_ forecast: HourWeather) -> Double {
-        forecast.temperature.converted(to: .fahrenheit).value
-    }
-
     private func heatMap(hourlyForecast: [HourWeather]) -> some View {
         Chart {
             ForEach(hourlyForecast.indices, id: \.self) { index in
@@ -179,7 +177,7 @@ struct HeatMapScreen: View {
     // This creates an individual cell in the heat map.
     private func mark(forecast: HourWeather) -> some ChartContent {
         let date = forecast.date
-        let temperature = fahrenheit(forecast)
+        let temperature = Temperature.toDouble(forecast)
 
         return Plot {
             RectangleMark(
@@ -194,14 +192,16 @@ struct HeatMapScreen: View {
 
             // Display the temperature on top of the cell.
             .annotation(position: .overlay) {
-                Text("\(String(format: "%.0f", temperature))℉")
-                    .rotationEffect(.degrees(-90))
-                    .font(.body)
-                    .frame(width: 55)
+                Text(
+                    "\(String(format: "%.0f", temperature))" + Temperature.unit
+                )
+                .rotationEffect(.degrees(-90))
+                .font(.body)
+                .frame(width: 60)
             }
         }
         .accessibilityLabel("\(date.md) \(date.h)")
-        .accessibilityValue("\(temperature)℉")
+        .accessibilityValue("\(temperature)" + Temperature.unit)
         .accessibilityHidden(false)
     }
 }

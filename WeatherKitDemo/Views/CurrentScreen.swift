@@ -67,8 +67,8 @@ struct CurrentScreen: View {
 
     private var formattedTemperature: String {
         guard let temp = weatherVM.summary?.temperature else { return "" }
-        return String(format: "%.0f", Temperature.toDouble(temp)) +
-            Temperature.unit
+        return String(format: "%.0f", temp.converted) +
+            weatherVM.temperatureUnitSymbol
     }
 
     private var matchedLocations: some View {

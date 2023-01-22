@@ -24,8 +24,8 @@ struct ChartScreen: View {
                 Text(date.formatted(.dateTime.weekday(.wide)))
                 Text(date.formatted(.dateTime.hour()))
                 Text(
-                    String(format: "%.0f", Temperature.toDouble(temperature)) +
-                        Temperature.unit
+                    String(format: "%.0f", temperature.converted) +
+                        weatherVM.temperatureUnitSymbol
                 )
             }
         }
@@ -56,7 +56,7 @@ struct ChartScreen: View {
                     )
                     let temperature = PlottableValue.value(
                         "Temperature",
-                        Temperature.toDouble(forecast)
+                        forecast.converted
                     )
 
                     LineMark(x: date, y: temperature)

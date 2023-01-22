@@ -30,6 +30,8 @@ class WeatherViewModel: NSObject, ObservableObject {
         return summary.hourlyForecast.filter { $0.date >= now }
     }
 
+    var temperatureUnitSymbol: String { useFahrenheit ? "℉" : "℃" }
+
     func load(location: CLLocation, colorScheme: ColorScheme) async throws {
         await MainActor.run {
             // Initialize to value from AppStorage.

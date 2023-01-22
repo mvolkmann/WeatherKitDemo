@@ -87,7 +87,7 @@ struct ForecastScreen: View {
     }
 
     private func format(forecast: HourWeather) -> String {
-        let temperature = Temperature.toDouble(forecast)
-        return String(format: "%.0f", temperature) + Temperature.unit
+        return String(format: "%.0f", forecast.converted) +
+            weatherVM.temperatureUnitSymbol
     }
 }

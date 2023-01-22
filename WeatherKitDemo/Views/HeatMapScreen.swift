@@ -55,8 +55,8 @@ struct HeatMapScreen: View {
         let forecastMax = hourlyForecast // also uses < !
             .max { $0.temperature.value < $1.temperature.value }
 
-        let tempMin = Temperature.toFahrenheit(forecastMin!)
-        let tempMax = Temperature.toFahrenheit(forecastMax!)
+        let tempMin = forecastMin!.fahrenheit
+        let tempMax = forecastMax!.fahrenheit
 
         let realStart = showAbsolute ? bluePercent * tempMin / 100 : redPercent
         let realEnd = showAbsolute ? bluePercent * tempMax / 100 : bluePercent
@@ -177,7 +177,7 @@ struct HeatMapScreen: View {
     // This creates an individual cell in the heat map.
     private func mark(forecast: HourWeather) -> some ChartContent {
         let date = forecast.date
-        let temperature = Temperature.toDouble(forecast)
+        let temperature = forecast.converted
 
         return Plot {
             RectangleMark(
@@ -193,7 +193,8 @@ struct HeatMapScreen: View {
             // Display the temperature on top of the cell.
             .annotation(position: .overlay) {
                 Text(
-                    "\(String(format: "%.0f", temperature))" + Temperature.unit
+                    "\(String(format: "%.0f", temperature))" +
+                        weatherVM.temperatureUnitSymbol
                 )
                 .rotationEffect(.degrees(-90))
                 .font(.body)
@@ -201,7 +202,7 @@ struct HeatMapScreen: View {
             }
         }
         .accessibilityLabel("\(date.md) \(date.h)")
-        .accessibilityValue("\(temperature)" + Temperature.unit)
+        .accessibilityValue("\(temperature)" + weatherVM.temperatureUnitSymbol)
         .accessibilityHidden(false)
     }
 }

@@ -7,18 +7,6 @@ import WeatherKit
 private let redPercent = 0.0
 private let bluePercent = 0.65
 
-private let absoluteHelp = """
-In absolute move, \
-blue represents 0℉" or less and \
-red represents 100℉" or more.
-"""
-
-private let relativeHelp = """
-In relative mode, \
-blue represents the lowest temperature over the next five days and \
-red represents the highest temperature over the next five days.
-"""
-
 struct HeatMapScreen: View {
     // MARK: - State
 
@@ -90,7 +78,7 @@ struct HeatMapScreen: View {
                 }
 
                 HStack {
-                    Text("Colors:")
+                    Text("Colors".localized + ":")
                     Toggle2(
                         off: "Relative",
                         on: "Absolute",
@@ -100,7 +88,7 @@ struct HeatMapScreen: View {
                 }
                 .bold()
 
-                Text(showAbsolute ? absoluteHelp : relativeHelp)
+                Text(showAbsolute ? "absolute-help" : "relative-help")
                     .font(.footnote)
 
                 /*
@@ -124,9 +112,10 @@ struct HeatMapScreen: View {
     // MARK: - Methods
 
     private func dayLabel(_ day: String) -> some View {
-        Text(day)
+        Text(day.localized)
             .rotationEffect(Angle.degrees(-90))
-            .frame(height: 50)
+            .frame(height: 50) // TODO: Why does "Mon" in French get elided?
+        // .border(.red) // for debugging the issue above
     }
 
     /*
@@ -161,6 +150,7 @@ struct HeatMapScreen: View {
                     let index = axisValue.index
                     let mod = index % 12
                     let hour = mod == 0 ? 12 : mod
+                    // TODO: Use 24-hour clock in French without AM/PM.
                     Text("\(hour)\n\(index < 12 ? "AM" : "PM")")
                         .multilineTextAlignment(.center)
                 }

@@ -18,10 +18,11 @@ class WeatherViewModel: NSObject, ObservableObject {
     var formattedTimestamp: String {
         guard let timestamp else { return "" }
 
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .medium
-        return dateFormatter.string(from: timestamp)
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .medium
+        print("identifier =", Locale.current.identifier)
+        return formatter.string(from: timestamp)
     }
 
     var futureForecast: [HourWeather] {

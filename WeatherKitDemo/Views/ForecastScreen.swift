@@ -73,6 +73,7 @@ struct ForecastScreen: View {
 
     private func forecastView(_ forecast: HourWeather) -> some View {
         HStack {
+            // TODO: Use 24-hour clock in French without AM/PM.
             Text(dateFormatter.string(from: forecast.date))
                 .frame(width: dateWidth)
             Image.symbol(symbolName: forecast.symbolName, size: 30)

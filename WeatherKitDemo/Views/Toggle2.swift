@@ -7,9 +7,9 @@ struct Toggle2: View {
 
     var body: some View {
         HStack {
-            Text(off).onTapGesture { isOn = false }
+            Text(off.localized).onTapGesture { isOn = false }
             Toggle("", isOn: $isOn).labelsHidden()
-            Text(on).onTapGesture { isOn = true }
+            Text(on.localized).onTapGesture { isOn = true }
         }
     }
 }

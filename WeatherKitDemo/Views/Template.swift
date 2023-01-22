@@ -82,7 +82,8 @@ struct Template<Content: View>: View {
                 .foregroundColor(.primary)
             if weatherVM.timestamp != nil {
                 HStack {
-                    Text("last updated \(weatherVM.formattedTimestamp)")
+                    Text("last updated")
+                    Text(weatherVM.formattedTimestamp)
                     Button("Refresh") { refresh() }
                 }
             }

@@ -144,6 +144,10 @@ struct CurrentScreen: View {
                 attributionLink()
             }
         }
+        .onAppear {
+            // TODO: Use this value to determine the default temperature unit.
+            print("Locale =", Locale.current)
+        }
     }
 
     @ViewBuilder
@@ -181,8 +185,7 @@ struct CurrentScreen: View {
                 )
                 LabeledContent("Winds", value: summary.wind)
             }
-            .font(.title3)
-            .bold()
+            .font(.headline)
             .foregroundColor(.primary)
         } else {
             EmptyView()

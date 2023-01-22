@@ -22,6 +22,7 @@ struct ChartScreen: View {
                let temperature = weatherVM.dateToTemperatureMap[date] {
                 // Text(date.formatted(.dateTime.month().day()))
                 Text(date.formatted(.dateTime.weekday(.wide)))
+                // TODO: Use 24-hour clock in French without AM/PM.
                 Text(date.formatted(.dateTime.hour()))
                 Text(
                     String(format: "%.0f", temperature.converted) +
@@ -46,7 +47,7 @@ struct ChartScreen: View {
     var body: some View {
         Template {
             let futureForecast = weatherVM.futureForecast
-            Text("Drag across the chart to see hourly details.")
+            Text("drag-help")
             Chart {
                 ForEach(futureForecast.indices, id: \.self) { index in
                     let forecast = futureForecast[index]

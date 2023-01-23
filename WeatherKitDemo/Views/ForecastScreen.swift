@@ -88,12 +88,10 @@ struct ForecastScreen: View {
             Text(format(forecast: forecast))
                 .frame(width: temperatureWidth)
 
-            // Text(forecast.wind.speed.formatted())
             Text(measurementFormatter.string(from: forecast.wind.speed))
                 .frame(width: windWidth)
 
-            let prec = forecast.precipitation.description
-            Text(prec.isEmpty ? "none".localized : prec)
+            Text(precipitationReport(forecast))
                 .frame(width: precipitationWidth)
         }
     }
@@ -101,5 +99,20 @@ struct ForecastScreen: View {
     private func format(forecast: HourWeather) -> String {
         return String(format: "%.0f", forecast.converted) +
             weatherVM.temperatureUnitSymbol
+    }
+
+    private func precipitationReport(_ forecast: HourWeather) -> String {
+        let description = forecast.precipitation.description
+        guard !description.isEmpty else { return "none".localized }
+
+        // print("precipitation amount =", forecast.precipitationAmount)
+        // TODO: Report in centimeters for metric languages.
+        let amount = forecast.precipitationAmount.converted(to: .inches)
+        // print("precipitation inches =", amount)
+        let amountText = amount.value < 0.1 ?
+            "trace" :
+            String(format: "%.1f", amount.value) + " " + amount.unit.symbol
+
+        return description + " " + amountText
     }
 }

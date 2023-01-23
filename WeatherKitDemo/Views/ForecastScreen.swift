@@ -105,14 +105,19 @@ struct ForecastScreen: View {
         let description = forecast.precipitation.description
         guard !description.isEmpty else { return "none".localized }
 
-        // print("precipitation amount =", forecast.precipitationAmount)
-        // TODO: Report in centimeters for metric languages.
-        let amount = forecast.precipitationAmount.converted(to: .inches)
-        // print("precipitation inches =", amount)
-        let amountText = amount.value < 0.1 ?
-            "trace" :
-            String(format: "%.1f", amount.value) + " " + amount.unit.symbol
+        let unit: UnitLength = Locale.current.region?.identifier == "US" ?
+            .inches : .centimeters
+        let amount = forecast.precipitationAmount.converted(to: unit)
 
-        return description + " " + amountText
+        var value = amount.value // "liquid equivalent"
+
+        // The baseline ratio of rain to snow is
+        // 1 inch of rain equals 10 inches of snow.
+        if description == "snow" { value *= 10 }
+
+        let amountText = value < 0.1 ? "trace" :
+            String(format: "%.1f", value) + " " + amount.unit.symbol
+
+        return "\(amountText) \(description)"
     }
 }

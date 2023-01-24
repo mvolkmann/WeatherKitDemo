@@ -29,6 +29,24 @@ struct HeatMapScreen: View {
 
     // MARK: - Variables
 
+    private var colorToggle: some View {
+        Group {
+            HStack(alignment: .center) {
+                Text("Colors".localized + ":")
+                Toggle2(
+                    off: "Relative",
+                    on: "Absolute",
+                    isOn: $showAbsolute
+                )
+            }
+            .bold()
+
+            Text(showAbsolute ? "absolute-help" : "relative-help")
+                .font(.footnote)
+                .frame(width: isWide ? 350 : .infinity)
+        }
+    }
+
     private var dayLabels: some View {
         VStack(spacing: 21) {
             let startIndex = Date().dayOfWeekNumber - 1
@@ -75,28 +93,15 @@ struct HeatMapScreen: View {
             } else {
                 HStack(alignment: .top, spacing: 0) {
                     dayLabels
-
                     ScrollView(.horizontal) {
                         heatMap(hourlyForecast: hourlyForecast)
                             // Prevent scrollbar from overlapping legend.
                             .padding(.bottom, 10)
                     }
+                    // .border(.red)
                 }
 
-                HStack(alignment: .center) {
-                    Text("Colors".localized + ":")
-                    Toggle2(
-                        off: "Relative",
-                        on: "Absolute",
-                        isOn: $showAbsolute
-                    )
-                }
-                .bold()
-                // .frame(maxWidth: .infinity)
-
-                Text(showAbsolute ? "absolute-help" : "relative-help")
-                    .font(.footnote)
-                    .frame(width: isWide ? 350 : .infinity)
+                colorToggle
 
                 /*
                  // TODO: This is only for verifying the desired gradient range.
@@ -122,7 +127,6 @@ struct HeatMapScreen: View {
         Text(day.localized)
             .rotationEffect(Angle.degrees(-90))
             .frame(height: 50) // TODO: Why does "Mon" in French get elided?
-        // .border(.red) // for debugging the issue above
     }
 
     /*

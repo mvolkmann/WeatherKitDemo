@@ -11,8 +11,8 @@ struct CurrentScreen: View {
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(
-        \.verticalSizeClass
-    ) var verticalSizeClass: UserInterfaceSizeClass?
+        \.horizontalSizeClass
+    ) var horizontalSizeClass: UserInterfaceSizeClass?
 
     @FocusState private var isTextFieldFocused: Bool
 
@@ -71,6 +71,8 @@ struct CurrentScreen: View {
             weatherVM.temperatureUnitSymbol
     }
 
+    private var isWide: Bool { horizontalSizeClass != .compact }
+
     private var matchedLocations: some View {
         List {
             ForEach(
@@ -103,12 +105,7 @@ struct CurrentScreen: View {
                 .font(.title)
             }
         }
-        .frame(maxWidth: width)
         .padding(.top, 10)
-    }
-
-    private var width: CGFloat {
-        verticalSizeClass == .compact ? 350 : .infinity
     }
 
     var body: some View {
@@ -143,6 +140,7 @@ struct CurrentScreen: View {
 
                 attributionLink()
             }
+            .frame(maxWidth: isWide ? 350 : .infinity)
         }
     }
 
@@ -170,7 +168,7 @@ struct CurrentScreen: View {
         if let summary = weatherVM.summary {
             VStack {
                 TemperatureUnitToggle()
-                Image.symbol(symbolName: summary.symbolName)
+                Image.symbol(symbolName: summary.symbolName, size: 80)
                 LabeledContent("Condition", value: summary.condition)
                 LabeledContent("Temperature", value: formattedTemperature)
                 let firstForecast = summary.hourlyForecast.first!

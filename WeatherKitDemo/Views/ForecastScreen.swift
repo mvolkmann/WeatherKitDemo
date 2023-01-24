@@ -2,9 +2,11 @@ import SwiftUI
 import WeatherKit
 
 struct ForecastScreen: View {
+    // MARK: - State
+
     @Environment(
-        \.verticalSizeClass
-    ) var verticalSizeClass: UserInterfaceSizeClass?
+        \.horizontalSizeClass
+    ) var horizontalSizeClass: UserInterfaceSizeClass?
 
     @State private var orientation = UIDeviceOrientation.unknown
 
@@ -27,9 +29,7 @@ struct ForecastScreen: View {
 
     private let dateWidth = 95.0
     private let symbolWidth = 30.0
-    private let temperatureWidth = 50.0
     private let windWidth = 65.0
-    private let precipitationWidth = 45.0
 
     // MARK: - Properties
 
@@ -40,19 +40,27 @@ struct ForecastScreen: View {
         HStack(spacing: 8) {
             Text("Day/Time").frame(width: dateWidth)
             Text("").frame(width: symbolWidth)
-            Text("Temp").frame(width: temperatureWidth)
-            Text("Wind").frame(width: windWidth)
-            Text("Prec").frame(width: precipitationWidth)
+            Text(isWide ? "Temperature" : "Temp").frame(width: temperatureWidth)
+            Text(isWide ? "Wind Speed" : "Wind").frame(width: windWidth)
+            Text(isWide ? "Precipitation" : "Prec")
+                .frame(width: precipitationWidth)
             Spacer()
         }
         .fontWeight(.bold)
         .padding(.leading)
-        .frame(maxWidth: .infinity)
     }
 
-    private var width: CGFloat {
-        verticalSizeClass == .compact ? 350 : .infinity
+    private var isWide: Bool { horizontalSizeClass != .compact }
+
+    private var listWidth: Double {
+        let extra = 25.0
+        return extra + dateWidth + symbolWidth + temperatureWidth + windWidth +
+            precipitationWidth + extra
     }
+
+    private var precipitationWidth: Double { isWide ? 110 : 45 }
+
+    private var temperatureWidth: Double { isWide ? 120 : 50 }
 
     var body: some View {
         Template {
@@ -69,7 +77,7 @@ struct ForecastScreen: View {
                 .listStyle(.plain)
                 .cornerRadius(10)
             }
-            .frame(maxWidth: width)
+            .frame(width: isWide ? listWidth : .infinity)
         }
         .onRotate { orientation = $0 }
     }
@@ -82,7 +90,7 @@ struct ForecastScreen: View {
             Text(dateFormatter.string(from: forecast.date))
                 .frame(width: dateWidth, alignment: .leading)
 
-            Image.symbol(symbolName: forecast.symbolName, size: 30)
+            Image.symbol(symbolName: forecast.symbolName)
                 .frame(width: symbolWidth)
 
             Text(format(forecast: forecast))

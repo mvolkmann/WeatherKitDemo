@@ -10,6 +10,10 @@ private let bluePercent = 0.65
 struct HeatMapScreen: View {
     // MARK: - State
 
+    @Environment(
+        \.horizontalSizeClass
+    ) var horizontalSizeClass: UserInterfaceSizeClass?
+
     @State private var hourlyForecast: [HourWeather] = []
     @State private var showAbsolute = false
 
@@ -60,6 +64,8 @@ struct HeatMapScreen: View {
         return Gradient(colors: hueColors)
     }
 
+    private var isWide: Bool { horizontalSizeClass != .compact }
+
     private let weatherVM = WeatherViewModel.shared
 
     var body: some View {
@@ -77,19 +83,20 @@ struct HeatMapScreen: View {
                     }
                 }
 
-                HStack {
+                HStack(alignment: .center) {
                     Text("Colors".localized + ":")
                     Toggle2(
                         off: "Relative",
                         on: "Absolute",
                         isOn: $showAbsolute
                     )
-                    Spacer()
                 }
                 .bold()
+                // .frame(maxWidth: .infinity)
 
                 Text(showAbsolute ? "absolute-help" : "relative-help")
                     .font(.footnote)
+                    .frame(width: isWide ? 350 : .infinity)
 
                 /*
                  // TODO: This is only for verifying the desired gradient range.

@@ -121,11 +121,24 @@ struct ForecastScreen: View {
 
         // The baseline ratio of rain to snow is
         // 1 inch of rain equals 10 inches of snow.
-        if description == "snow" { value *= 10 }
+        if description == "snow" { value *= snowMultiplier(forecast) }
 
         let amountText = value < 0.1 ? "trace" :
             String(format: "%.1f", value) + " " + amount.unit.symbol
 
         return "\(amountText) \(description)"
+    }
+
+    // These numbers come from
+    // https://sciencing.com/calculate-ratio-between-two-numbers-8187157.html.
+    private func snowMultiplier(_ forecast: HourWeather) -> Double {
+        let fahrenheit = forecast.temperature.converted(to: .fahrenheit).value
+        if fahrenheit >= 27 { return 10.0 }
+        if fahrenheit >= 20 { return 15.0 }
+        if fahrenheit >= 15 { return 20.0 }
+        if fahrenheit >= 10 { return 30.0 }
+        if fahrenheit >= 0 { return 40.0 }
+        if fahrenheit >= -20 { return 50.0 }
+        return 100
     }
 }

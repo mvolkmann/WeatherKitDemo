@@ -25,8 +25,8 @@ class WeatherViewModel: NSObject, ObservableObject {
     }
 
     var futureForecast: [HourWeather] {
-        let now = Date()
         guard let summary else { return [] }
+        let now = Date()
         return summary.hourlyForecast.filter { $0.date >= now }
     }
 
@@ -45,7 +45,6 @@ class WeatherViewModel: NSObject, ObservableObject {
             for: location,
             colorScheme: colorScheme
         )
-        // print("weatherSummary =", weatherSummary)
 
         await MainActor.run {
             summary = weatherSummary

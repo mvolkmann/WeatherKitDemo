@@ -6,6 +6,8 @@ import WeatherKit
 // Blue is 70% through the gradient and is where we want to stop.
 private let redPercent = 0.0
 private let bluePercent = 0.65
+private let markHeight = 70.0 // 90.0
+private let markWidth = 30.0
 
 struct HeatMapScreen: View {
     // MARK: - State
@@ -43,12 +45,12 @@ struct HeatMapScreen: View {
 
             Text(showAbsolute ? "absolute-help" : "relative-help")
                 .font(.footnote)
-                .frame(width: isWide ? 350 : .infinity)
+                .frame(maxWidth: isWide ? 500 : .infinity)
         }
     }
 
     private var dayLabels: some View {
-        VStack(spacing: 21) {
+        VStack(spacing: 0) {
             let startIndex = Date().dayOfWeekNumber - 1
             let range =
                 startIndex ..< startIndex + WeatherService.days
@@ -56,7 +58,6 @@ struct HeatMapScreen: View {
                 dayLabel(Self.daysOfWeek[index % 7])
             }
         }
-        .padding(.top, 11)
     }
 
     private var gradient: Gradient {
@@ -82,6 +83,13 @@ struct HeatMapScreen: View {
         return Gradient(colors: hueColors)
     }
 
+    private var heatMapHeight: Double {
+        // The + 1 is for the x-axis labels and the key.
+        Double(WeatherService.days + 1) * markHeight
+    }
+
+    private var heatMapWidth: Double { markWidth * 24 }
+
     private var isWide: Bool { horizontalSizeClass != .compact }
 
     private let weatherVM = WeatherViewModel.shared
@@ -89,16 +97,20 @@ struct HeatMapScreen: View {
     var body: some View {
         Template {
             if hourlyForecast.isEmpty {
-                Text("Forecast data is not available.")
+                Text("Forecast data is not available.").font(.largeTitle)
             } else {
                 HStack(alignment: .top, spacing: 0) {
+                    Spacer()
                     dayLabels
                     ScrollView(.horizontal) {
                         heatMap(hourlyForecast: hourlyForecast)
                             // Prevent scrollbar from overlapping legend.
                             .padding(.bottom, 10)
                     }
-                    // .border(.red)
+                    .if(isWide) { view in
+                        view.frame(width: heatMapWidth, height: heatMapHeight)
+                    }
+                    Spacer()
                 }
 
                 colorToggle
@@ -124,9 +136,10 @@ struct HeatMapScreen: View {
     // MARK: - Methods
 
     private func dayLabel(_ day: String) -> some View {
+        // TODO: Why does "Mon" in French get elided?
         Text(day.localized)
+            .frame(height: markHeight)
             .rotationEffect(Angle.degrees(-90))
-            .frame(height: 50) // TODO: Why does "Mon" in French get elided?
     }
 
     /*
@@ -172,7 +185,7 @@ struct HeatMapScreen: View {
         // They display above each row.
         .chartYAxis(.hidden)
 
-        .frame(width: 800, height: Double(WeatherService.days * 85))
+        .frame(width: heatMapWidth, height: heatMapHeight)
     }
 
     // This creates an individual cell in the heat map.

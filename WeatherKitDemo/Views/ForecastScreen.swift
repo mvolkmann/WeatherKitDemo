@@ -77,7 +77,7 @@ struct ForecastScreen: View {
                 .listStyle(.plain)
                 .cornerRadius(10)
             }
-            .frame(width: isWide ? listWidth : .infinity)
+            .frame(maxWidth: isWide ? listWidth : .infinity)
         }
         .onRotate { orientation = $0 }
     }

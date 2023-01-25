@@ -5,6 +5,7 @@ import WeatherKit
 struct ContentView: View {
     @Environment(\.colorScheme) private var colorScheme
 
+    // @State private var lastLocation: CLLocation?
     @State private var selectedTab: String = "current"
 
     @StateObject private var locationVM = LocationViewModel.shared
@@ -29,6 +30,14 @@ struct ContentView: View {
         // Run this closure again every time the selected placemark changes.
         .task(id: locationVM.selectedPlacemark, priority: .background) {
             if let location = locationVM.selectedPlacemark?.location {
+                /*
+                 if let lastLocation, location == lastLocation {
+                     // TODO: Why does this break loading of weather data?
+                     // return
+                 }
+
+                 lastLocation = location
+                 */
                 do {
                     try await weatherVM.load(
                         location: location,

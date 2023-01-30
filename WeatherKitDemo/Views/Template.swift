@@ -74,7 +74,7 @@ struct Template<Content: View>: View {
     }
 
     private var place: some View {
-        Text(location).font(.title2).bold()
+        Text(location).font(.title3).bold()
     }
 
     private var title: some View {
@@ -87,8 +87,10 @@ struct Template<Content: View>: View {
                 HStack {
                     Text("last updated")
                     Text(weatherVM.formattedTimestamp)
+                    Spacer()
                     Button("Refresh") { refresh() }
                 }
+                .font(.system(size: 16))
             }
         }
     }

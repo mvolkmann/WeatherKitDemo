@@ -10,6 +10,7 @@ struct TemperatureUnitToggle: View {
             on: "Fahrenheit",
             isOn: $weatherVM.useFahrenheit
         )
+        .font(.callout)
         // Keep AppStorage in sync with setting in WeatherViewModel.
         .onChange(of: weatherVM.useFahrenheit) { useFahrenheit in
             showFahrenheit = useFahrenheit

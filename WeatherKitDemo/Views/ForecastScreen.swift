@@ -46,6 +46,7 @@ struct ForecastScreen: View {
                 .frame(width: precipitationWidth)
             Spacer()
         }
+        .font(.subheadline)
         .fontWeight(.bold)
         .padding(.leading)
     }
@@ -60,7 +61,7 @@ struct ForecastScreen: View {
 
     private var precipitationWidth: Double { isWide ? 110 : 45 }
 
-    private var temperatureWidth: Double { isWide ? 120 : 50 }
+    private var temperatureWidth: Double { isWide ? 120 : 55 }
 
     var body: some View {
         Template {
@@ -111,7 +112,8 @@ struct ForecastScreen: View {
 
     private func precipitationReport(_ forecast: HourWeather) -> String {
         let description = forecast.precipitation.description
-        guard !description.isEmpty else { return "none".localized }
+        // guard !description.isEmpty else { return "none".localized }
+        guard !description.isEmpty else { return "-" }
 
         let unit: UnitLength = Locale.current.region?.identifier == "US" ?
             .inches : .centimeters

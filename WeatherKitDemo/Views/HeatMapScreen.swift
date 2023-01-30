@@ -42,10 +42,10 @@ struct HeatMapScreen: View {
                     isOn: $showAbsolute
                 )
             }
-            .bold()
 
             helpText
-                .font(.footnote)
+                // .font(.footnote)
+                .font(.system(size: 14))
                 .frame(maxWidth: isWide ? 500 : .infinity)
         }
     }

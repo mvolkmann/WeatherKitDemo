@@ -47,7 +47,7 @@ struct ChartScreen: View {
     var body: some View {
         Template {
             let futureForecast = weatherVM.futureForecast
-            Text("drag-help")
+            Text("drag-help").font(.subheadline)
             Chart {
                 ForEach(futureForecast.indices, id: \.self) { index in
                     let forecast = futureForecast[index]

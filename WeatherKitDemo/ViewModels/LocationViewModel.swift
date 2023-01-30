@@ -9,6 +9,7 @@ import SwiftUI
 class LocationViewModel: NSObject, ObservableObject {
     // MARK: - State
 
+    @Published var authorized: Bool = false
     @Published var searchLocations: [String] = []
     @Published var currentPlacemark: CLPlacemark?
     @Published var likedLocations: [String] = []
@@ -23,12 +24,11 @@ class LocationViewModel: NSObject, ObservableObject {
 
         super.init()
 
+        locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.distanceFilter = kCLDistanceFilterNone
-        // locationManager.requestAlwaysAuthorization()
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
-        locationManager.delegate = self
 
         cancellable = $searchQuery.assign(to: \.queryFragment, on: completer)
         completer.delegate = self
@@ -36,7 +36,7 @@ class LocationViewModel: NSObject, ObservableObject {
         completer.resultTypes = .address
     }
 
-    // MARK: - Properites
+    // MARK: - Properties
 
     static let shared = LocationViewModel()
 
@@ -83,6 +83,14 @@ class LocationViewModel: NSObject, ObservableObject {
 }
 
 extension LocationViewModel: CLLocationManagerDelegate {
+    func locationManager(
+        _ manager: CLLocationManager,
+        didChangeAuthorization status: CLAuthorizationStatus
+    ) {
+        authorized =
+            status == .authorizedAlways || status == .authorizedWhenInUse
+    }
+
     func locationManager(
         _: CLLocationManager,
         didUpdateLocations locations: [CLLocation]

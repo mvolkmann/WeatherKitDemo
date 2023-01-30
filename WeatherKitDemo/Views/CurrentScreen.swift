@@ -115,7 +115,7 @@ struct CurrentScreen: View {
                     currentData()
                 }
 
-                if !locationVM.usingCurrent {
+                if locationVM.authorized && !locationVM.usingCurrent {
                     currentLocationButton
                 }
 

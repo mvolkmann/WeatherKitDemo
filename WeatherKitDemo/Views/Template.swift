@@ -98,12 +98,11 @@ struct Template<Content: View>: View {
 
                 HStack {
                     place
-                    likeButton
+                    if !location.isEmpty { likeButton }
                 }
 
-                if weatherVM.summary == nil {
+                if locationVM.authorized && weatherVM.summary == nil {
                     Spacer()
-                    // ProgressView()
                     LottieView(name: "weather-progress", loopMode: .loop)
                         .frame(width: 200, height: 200)
                 } else {

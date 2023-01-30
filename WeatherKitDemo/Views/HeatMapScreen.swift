@@ -5,7 +5,7 @@ import WeatherKit
 // Red is 0% through the gradient and is where we want to start.
 // Blue is 70% through the gradient and is where we want to stop.
 private let redPercent = 0.0
-private let bluePercent = 0.65
+private let bluePercent = 2.0 / 3.0
 private let markHeight = 70.0 // 90.0
 private let markWidth = 30.0
 
@@ -67,16 +67,21 @@ struct HeatMapScreen: View {
         let forecastMax = hourlyForecast // also uses < !
             .max { $0.temperature.value < $1.temperature.value }
 
-        let tempMin = forecastMin!.fahrenheit
-        let tempMax = forecastMax!.fahrenheit
+        let tempMin = max(forecastMin!.fahrenheit, 0)
+        let tempMax = min(forecastMax!.fahrenheit, 100)
 
-        let realStart = showAbsolute ? bluePercent * tempMin / 100 : redPercent
-        let realEnd = showAbsolute ? bluePercent * tempMax / 100 : bluePercent
+        // We want these values to range from
+        // bluePercent for the coldest to redPercent for the warmest.
+        let realStart = showAbsolute ? bluePercent - bluePercent * tempMax /
+            100 : redPercent
+        let realEnd = showAbsolute ? bluePercent - bluePercent * tempMin / 100 :
+            bluePercent
 
+        // red has a hue of zero and blue has hue of 2/3.
         // "by" is negative so the gradient goes from blue to red.
         let hueColors = stride(
-            from: realEnd, // redish
-            to: realStart, // bluish
+            from: realEnd, // blue-ish
+            to: realStart, // red-ish
             by: -0.01
         ).map {
             Color(hue: $0, saturation: 0.8, brightness: 0.8)

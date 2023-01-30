@@ -16,8 +16,6 @@ struct CurrentScreen: View {
 
     @FocusState private var isTextFieldFocused: Bool
 
-    @State private var placemarks: [CLPlacemark] = []
-
     @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
 

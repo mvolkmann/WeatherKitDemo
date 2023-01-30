@@ -10,7 +10,10 @@ struct LocationService {
         placemark?.country ?? ""
     }
 
-    static func description(from placemark: CLPlacemark?) -> String {
+    static func description(
+        from placemark: CLPlacemark?,
+        full: Bool = false
+    ) -> String {
         guard let placemark else { return "" }
         let city = Self.city(from: placemark)
         let state = Self.state(from: placemark)
@@ -20,7 +23,9 @@ struct LocationService {
         } else if city == state {
             return "\(city), \(country)"
         } else {
-            return "\(city), \(state)"
+            return full ?
+                "\(city), \(state), \(country)" :
+                "\(city), \(state)"
         }
     }
 

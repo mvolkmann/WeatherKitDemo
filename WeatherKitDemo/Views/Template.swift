@@ -46,7 +46,10 @@ struct Template<Content: View>: View {
                 isLiked.toggle()
 
                 if let place = locationVM.selectedPlacemark {
-                    let location = LocationService.description(from: place)
+                    let location = LocationService.description(
+                        from: place,
+                        full: true
+                    )
 
                     if isLiked {
                         locationVM.likeLocation(location)

@@ -1,4 +1,4 @@
-"absolute-help" = "En mode absolu, le bleu représente 0℉ ou moins et le rouge représente 100℉ ou plus.";
+"absolute-help %@ %@" = "En mode absolu, le bleu représente %@ ou moins et le rouge représente %@ ou plus.";
 "Absolute" = "Tout à fait";
 "AM" = "";
 "Celsius" = "Celsius";

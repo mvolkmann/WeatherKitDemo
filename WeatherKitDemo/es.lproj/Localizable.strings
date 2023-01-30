@@ -1,4 +1,4 @@
-"absolute-help" = "En modo absoluto, el azul representa 0°F o menos y el rojo representa 100°F o más.";
+"absolute-help %@ %@" = "En modo absoluto, el azul representa %@ o menos y el rojo representa %@ o más.";
 "Absolute" = "Absoluta";
 "AM" = "a. m.";
 "Celsius" = "Celsius";

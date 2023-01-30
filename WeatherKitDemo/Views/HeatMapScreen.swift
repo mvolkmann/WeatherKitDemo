@@ -18,6 +18,7 @@ struct HeatMapScreen: View {
 
     @State private var hourlyForecast: [HourWeather] = []
     @State private var showAbsolute = false
+    @StateObject private var weatherVM = WeatherViewModel.shared
 
     // MARK: - Constants
 
@@ -43,7 +44,7 @@ struct HeatMapScreen: View {
             }
             .bold()
 
-            Text(showAbsolute ? "absolute-help" : "relative-help")
+            helpText
                 .font(.footnote)
                 .frame(maxWidth: isWide ? 500 : .infinity)
         }
@@ -90,9 +91,15 @@ struct HeatMapScreen: View {
 
     private var heatMapWidth: Double { markWidth * 24 }
 
-    private var isWide: Bool { horizontalSizeClass != .compact }
+    private var helpText: some View {
+        let low = weatherVM.useFahrenheit ? "0℉" : "-17.8℃"
+        let high = weatherVM.useFahrenheit ? "100℉" : "37.8℃"
+        return showAbsolute ?
+            Text("absolute-help \(low) \(high)") :
+            Text("relative-help")
+    }
 
-    private let weatherVM = WeatherViewModel.shared
+    private var isWide: Bool { horizontalSizeClass != .compact }
 
     var body: some View {
         Template {

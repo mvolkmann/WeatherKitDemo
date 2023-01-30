@@ -40,9 +40,9 @@ struct ForecastScreen: View {
         HStack(spacing: 8) {
             Text("Day/Time").frame(width: dateWidth)
             Text("").frame(width: symbolWidth)
-            Text(isWide ? "Temperature" : "Temp").frame(width: temperatureWidth)
-            Text(isWide ? "Wind Speed" : "Wind").frame(width: windWidth)
-            Text(isWide ? "Precipitation" : "Prec")
+            Text("Temp").frame(width: temperatureWidth)
+            Text("Wind").frame(width: windWidth)
+            Text(isWide ? "Precip" : "Prec")
                 .frame(width: precipitationWidth)
             Spacer()
         }

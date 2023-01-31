@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A0D14162988B0250087474E /* ActualFeelToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D14152988B0250087474E /* ActualFeelToggle.swift */; };
 		1A36EDA828D68D6B00372EE1 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 1A36EDA528D68D6B00372EE1 /* README.md */; };
 		1A50CC3228D381CC005B1D36 /* LocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A50CC3128D381CC005B1D36 /* LocationViewModel.swift */; };
 		1A5A7204297DF48F00BC1EC9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5A7203297DF48F00BC1EC9 /* AppDelegate.swift */; };
@@ -38,6 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1A0D14152988B0250087474E /* ActualFeelToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActualFeelToggle.swift; sourceTree = "<group>"; };
 		1A36EDA528D68D6B00372EE1 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		1A50CC3028D380C3005B1D36 /* WeatherKitDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WeatherKitDemo.entitlements; sourceTree = "<group>"; };
 		1A50CC3128D381CC005B1D36 /* LocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewModel.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 		1AB0621028D64C3900602C7B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				1A0D14152988B0250087474E /* ActualFeelToggle.swift */,
 				1A713EBA28F9DFD000AEA66B /* ChartScreen.swift */,
 				1A84529328D37DA900C28047 /* ContentView.swift */,
 				1A713EB428F9DCDA00AEA66B /* CurrentScreen.swift */,
@@ -277,6 +280,7 @@
 				1A713EC128FA0CD500AEA66B /* Template.swift in Sources */,
 				1A713EC328FC3EF900AEA66B /* StringExtension.swift in Sources */,
 				1A713EC528FC4E5700AEA66B /* ViewExtension.swift in Sources */,
+				1A0D14162988B0250087474E /* ActualFeelToggle.swift in Sources */,
 				1A713EC828FC5C5000AEA66B /* LocationService.swift in Sources */,
 				1A713EBD28F9FDB800AEA66B /* DateExtension.swift in Sources */,
 				1AB73A8C297D8A3100DCF9A9 /* MeasureExtension.swift in Sources */,
@@ -428,7 +432,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = WeatherKitDemo/WeatherKitDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherKitDemo/Preview Content\"";
 				DEVELOPMENT_TEAM = 4BG3523GAZ;
 				ENABLE_PREVIEWS = YES;
@@ -445,7 +449,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "r.mark.volkmann-gmail.com.FeatherWeather";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -462,7 +466,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = WeatherKitDemo/WeatherKitDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherKitDemo/Preview Content\"";
 				DEVELOPMENT_TEAM = 4BG3523GAZ;
 				ENABLE_PREVIEWS = YES;
@@ -479,7 +483,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "r.mark.volkmann-gmail.com.FeatherWeather";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

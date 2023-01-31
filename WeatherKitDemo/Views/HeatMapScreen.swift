@@ -111,6 +111,7 @@ struct HeatMapScreen: View {
             if hourlyForecast.isEmpty {
                 Text("Forecast data is not available.").font(.largeTitle)
             } else {
+                ActualFeelToggle()
                 HStack(alignment: .top, spacing: 0) {
                     Spacer()
                     dayLabels
@@ -124,17 +125,7 @@ struct HeatMapScreen: View {
                     }
                     Spacer()
                 }
-
                 colorToggle
-
-                /*
-                 // TODO: This is only for verifying the desired gradient range.
-                 LinearGradient(
-                     gradient: gradient,
-                     startPoint: .leading,
-                     endPoint: .trailing
-                 )
-                 */
             }
         }
         // Run this closure again every time the selected placemark changes.
@@ -203,7 +194,15 @@ struct HeatMapScreen: View {
     // This creates an individual cell in the heat map.
     private func mark(forecast: HourWeather) -> some ChartContent {
         let date = forecast.date
-        let temperature = forecast.converted
+        let measurement = weatherVM.showFeel ?
+            forecast.apparentTemperature : forecast.temperature
+        let temperature = measurement.converted
+
+        /*
+         // TODO: Is there a bug that sometimes causes temperatures to be elided?
+         let t = String(format: "%.0f", temperature)
+         print("temperature = \(temperature), t = \(t)")
+         */
 
         return Plot {
             RectangleMark(

@@ -66,7 +66,8 @@ struct ForecastScreen: View {
     var body: some View {
         Template {
             VStack {
-                header.padding(.top)
+                ActualFeelToggle()
+                header
                 List {
                     ForEach(
                         weatherVM.futureForecast,
@@ -94,7 +95,7 @@ struct ForecastScreen: View {
             Image.symbol(symbolName: forecast.symbolName)
                 .frame(width: symbolWidth)
 
-            Text(format(forecast: forecast))
+            Text(formatTemperature(forecast: forecast))
                 .frame(width: temperatureWidth)
 
             Text(measurementFormatter.string(from: forecast.wind.speed))
@@ -105,8 +106,10 @@ struct ForecastScreen: View {
         }
     }
 
-    private func format(forecast: HourWeather) -> String {
-        return String(format: "%.0f", forecast.converted) +
+    private func formatTemperature(forecast: HourWeather) -> String {
+        let temperature = weatherVM.showFeel ?
+            forecast.apparentTemperature : forecast.temperature
+        return String(format: "%.0f", temperature.converted) +
             weatherVM.temperatureUnitSymbol
     }
 

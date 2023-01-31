@@ -4,9 +4,11 @@ import WeatherKit
 
 class WeatherViewModel: NSObject, ObservableObject {
     @AppStorage("showFahrenheit") var showFahrenheit = false
+    @AppStorage("showFeel") var showFeel = false
 
     @Published var dateToTemperatureMap: [Date: Measurement<UnitTemperature>] =
         [:]
+    @Published var useFeel = false
     @Published var useFahrenheit = false
     @Published var summary: WeatherSummary?
     @Published var timestamp: Date?
@@ -34,8 +36,9 @@ class WeatherViewModel: NSObject, ObservableObject {
 
     func load(location: CLLocation, colorScheme: ColorScheme) async throws {
         await MainActor.run {
-            // Initialize to value from AppStorage.
+            // Initialize to values from AppStorage.
             useFahrenheit = showFahrenheit
+            useFeel = showFeel
 
             summary = nil
         }

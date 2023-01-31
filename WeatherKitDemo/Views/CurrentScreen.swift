@@ -63,8 +63,16 @@ struct CurrentScreen: View {
         .listStyle(.plain)
     }
 
-    private var formattedTemperature: String {
+    private var formattedActual: String {
         guard let temp = weatherVM.summary?.temperature else { return "" }
+        return String(format: "%.0f", temp.converted) +
+            weatherVM.temperatureUnitSymbol
+    }
+
+    private var formattedFeelsLike: String {
+        guard let forecast = weatherVM.summary?.hourlyForecast
+        else { return "" }
+        guard let temp = forecast.first?.apparentTemperature else { return "" }
         return String(format: "%.0f", temp.converted) +
             weatherVM.temperatureUnitSymbol
     }
@@ -168,7 +176,9 @@ struct CurrentScreen: View {
                 TemperatureUnitToggle()
                 Image.symbol(symbolName: summary.symbolName, size: 80)
                 LabeledContent("Condition", value: summary.condition)
-                LabeledContent("Temperature", value: formattedTemperature)
+                LabeledContent("Temperature", value: formattedActual)
+                LabeledContent("Feels Like", value: formattedFeelsLike)
+
                 let firstForecast = summary.hourlyForecast.first!
                 let humidity = firstForecast.humidity * 100
                 LabeledContent(

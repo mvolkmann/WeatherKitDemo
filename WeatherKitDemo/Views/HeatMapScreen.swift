@@ -2,10 +2,6 @@ import Charts
 import SwiftUI
 import WeatherKit
 
-// Red is 0% through the gradient and is where we want to start.
-// Blue is 70% through the gradient and is where we want to stop.
-private let redPercent = 0.0
-private let bluePercent = 2.0 / 3.0
 private let markHeight = 70.0 // 90.0
 private let markWidth = 30.0
 
@@ -17,7 +13,6 @@ struct HeatMapScreen: View {
     ) var horizontalSizeClass: UserInterfaceSizeClass?
 
     @State private var hourlyForecast: [HourWeather] = []
-    @State private var showAbsolute = false
     @StateObject private var weatherVM = WeatherViewModel.shared
 
     // MARK: - Constants
@@ -39,7 +34,7 @@ struct HeatMapScreen: View {
                 Toggle2(
                     off: "Relative",
                     on: "Absolute",
-                    isOn: $showAbsolute
+                    isOn: $weatherVM.showAbsolute
                 )
             }
 
@@ -61,34 +56,6 @@ struct HeatMapScreen: View {
         }
     }
 
-    private var gradient: Gradient {
-        let forecastMin = hourlyForecast
-            .min { $0.temperature.value < $1.temperature.value }
-        let forecastMax = hourlyForecast // also uses < !
-            .max { $0.temperature.value < $1.temperature.value }
-
-        let tempMin = max(forecastMin!.fahrenheit, 0)
-        let tempMax = min(forecastMax!.fahrenheit, 100)
-
-        // We want these values to range from
-        // bluePercent for the coldest to redPercent for the warmest.
-        let realStart = showAbsolute ? bluePercent - bluePercent * tempMax /
-            100 : redPercent
-        let realEnd = showAbsolute ? bluePercent - bluePercent * tempMin / 100 :
-            bluePercent
-
-        // red has a hue of zero and blue has hue of 2/3.
-        // "by" is negative so the gradient goes from blue to red.
-        let hueColors = stride(
-            from: realEnd, // blue-ish
-            to: realStart, // red-ish
-            by: -0.01
-        ).map {
-            Color(hue: $0, saturation: 0.8, brightness: 0.8)
-        }
-        return Gradient(colors: hueColors)
-    }
-
     private var heatMapHeight: Double {
         // The + 1 is for the x-axis labels and the key.
         Double(WeatherService.days + 1) * markHeight
@@ -99,7 +66,7 @@ struct HeatMapScreen: View {
     private var helpText: some View {
         let low = weatherVM.useFahrenheit ? "0℉" : "-17.8℃"
         let high = weatherVM.useFahrenheit ? "100℉" : "37.8℃"
-        return showAbsolute ?
+        return weatherVM.showAbsolute ?
             Text("absolute-help \(low) \(high)") :
             Text("relative-help")
     }
@@ -168,7 +135,7 @@ struct HeatMapScreen: View {
             }
         }
 
-        .chartForegroundStyleScale(range: gradient)
+        .chartForegroundStyleScale(range: weatherVM.gradient)
 
         .chartXAxis {
             AxisMarks(position: .bottom, values: .automatic) { axisValue in

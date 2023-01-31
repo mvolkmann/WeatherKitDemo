@@ -96,7 +96,12 @@ struct ForecastScreen: View {
                 .frame(width: symbolWidth)
 
             Text(formatTemperature(forecast: forecast))
+                .foregroundColor(Color(UIColor.systemBackground))
                 .frame(width: temperatureWidth)
+                .padding(.vertical, 5)
+                .background(
+                    weatherVM.color(temperature: forecast.fahrenheit)
+                )
 
             Text(measurementFormatter.string(from: forecast.wind.speed))
                 .frame(width: windWidth)

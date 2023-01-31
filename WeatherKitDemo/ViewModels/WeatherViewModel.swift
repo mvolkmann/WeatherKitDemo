@@ -2,6 +2,9 @@ import CoreLocation
 import SwiftUI
 import WeatherKit
 
+private let bluePercent = 2.0 / 3.0
+private let redPercent = 0.0
+
 class WeatherViewModel: NSObject, ObservableObject {
     @AppStorage("showFahrenheit") var showFahrenheit = false
     @AppStorage("showFeel") var showFeel = false
@@ -10,12 +13,37 @@ class WeatherViewModel: NSObject, ObservableObject {
         [:]
     @Published var useFeel = false
     @Published var useFahrenheit = false
+    @Published var showAbsolute = false
     @Published var summary: WeatherSummary?
     @Published var timestamp: Date?
 
     // This is a singleton class.
     static let shared = WeatherViewModel()
     override private init() {}
+
+    // MARK: - Properties
+
+    // Returns the highest temperature in Fahrenheit over the next five days.
+    var forecastTempMax: Double {
+        guard let forecasts = summary?.hourlyForecast, !forecasts.isEmpty else {
+            return 100.0
+        }
+        let forecast = forecasts.max {
+            $0.temperature.value < $1.temperature.value
+        }
+        return forecast!.fahrenheit
+    }
+
+    // Returns the lowest temperature in Fahrenheit over the next five days.
+    var forecastTempMin: Double {
+        guard let forecasts = summary?.hourlyForecast, !forecasts.isEmpty else {
+            return 0.0
+        }
+        let forecast = forecasts.min {
+            $0.temperature.value < $1.temperature.value
+        }
+        return forecast!.fahrenheit
+    }
 
     var formattedTimestamp: String {
         guard let timestamp else { return "" }
@@ -32,7 +60,53 @@ class WeatherViewModel: NSObject, ObservableObject {
         return summary.hourlyForecast.filter { $0.date >= now }
     }
 
+    // Returns a color gradient from the lowest to highest temperatures
+    // over the next five days, taking into account whether
+    // an absolute or relative scale should be used.
+    var gradient: Gradient {
+        let tempMin = max(forecastTempMin, 0)
+        let tempMax = min(forecastTempMax, 100)
+
+        // We want these values to range from
+        // bluePercent for the coldest to redPercent for the warmest.
+        let realStart = showAbsolute ?
+            bluePercent - bluePercent * tempMax / 100 : redPercent
+        let realEnd = showAbsolute ?
+            bluePercent - bluePercent * tempMin / 100 : bluePercent
+
+        // red has a hue of zero and blue has hue of 2/3.
+        // "by" is negative so the gradient goes from blue to red.
+        let hueColors = stride(
+            from: realEnd, // blue-ish
+            to: realStart, // red-ish
+            by: -0.01
+        ).map {
+            color(forHue: $0)
+        }
+        return Gradient(colors: hueColors)
+    }
+
     var temperatureUnitSymbol: String { useFahrenheit ? "℉" : "℃" }
+
+    // MARK: - Methods
+
+    private func color(forHue hue: Double) -> Color {
+        Color(hue: hue, saturation: 0.8, brightness: 0.8)
+    }
+
+    // Returns the Color to display for a given temperature.
+    func color(temperature: Double) -> Color {
+        let tempMin = max(forecastTempMin, 0)
+        let tempMax = min(forecastTempMax, 100)
+
+        let realStart = showAbsolute ?
+            bluePercent - bluePercent * tempMax / 100 : redPercent
+        let realEnd = showAbsolute ?
+            bluePercent - bluePercent * tempMin / 100 : bluePercent
+        let percent = max(temperature - tempMin, 0) / (tempMax - tempMin)
+        let hue = realEnd - percent * (realEnd - realStart)
+        return color(forHue: hue)
+    }
 
     func load(location: CLLocation, colorScheme: ColorScheme) async throws {
         await MainActor.run {

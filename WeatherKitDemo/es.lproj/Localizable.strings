@@ -1,5 +1,6 @@
 "absolute-help %@ %@" = "En modo absoluto, el azul representa %@ o menos y el rojo representa %@ o más.";
 "Absolute" = "Absoluta";
+"Actual" = "Actual";
 "AM" = "a. m.";
 "Celsius" = "Celsius";
 "Chart" = "Gráfico";
@@ -12,6 +13,7 @@
 "Fahrenheit" = "Fahrenheit";
 "Favorite Locations" = "Ubicaciones favoritas";
 "Feather Weather" = "Clima de Plumas";
+"Feels Like" = "Se siente como";
 "Forecast" = "Pronóstico";
 "Fri" = "vie";
 "Heat Map" = "Mapa de calor";

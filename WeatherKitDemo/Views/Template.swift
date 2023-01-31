@@ -40,17 +40,17 @@ struct Template<Content: View>: View {
 
     private let content: Content
 
+    private var icon: String {
+        locationVM.isLikedLocation(location) ? "heart.fill" : "heart"
+    }
+
     private var likeButton: some View {
         Button(
             action: {
                 isLiked.toggle()
 
                 if let place = locationVM.selectedPlacemark {
-                    let location = LocationService.description(
-                        from: place,
-                        full: true
-                    )
-
+                    let location = LocationService.description(from: place)
                     if isLiked {
                         locationVM.likeLocation(location)
                     } else {
@@ -64,7 +64,7 @@ struct Template<Content: View>: View {
                 }
             },
             label: {
-                Image(systemName: isLiked ? "heart.fill" : "heart")
+                Image(systemName: icon)
                     .resizable()
                     .scaledToFit()
                     .frame(height: 20)

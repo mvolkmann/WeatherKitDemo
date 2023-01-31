@@ -174,18 +174,23 @@ struct CurrentScreen: View {
         if let summary = weatherVM.summary {
             VStack {
                 TemperatureUnitToggle()
-                Image.symbol(symbolName: summary.symbolName, size: 80)
-                LabeledContent("Condition", value: summary.condition)
-                LabeledContent("Temperature", value: formattedActual)
-                LabeledContent("Feels Like", value: formattedFeelsLike)
+                    .padding(.top, 5)
+                ZStack(alignment: .top) {
+                    Image.symbol(symbolName: summary.symbolName, size: 80)
+                    VStack {
+                        LabeledContent("Condition", value: summary.condition)
+                        LabeledContent("Temperature", value: formattedActual)
+                        LabeledContent("Feels Like", value: formattedFeelsLike)
 
-                let firstForecast = summary.hourlyForecast.first!
-                let humidity = firstForecast.humidity * 100
-                LabeledContent(
-                    "Humidity",
-                    value: "\(String(format: "%.0f", humidity))%"
-                )
-                LabeledContent("Winds", value: summary.wind)
+                        let firstForecast = summary.hourlyForecast.first!
+                        let humidity = firstForecast.humidity * 100
+                        LabeledContent(
+                            "Humidity",
+                            value: "\(String(format: "%.0f", humidity))%"
+                        )
+                        LabeledContent("Winds", value: summary.wind)
+                    }
+                }
             }
             .font(.headline)
             .foregroundColor(.primary)

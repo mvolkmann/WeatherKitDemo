@@ -22,8 +22,10 @@ struct ChartScreen: View {
                let temperature = weatherVM.dateToTemperatureMap[date] {
                 // Text(date.formatted(.dateTime.month().day()))
                 Text(date.formatted(.dateTime.weekday(.wide)))
+
                 // TODO: Use 24-hour clock in French without AM/PM.
                 Text(date.formatted(.dateTime.hour()))
+
                 Text(
                     String(format: "%.0f", temperature.converted) +
                         weatherVM.temperatureUnitSymbol
@@ -71,10 +73,9 @@ struct ChartScreen: View {
 
                     if selectedDate == forecast.date {
                         RuleMark(x: date)
-                            .annotation(
-                                position: annotationPosition(index),
-                                content: { annotation }
-                            )
+                            .annotation(position: annotationPosition(index)) {
+                                annotation
+                            }
                             // Display a red, dashed, vertical line.
                             .foregroundStyle(.red)
                             .lineStyle(StrokeStyle(dash: [10, 5]))
@@ -95,8 +96,8 @@ struct ChartScreen: View {
         guard let summary = weatherVM.summary else { return .top }
 
         let percent = Double(index) / Double(summary.hourlyForecast.count)
-        return percent < 0.1 ? .topTrailing :
-            percent >= 0.9 ? .topLeading :
+        return percent < 0.15 ? .topTrailing :
+            percent >= 0.80 ? .topLeading :
             .top
     }
 

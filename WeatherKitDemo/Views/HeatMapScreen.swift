@@ -111,7 +111,7 @@ struct HeatMapScreen: View {
             if hourlyForecast.isEmpty {
                 Text("Forecast data is not available.").font(.largeTitle)
             } else {
-                ActualFeelToggle()
+                ActualFeelToggle().padding(.bottom, 10)
                 HStack(alignment: .top, spacing: 0) {
                     Spacer()
                     dayLabels

@@ -98,7 +98,7 @@ struct Template<Content: View>: View {
     var body: some View {
         ZStack {
             background
-            VStack {
+            VStack(spacing: 0) {
                 title
 
                 HStack {

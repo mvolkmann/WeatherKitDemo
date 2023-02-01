@@ -2,8 +2,8 @@ import Charts
 import SwiftUI
 import WeatherKit
 
-private let markHeight = 70.0 // 90.0
-private let markWidth = 30.0
+private let markHeight = 20.0 // 90.0
+private let markWidth = 50.0
 
 struct HeatMapScreen: View {
     // MARK: - State
@@ -46,7 +46,7 @@ struct HeatMapScreen: View {
     }
 
     private var dayLabels: some View {
-        VStack(spacing: 0) {
+        HStack(spacing: 0) {
             let startIndex = Date().dayOfWeekNumber - 1
             let range =
                 startIndex ..< startIndex + WeatherService.days
@@ -80,19 +80,21 @@ struct HeatMapScreen: View {
             } else {
                 ActualFeelToggle().padding(.bottom, 10)
                 ScrollView {
-                    HStack(alignment: .top, spacing: 0) {
+                    VStack(spacing: 0) {
                         dayLabels
-                        ScrollView(.horizontal) {
+                        ScrollView {
                             heatMap(hourlyForecast: hourlyForecast)
                                 // Prevent scrollbar from overlapping legend.
                                 .padding(.bottom, 10)
                         }
-                        .if(isWide) { view in
-                            view.frame(
-                                width: heatMapWidth,
-                                height: heatMapHeight
-                            )
-                        }
+                        /*
+                         .if(isWide) { view in
+                             view.frame(
+                                 width: heatMapWidth,
+                                 height: heatMapHeight
+                             )
+                         }
+                         */
                     }
                     colorToggle
                 }
@@ -111,8 +113,7 @@ struct HeatMapScreen: View {
     private func dayLabel(_ day: String) -> some View {
         // TODO: Why does "Mon" in French get elided?
         Text(day.localized)
-            .frame(height: markHeight)
-            .rotationEffect(Angle.degrees(-90))
+            .frame(width: markWidth)
     }
 
     /*
@@ -140,7 +141,7 @@ struct HeatMapScreen: View {
 
         .chartForegroundStyleScale(range: weatherVM.gradient)
 
-        .chartXAxis {
+        .chartYAxis {
             AxisMarks(position: .bottom, values: .automatic) { axisValue in
                 AxisTick()
                 AxisValueLabel(centered: true) {
@@ -156,7 +157,7 @@ struct HeatMapScreen: View {
 
         // I can't get the y-axis labels to appear to the left of each row.
         // They display above each row.
-        .chartYAxis(.hidden)
+        .chartXAxis(.hidden)
 
         .frame(width: heatMapWidth, height: heatMapHeight)
     }
@@ -167,6 +168,7 @@ struct HeatMapScreen: View {
         let measurement = weatherVM.showFeel ?
             forecast.apparentTemperature : forecast.temperature
         let temperature = measurement.converted
+        print("mark: \(date.dayOfWeek) \(date.hour)")
 
         /*
          // TODO: Is there a bug that sometimes causes temperatures to be elided?
@@ -177,10 +179,12 @@ struct HeatMapScreen: View {
         return Plot {
             RectangleMark(
                 // Why do String values work, but Int values do not?
-                x: .value("Time", "\(date.hour)"),
-                y: .value("Day", date.dayOfWeek),
-                width: .ratio(1),
-                height: .ratio(1)
+                x: .value("Day", date.dayOfWeek),
+                y: .value("Time", "\(date.hour)"),
+                // width: .ratio(1),
+                // height: .ratio(1)
+                width: MarkDimension(floatLiteral: markWidth),
+                height: MarkDimension(floatLiteral: markHeight)
             )
 
             .foregroundStyle(by: .value("Temperature", temperature))
@@ -191,7 +195,7 @@ struct HeatMapScreen: View {
                     "\(String(format: "%.0f", temperature))" +
                         weatherVM.temperatureUnitSymbol
                 )
-                .rotationEffect(.degrees(-90))
+                // .rotationEffect(.degrees(-90))
                 .font(.body)
                 .frame(width: 60)
             }

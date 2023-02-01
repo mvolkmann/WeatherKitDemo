@@ -10,6 +10,7 @@ struct Template<Content: View>: View {
 
     @State private var location: String = ""
     @State private var isLiked: Bool = false
+    @State private var isSettingsPresented = false
 
     @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
@@ -37,6 +38,25 @@ struct Template<Content: View>: View {
         startPoint: .top,
         endPoint: .bottom
     )
+
+    private var buttons: some View {
+        HStack {
+            Button(action: refreshForecast) {
+                Image(systemName: "arrow.clockwise")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 20)
+            }
+            Spacer()
+            Button(action: { isSettingsPresented = true }) {
+                Image(systemName: "gear")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 25)
+            }
+        }
+        .padding(.horizontal)
+    }
 
     private let content: Content
 
@@ -103,23 +123,10 @@ struct Template<Content: View>: View {
             .bold()
     }
 
-    private var refresh: some View {
-        HStack {
-            Spacer()
-            Button(action: refreshForecast) {
-                Image(systemName: "arrow.clockwise")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 25)
-                    .padding(.trailing)
-            }
-        }
-    }
-
     var body: some View {
         ZStack(alignment: .top) {
             background
-            refresh
+            buttons
             VStack(spacing: 0) {
                 heading
 
@@ -138,6 +145,13 @@ struct Template<Content: View>: View {
 
         .onChange(of: scenePhase) { newPhase in
             if newPhase == .active { refreshForecast() }
+        }
+
+        .sheet(isPresented: $isSettingsPresented) {
+            Settings()
+                // Need at least this height for iPhone SE.
+                .presentationDetents([.height(235)])
+                .presentationDragIndicator(.visible)
         }
 
         // We are using task instead of onAppear so we can specify a dependency.

@@ -1,6 +1,6 @@
 "absolute-help %@ %@" = "En modo absoluto, el azul representa %@ o menos y el rojo representa %@ o más.";
-"Absolute" = "Absoluta";
-"Actual" = "Actual";
+"Absolute Colors" = "Colores absolutos";
+"Actual Temperature" = "Temperatura real";
 "AM" = "a. m.";
 "Celsius" = "Celsius";
 "Chart" = "Gráfico";
@@ -13,7 +13,7 @@
 "Fahrenheit" = "Fahrenheit";
 "Favorite Locations" = "Ubicaciones favoritas";
 "Feather Weather" = "Clima de Plumas";
-"Feels Like" = "Se siente como";
+"Feels Like Temperature" = "Se siente como la temperatura";
 "Forecast" = "Pronóstico";
 "Fri" = "vie";
 "Heat Map" = "Mapa de calor";
@@ -25,7 +25,7 @@
 "Prec" = "Prec";
 "Refresh" = "Actualizar";
 "relative-help" = "En modo relativo, el azul representa la temperatura más baja durante los próximos cinco días y el rojo representa la temperatura más alta durante los próximos cinco días.";
-"Relative" = "Pariente";
+"Relative Colors" = "Colores relativos";
 "Sat" = "sáb";
 "Sun" = "dom";
 "Temp" = "La temp";

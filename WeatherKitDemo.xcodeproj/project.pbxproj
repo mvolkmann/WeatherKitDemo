@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1A0D14162988B0250087474E /* ActualFeelToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D14152988B0250087474E /* ActualFeelToggle.swift */; };
+		1A0D1422298AEDC80087474E /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D1421298AEDC80087474E /* Settings.swift */; };
+		1A0D1424298AEE1B0087474E /* ColorToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D1423298AEE1B0087474E /* ColorToggle.swift */; };
 		1A36EDA828D68D6B00372EE1 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 1A36EDA528D68D6B00372EE1 /* README.md */; };
 		1A50CC3228D381CC005B1D36 /* LocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A50CC3128D381CC005B1D36 /* LocationViewModel.swift */; };
 		1A5A7204297DF48F00BC1EC9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5A7203297DF48F00BC1EC9 /* AppDelegate.swift */; };
@@ -40,6 +42,8 @@
 
 /* Begin PBXFileReference section */
 		1A0D14152988B0250087474E /* ActualFeelToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActualFeelToggle.swift; sourceTree = "<group>"; };
+		1A0D1421298AEDC80087474E /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		1A0D1423298AEE1B0087474E /* ColorToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorToggle.swift; sourceTree = "<group>"; };
 		1A36EDA528D68D6B00372EE1 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		1A50CC3028D380C3005B1D36 /* WeatherKitDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WeatherKitDemo.entitlements; sourceTree = "<group>"; };
 		1A50CC3128D381CC005B1D36 /* LocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewModel.swift; sourceTree = "<group>"; };
@@ -153,14 +157,16 @@
 			children = (
 				1A0D14152988B0250087474E /* ActualFeelToggle.swift */,
 				1A713EBA28F9DFD000AEA66B /* ChartScreen.swift */,
+				1A0D1423298AEE1B0087474E /* ColorToggle.swift */,
 				1A84529328D37DA900C28047 /* ContentView.swift */,
 				1A713EB428F9DCDA00AEA66B /* CurrentScreen.swift */,
 				1A713EBE28FA0A4B00AEA66B /* ForecastScreen.swift */,
 				1A79703528FDE9BC00569E68 /* HeatMapScreen.swift */,
 				1A5A7235297F033A00BC1EC9 /* LottieView.swift */,
+				1A0D1421298AEDC80087474E /* Settings.swift */,
+				1A97783E297D7489006CFB86 /* TemperatureUnitToggle.swift */,
 				1A713EC028FA0CD500AEA66B /* Template.swift */,
 				1A97783A297D6F4C006CFB86 /* Toggle2.swift */,
-				1A97783E297D7489006CFB86 /* TemperatureUnitToggle.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -268,8 +274,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A0D1422298AEDC80087474E /* Settings.swift in Sources */,
 				1A97783B297D6F4C006CFB86 /* Toggle2.swift in Sources */,
 				1AB0620E28D64BD900602C7B /* WeatherServiceExtension.swift in Sources */,
+				1A0D1424298AEE1B0087474E /* ColorToggle.swift in Sources */,
 				1A97783F297D7489006CFB86 /* TemperatureUnitToggle.swift in Sources */,
 				1A713EB728F9DD4100AEA66B /* WeatherViewModel.swift in Sources */,
 				1A713EBF28FA0A4B00AEA66B /* ForecastScreen.swift in Sources */,
@@ -432,7 +440,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = WeatherKitDemo/WeatherKitDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherKitDemo/Preview Content\"";
 				DEVELOPMENT_TEAM = 4BG3523GAZ;
 				ENABLE_PREVIEWS = YES;
@@ -449,7 +457,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "r.mark.volkmann-gmail.com.FeatherWeather";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -466,7 +474,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = WeatherKitDemo/WeatherKitDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherKitDemo/Preview Content\"";
 				DEVELOPMENT_TEAM = 4BG3523GAZ;
 				ENABLE_PREVIEWS = YES;
@@ -483,7 +491,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "r.mark.volkmann-gmail.com.FeatherWeather";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

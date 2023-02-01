@@ -6,16 +6,17 @@ private let bluePercent = 2.0 / 3.0
 private let redPercent = 0.0
 
 class WeatherViewModel: NSObject, ObservableObject {
+    @AppStorage("showAbsoluteColors") var showAbsoluteColors = false
     @AppStorage("showFahrenheit") var showFahrenheit = false
     @AppStorage("showFeel") var showFeel = false
 
     @Published var dateToTemperatureMap: [Date: Measurement<UnitTemperature>] =
         [:]
-    @Published var useFeel = false
-    @Published var useFahrenheit = false
-    @Published var showAbsolute = false
     @Published var summary: WeatherSummary?
     @Published var timestamp: Date?
+    @Published var useAbsoluteColors = false
+    @Published var useFeel = false
+    @Published var useFahrenheit = false
 
     // This is a singleton class.
     static let shared = WeatherViewModel()
@@ -69,9 +70,9 @@ class WeatherViewModel: NSObject, ObservableObject {
 
         // We want these values to range from
         // bluePercent for the coldest to redPercent for the warmest.
-        let realStart = showAbsolute ?
+        let realStart = useAbsoluteColors ?
             bluePercent - bluePercent * tempMax / 100 : redPercent
-        let realEnd = showAbsolute ?
+        let realEnd = useAbsoluteColors ?
             bluePercent - bluePercent * tempMin / 100 : bluePercent
 
         // red has a hue of zero and blue has hue of 2/3.
@@ -99,9 +100,9 @@ class WeatherViewModel: NSObject, ObservableObject {
         let tempMin = max(forecastTempMin, 0)
         let tempMax = min(forecastTempMax, 100)
 
-        let realStart = showAbsolute ?
+        let realStart = useAbsoluteColors ?
             bluePercent - bluePercent * tempMax / 100 : redPercent
-        let realEnd = showAbsolute ?
+        let realEnd = useAbsoluteColors ?
             bluePercent - bluePercent * tempMin / 100 : bluePercent
         let percent = max(temperature - tempMin, 0) / (tempMax - tempMin)
         let hue = realEnd - percent * (realEnd - realStart)
@@ -111,6 +112,7 @@ class WeatherViewModel: NSObject, ObservableObject {
     func load(location: CLLocation, colorScheme: ColorScheme) async throws {
         await MainActor.run {
             // Initialize to values from AppStorage.
+            useAbsoluteColors = showAbsoluteColors
             useFahrenheit = showFahrenheit
             useFeel = showFeel
 

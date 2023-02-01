@@ -174,10 +174,9 @@ struct CurrentScreen: View {
     private func currentData() -> some View {
         if let summary = weatherVM.summary {
             VStack {
-                TemperatureUnitToggle()
-                    .padding(.top, 5)
                 ZStack(alignment: .top) {
-                    Image.symbol(symbolName: summary.symbolName, size: 80)
+                    Image.symbol(symbolName: summary.symbolName, size: 70)
+                        .padding(.top, 28)
                     VStack {
                         LabeledContent("Condition", value: summary.condition)
                         LabeledContent("Temperature", value: formattedActual)
@@ -195,6 +194,7 @@ struct CurrentScreen: View {
             }
             .font(.headline)
             .foregroundColor(.primary)
+            .padding(.top)
         } else {
             EmptyView()
         }

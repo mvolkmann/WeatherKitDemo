@@ -27,24 +27,6 @@ struct HeatMapScreen: View {
 
     // MARK: - Variables
 
-    private var colorToggle: some View {
-        Group {
-            HStack(alignment: .center) {
-                Text("Colors".localized + ":")
-                Toggle2(
-                    off: "Relative",
-                    on: "Absolute",
-                    isOn: $weatherVM.showAbsolute
-                )
-            }
-
-            helpText
-                // .font(.footnote)
-                .font(.system(size: 14))
-                .frame(maxWidth: isWide ? 500 : .infinity)
-        }
-    }
-
     private var dayLabels: some View {
         VStack(spacing: 0) {
             let startIndex = Date().dayOfWeekNumber - 1
@@ -66,7 +48,7 @@ struct HeatMapScreen: View {
     private var helpText: some View {
         let low = weatherVM.useFahrenheit ? "0℉" : "-17.8℃"
         let high = weatherVM.useFahrenheit ? "100℉" : "37.8℃"
-        return weatherVM.showAbsolute ?
+        return weatherVM.useAbsoluteColors ?
             Text("absolute-help \(low) \(high)") :
             Text("relative-help")
     }
@@ -78,7 +60,6 @@ struct HeatMapScreen: View {
             if hourlyForecast.isEmpty {
                 Text("Forecast data is not available.").font(.title)
             } else {
-                ActualFeelToggle().padding(.bottom, 10)
                 ScrollView {
                     HStack(alignment: .top, spacing: 0) {
                         dayLabels
@@ -94,8 +75,9 @@ struct HeatMapScreen: View {
                             )
                         }
                     }
-                    colorToggle
+                    // .rotationEffect(.degrees(90))
                 }
+                .padding(.top)
             }
         }
         // Run this closure again every time the selected placemark changes.
@@ -137,9 +119,8 @@ struct HeatMapScreen: View {
                 mark(forecast: forecast)
             }
         }
-
         .chartForegroundStyleScale(range: weatherVM.gradient)
-
+        // .chartLegend(.hidden) // TODO: Why does this also hide x-axis labels?
         .chartXAxis {
             AxisMarks(position: .bottom, values: .automatic) { axisValue in
                 AxisTick()

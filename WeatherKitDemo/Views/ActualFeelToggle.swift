@@ -6,11 +6,10 @@ struct ActualFeelToggle: View {
 
     var body: some View {
         Toggle2(
-            off: "Actual",
-            on: "Feels Like",
+            off: "Actual Temperature",
+            on: "Feels Like Temperature",
             isOn: $weatherVM.useFeel
         )
-        .font(.callout)
         // Keep AppStorage in sync with setting in WeatherViewModel.
         .onChange(of: weatherVM.useFeel) { useFeel in
             showFeel = useFeel

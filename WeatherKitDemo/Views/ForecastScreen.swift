@@ -66,7 +66,6 @@ struct ForecastScreen: View {
     var body: some View {
         Template {
             VStack {
-                ActualFeelToggle()
                 header
                 List {
                     ForEach(

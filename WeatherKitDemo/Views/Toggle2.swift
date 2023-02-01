@@ -6,10 +6,11 @@ struct Toggle2: View {
     @Binding var isOn: Bool
 
     var body: some View {
-        HStack {
-            Text(off.localized).onTapGesture { isOn = false }
-            Toggle("", isOn: $isOn).labelsHidden()
-            Text(on.localized).onTapGesture { isOn = true }
+        Picker("Title Goes Here", selection: $isOn) {
+            Text(off.localized).tag(false)
+            Text(on.localized).tag(true)
         }
+        .pickerStyle(.segmented)
+        .font(.callout)
     }
 }

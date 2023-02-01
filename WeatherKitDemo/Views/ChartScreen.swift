@@ -82,7 +82,7 @@ struct ChartScreen: View {
                     }
                 }
             }
-            .padding(.top, 70) // leaves room for top annotation
+            .padding(.top, 80) // leaves room for top annotation
             .chartYAxis {
                 AxisMarks(position: .leading)
             }

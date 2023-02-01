@@ -76,23 +76,26 @@ struct HeatMapScreen: View {
     var body: some View {
         Template {
             if hourlyForecast.isEmpty {
-                Text("Forecast data is not available.").font(.largeTitle)
+                Text("Forecast data is not available.").font(.title)
             } else {
                 ActualFeelToggle().padding(.bottom, 10)
-                HStack(alignment: .top, spacing: 0) {
-                    Spacer()
-                    dayLabels
-                    ScrollView(.horizontal) {
-                        heatMap(hourlyForecast: hourlyForecast)
-                            // Prevent scrollbar from overlapping legend.
-                            .padding(.bottom, 10)
+                ScrollView {
+                    HStack(alignment: .top, spacing: 0) {
+                        dayLabels
+                        ScrollView(.horizontal) {
+                            heatMap(hourlyForecast: hourlyForecast)
+                                // Prevent scrollbar from overlapping legend.
+                                .padding(.bottom, 10)
+                        }
+                        .if(isWide) { view in
+                            view.frame(
+                                width: heatMapWidth,
+                                height: heatMapHeight
+                            )
+                        }
                     }
-                    .if(isWide) { view in
-                        view.frame(width: heatMapWidth, height: heatMapHeight)
-                    }
-                    Spacer()
+                    colorToggle
                 }
-                colorToggle
             }
         }
         // Run this closure again every time the selected placemark changes.

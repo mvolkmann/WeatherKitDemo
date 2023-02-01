@@ -40,6 +40,28 @@ struct Template<Content: View>: View {
 
     private let content: Content
 
+    private var heading: some View {
+        VStack(spacing: 0) {
+            Text("Feather Weather")
+                .font(.title)
+                .fontWeight(.bold)
+                .foregroundColor(.primary)
+
+            HStack {
+                place
+                if !location.isEmpty { likeButton }
+            }
+
+            if weatherVM.timestamp != nil {
+                HStack {
+                    Text("last updated")
+                    Text(weatherVM.formattedTimestamp)
+                }
+                .font(.system(size: 16))
+            }
+        }
+    }
+
     private var icon: String {
         locationVM.isLikedLocation(location) ? "heart.fill" : "heart"
     }
@@ -74,37 +96,30 @@ struct Template<Content: View>: View {
     }
 
     private var place: some View {
-        Text(location).font(.title3).bold()
+        Text(location).font(.body).bold()
     }
 
-    private var title: some View {
-        VStack {
-            Text("Feather Weather")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .foregroundColor(.primary)
-            if weatherVM.timestamp != nil {
-                HStack {
-                    Text("last updated")
-                    Text(weatherVM.formattedTimestamp)
-                    Spacer()
-                    Button("Refresh") { refresh() }
-                }
-                .font(.system(size: 16))
+    private var refresh: some View {
+        HStack {
+            Spacer()
+            Button(action: refreshForecast) {
+                Image(systemName: "arrow.clockwise")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 25)
+                    .padding(
+                        EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 10)
+                    )
             }
         }
     }
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .top) {
             background
+            refresh
             VStack(spacing: 0) {
-                title
-
-                HStack {
-                    place
-                    if !location.isEmpty { likeButton }
-                }
+                heading
 
                 if locationVM.authorized && weatherVM.summary == nil {
                     Spacer()
@@ -116,11 +131,11 @@ struct Template<Content: View>: View {
 
                 Spacer()
             }
-            .padding()
+            .padding(.horizontal)
         }
 
         .onChange(of: scenePhase) { newPhase in
-            if newPhase == .active { refresh() }
+            if newPhase == .active { refreshForecast() }
         }
 
         // We are using task instead of onAppear so we can specify a dependency.
@@ -142,7 +157,7 @@ struct Template<Content: View>: View {
 
     // MARK: - Methods
 
-    private func refresh() {
+    private func refreshForecast() {
         guard let location = locationVM.selectedPlacemark?.location
         else { return }
 

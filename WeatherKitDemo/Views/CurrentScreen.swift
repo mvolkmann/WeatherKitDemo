@@ -96,6 +96,7 @@ struct CurrentScreen: View {
     private var searchArea: some View {
         HStack(alignment: .center) {
             TextField("New Location", text: $locationVM.searchQuery)
+                .disableAutocorrection(true)
                 .focused($isTextFieldFocused)
                 .padding(10)
                 .background(

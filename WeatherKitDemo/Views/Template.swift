@@ -96,7 +96,11 @@ struct Template<Content: View>: View {
     }
 
     private var place: some View {
-        Text(location).font(.body).bold()
+        Text(location)
+            .lineLimit(1)
+            .font(.body)
+            .minimumScaleFactor(0.75)
+            .bold()
     }
 
     private var refresh: some View {
@@ -107,9 +111,7 @@ struct Template<Content: View>: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 25)
-                    .padding(
-                        EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 10)
-                    )
+                    .padding(.trailing)
             }
         }
     }

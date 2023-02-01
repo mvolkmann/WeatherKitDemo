@@ -36,6 +36,7 @@ struct CurrentScreen: View {
             }
         }
         .cornerRadius(10)
+        .foregroundColor(.white)
     }
 
     private var favoriteLocations: some View {
@@ -72,9 +73,11 @@ struct CurrentScreen: View {
     private var formattedFeelsLike: String {
         guard let forecast = weatherVM.summary?.hourlyForecast
         else { return "" }
-        guard let temp = forecast.first?.apparentTemperature else { return "" }
-        return String(format: "%.0f", temp.converted) +
-            weatherVM.temperatureUnitSymbol
+        guard let firstForecast = forecast.first else { return "" }
+
+        // print("CurrentScreen: firstForecast =", firstForecast)
+        let temp = firstForecast.apparentTemperature.converted
+        return String(format: "%.0f", temp) + weatherVM.temperatureUnitSymbol
     }
 
     private var isWide: Bool { horizontalSizeClass != .compact }

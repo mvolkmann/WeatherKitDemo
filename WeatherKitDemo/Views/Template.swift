@@ -134,6 +134,9 @@ struct Template<Content: View>: View {
                     Spacer()
                     LottieView(name: "weather-progress", loopMode: .loop)
                         .frame(width: 200, height: 200)
+                    if weatherVM.slow {
+                        Text("weatherkit-slow").font(.title2)
+                    }
                 } else {
                     self.content
                 }

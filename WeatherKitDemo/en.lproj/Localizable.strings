@@ -1,3 +1,4 @@
 "absolute-help %@ %@" = "In absolute mode, blue represents %@ or less and red represents %@ or more.";
 "drag-help" = "Drag across the chart to see hourly details.";
 "relative-help" = "In relative mode, blue represents the lowest temperature over the next five days and red represents the highest temperature over the next five days.";
+"weatherkit-slow" = "WeatherKit is taking longer than usual to return weather data.";

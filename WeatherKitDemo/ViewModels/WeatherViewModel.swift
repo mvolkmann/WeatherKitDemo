@@ -6,12 +6,15 @@ private let bluePercent = 2.0 / 3.0
 private let redPercent = 0.0
 
 class WeatherViewModel: NSObject, ObservableObject {
+    // MARK: - State
+
     @AppStorage("showAbsoluteColors") var showAbsoluteColors = false
     @AppStorage("showFahrenheit") var showFahrenheit: Bool?
     @AppStorage("showFeel") var showFeel = false
 
     @Published var dateToTemperatureMap: [Date: Measurement<UnitTemperature>] =
         [:]
+    @Published var slow = false
     @Published var summary: WeatherSummary?
     @Published var timestamp: Date?
     @Published var useAbsoluteColors = false
@@ -23,6 +26,8 @@ class WeatherViewModel: NSObject, ObservableObject {
     override private init() {}
 
     // MARK: - Properties
+
+    // var loadingLocation: CLLocation?
 
     // Returns the highest temperature in Fahrenheit over the next five days.
     var forecastTempMax: Double {
@@ -110,6 +115,27 @@ class WeatherViewModel: NSObject, ObservableObject {
     }
 
     func load(location: CLLocation, colorScheme: ColorScheme) async throws {
+        /*
+         // This logic for avoiding duplicate weather lookups
+         // sometimes results in no weather data being fetched
+         // and I don't know why.
+         if let loadingLocation {
+             if location.description == loadingLocation.description {
+                 return
+             }
+         }
+
+         loadingLocation = location
+         defer { loadingLocation = nil }
+         */
+
+        // If WeatherKit takes more than 5 seconds to return data,
+        // consider it slow.
+        let waitSeconds = 5.0
+        DispatchQueue.main.asyncAfter(deadline: .now() + waitSeconds) {
+            if self.summary == nil { self.slow = true }
+        }
+
         await MainActor.run {
             // Initialize to values from AppStorage.
             useAbsoluteColors = showAbsoluteColors
@@ -126,8 +152,9 @@ class WeatherViewModel: NSObject, ObservableObject {
             colorScheme: colorScheme
         )
 
-        await MainActor.run {
+        Task { @MainActor in
             summary = weatherSummary
+            slow = false
 
             dateToTemperatureMap = [:]
             if let forecasts = summary?.hourlyForecast {
@@ -135,10 +162,8 @@ class WeatherViewModel: NSObject, ObservableObject {
                     dateToTemperatureMap[forecast.date] = forecast.temperature
                 }
             }
-        }
 
-        Task {
-            await MainActor.run { self.timestamp = Date() }
+            timestamp = Date()
         }
     }
 }

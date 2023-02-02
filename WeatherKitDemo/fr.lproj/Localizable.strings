@@ -33,6 +33,7 @@
 "Thu" = "jeu";
 "Time" = "Temps";
 "Tue" = "mar";
+"weatherkit-slow" = "WeatherKit prend plus de temps que d'habitude pour renvoyer les données météorologiques.";
 "Wed" = "mer";
 "Wind" = "Vent";
 "Winds" = "Les vents";

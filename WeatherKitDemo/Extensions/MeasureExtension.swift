@@ -6,4 +6,8 @@ extension Measurement<UnitTemperature> {
         let useFahrenheit = WeatherViewModel.shared.useFahrenheit
         return converted(to: useFahrenheit ? .fahrenheit : .celsius).value
     }
+
+    var fahrenheit: Double {
+        return converted(to: .fahrenheit).value
+    }
 }

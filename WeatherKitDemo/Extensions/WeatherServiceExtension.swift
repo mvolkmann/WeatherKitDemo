@@ -43,6 +43,7 @@ extension WeatherService {
             condition: current.condition.description,
             symbolName: current.symbolName,
             temperature: current.temperature,
+            apparentTemperature: current.apparentTemperature,
             wind: "\(windSpeed) from \(windDirection)",
             hourlyForecast: keepForecast,
             attributionLightLogoURL: attr.combinedMarkLightURL,

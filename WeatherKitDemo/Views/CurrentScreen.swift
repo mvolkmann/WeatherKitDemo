@@ -65,19 +65,11 @@ struct CurrentScreen: View {
     }
 
     private var formattedActual: String {
-        guard let temp = weatherVM.summary?.temperature else { return "" }
-        return String(format: "%.0f", temp.converted) +
-            weatherVM.temperatureUnitSymbol
+        formatTemperature(weatherVM.summary?.temperature)
     }
 
     private var formattedFeelsLike: String {
-        guard let forecast = weatherVM.summary?.hourlyForecast
-        else { return "" }
-        guard let firstForecast = forecast.first else { return "" }
-
-        // print("CurrentScreen: firstForecast =", firstForecast)
-        let temp = firstForecast.apparentTemperature.converted
-        return String(format: "%.0f", temp) + weatherVM.temperatureUnitSymbol
+        formatTemperature(weatherVM.summary?.apparentTemperature)
     }
 
     private var isWide: Bool { horizontalSizeClass != .compact }
@@ -154,6 +146,8 @@ struct CurrentScreen: View {
         }
     }
 
+    // MARK: - Methods
+
     @ViewBuilder
     private func attributionLink() -> some View {
         if let summary = weatherVM.summary {
@@ -201,6 +195,14 @@ struct CurrentScreen: View {
         } else {
             EmptyView()
         }
+    }
+
+    private func formatTemperature(
+        _ temperature: Measurement<UnitTemperature>?
+    ) -> String {
+        guard let temperature else { return "" }
+        return String(format: "%.0f", temperature.converted) +
+            weatherVM.temperatureUnitSymbol
     }
 
     private func selectLocation(_ location: String) {

@@ -107,6 +107,7 @@ extension LocationViewModel: CLLocationManagerDelegate {
                 } else if let self {
                     self.currentPlacemark = placemarks?.first
                     self.selectedPlacemark = self.currentPlacemark
+
                     // Once we have the location, stop trying to update it.
                     self.locationManager.stopUpdatingLocation()
                 }

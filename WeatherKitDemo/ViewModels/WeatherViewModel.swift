@@ -7,7 +7,7 @@ private let redPercent = 0.0
 
 class WeatherViewModel: NSObject, ObservableObject {
     @AppStorage("showAbsoluteColors") var showAbsoluteColors = false
-    @AppStorage("showFahrenheit") var showFahrenheit = false
+    @AppStorage("showFahrenheit") var showFahrenheit: Bool?
     @AppStorage("showFeel") var showFeel = false
 
     @Published var dateToTemperatureMap: [Date: Measurement<UnitTemperature>] =
@@ -113,7 +113,8 @@ class WeatherViewModel: NSObject, ObservableObject {
         await MainActor.run {
             // Initialize to values from AppStorage.
             useAbsoluteColors = showAbsoluteColors
-            useFahrenheit = showFahrenheit
+            useFahrenheit = showFahrenheit ??
+                (LocationViewModel.shared.country == "United States")
             useFeel = showFeel
 
             summary = nil

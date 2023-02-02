@@ -10,3 +10,6 @@ This demonstrates using the Apple WeatherKit library from a SwiftUI app.
   src="weatherkit-chart.png" title="WeatherKit Chart">
 <img alt="WeatherKit Heat Map" style="width: 45%"
   src="weatherkit-heatmap.png" title="WeatherKit Heat Map">
+ 
+For testing long city names, use
+Llanfairpwllgwyngyll, Wales, United Kingdom.

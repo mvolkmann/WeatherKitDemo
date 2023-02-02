@@ -96,8 +96,9 @@ struct ChartScreen: View {
         guard let summary = weatherVM.summary else { return .top }
 
         let percent = Double(index) / Double(summary.hourlyForecast.count)
+        // These percent values work well for iPhone SE.
         return percent < 0.15 ? .topTrailing :
-            percent >= 0.80 ? .topLeading :
+            percent >= 0.75 ? .topLeading :
             .top
     }
 

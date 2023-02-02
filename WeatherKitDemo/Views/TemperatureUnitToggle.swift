@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TemperatureUnitToggle: View {
-    @AppStorage("showFahrenheit") var showFahrenheit = false
+    @AppStorage("showFahrenheit") var showFahrenheit: Bool?
     @StateObject private var weatherVM = WeatherViewModel.shared
 
     var body: some View {

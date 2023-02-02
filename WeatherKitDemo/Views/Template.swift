@@ -78,6 +78,8 @@ struct Template<Content: View>: View {
                     Text(weatherVM.formattedTimestamp)
                 }
                 .font(.system(size: 16))
+                let tempKind = weatherVM.useFeel ? "feels like" : "actual"
+                Text("showing \(tempKind) temperatures")
             }
         }
     }

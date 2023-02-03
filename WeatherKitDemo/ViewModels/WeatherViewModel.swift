@@ -8,6 +8,7 @@ private let redPercent = 0.0
 class WeatherViewModel: NSObject, ObservableObject {
     // MARK: - State
 
+    @AppStorage("heatMapDaysOnTop") var heatMapDaysOnTop = false
     @AppStorage("showAbsoluteColors") var showAbsoluteColors = false
     @AppStorage("showFahrenheit") var showFahrenheit: Bool?
     @AppStorage("showFeel") var showFeel = false

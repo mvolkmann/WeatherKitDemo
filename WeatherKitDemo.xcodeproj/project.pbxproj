@@ -10,7 +10,6 @@
 		1A0D14162988B0250087474E /* ActualFeelToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D14152988B0250087474E /* ActualFeelToggle.swift */; };
 		1A0D1422298AEDC80087474E /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D1421298AEDC80087474E /* Settings.swift */; };
 		1A0D1424298AEE1B0087474E /* ColorToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D1423298AEE1B0087474E /* ColorToggle.swift */; };
-		1A0D1426298C3B550087474E /* HeatMap2Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D1425298C3B550087474E /* HeatMap2Screen.swift */; };
 		1A36EDA828D68D6B00372EE1 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 1A36EDA528D68D6B00372EE1 /* README.md */; };
 		1A50CC3228D381CC005B1D36 /* LocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A50CC3128D381CC005B1D36 /* LocationViewModel.swift */; };
 		1A5A7204297DF48F00BC1EC9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5A7203297DF48F00BC1EC9 /* AppDelegate.swift */; };
@@ -26,6 +25,7 @@
 		1A713EC328FC3EF900AEA66B /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A713EC228FC3EF900AEA66B /* StringExtension.swift */; };
 		1A713EC528FC4E5700AEA66B /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A713EC428FC4E5700AEA66B /* ViewExtension.swift */; };
 		1A713EC828FC5C5000AEA66B /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A713EC728FC5C5000AEA66B /* LocationService.swift */; };
+		1A7861C1298D756B009D03F7 /* HeatMapToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7861C0298D756B009D03F7 /* HeatMapToggle.swift */; };
 		1A79703628FDE9BC00569E68 /* HeatMapScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A79703528FDE9BC00569E68 /* HeatMapScreen.swift */; };
 		1A84529228D37DA900C28047 /* WeatherKitDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A84529128D37DA900C28047 /* WeatherKitDemoApp.swift */; };
 		1A84529428D37DA900C28047 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A84529328D37DA900C28047 /* ContentView.swift */; };
@@ -45,7 +45,6 @@
 		1A0D14152988B0250087474E /* ActualFeelToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActualFeelToggle.swift; sourceTree = "<group>"; };
 		1A0D1421298AEDC80087474E /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		1A0D1423298AEE1B0087474E /* ColorToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorToggle.swift; sourceTree = "<group>"; };
-		1A0D1425298C3B550087474E /* HeatMap2Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatMap2Screen.swift; sourceTree = "<group>"; };
 		1A36EDA528D68D6B00372EE1 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		1A50CC3028D380C3005B1D36 /* WeatherKitDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WeatherKitDemo.entitlements; sourceTree = "<group>"; };
 		1A50CC3128D381CC005B1D36 /* LocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewModel.swift; sourceTree = "<group>"; };
@@ -61,6 +60,7 @@
 		1A713EC228FC3EF900AEA66B /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		1A713EC428FC4E5700AEA66B /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
 		1A713EC728FC5C5000AEA66B /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		1A7861C0298D756B009D03F7 /* HeatMapToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatMapToggle.swift; sourceTree = "<group>"; };
 		1A79703528FDE9BC00569E68 /* HeatMapScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatMapScreen.swift; sourceTree = "<group>"; };
 		1A84528E28D37DA900C28047 /* WeatherKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A84529128D37DA900C28047 /* WeatherKitDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherKitDemoApp.swift; sourceTree = "<group>"; };
@@ -160,11 +160,11 @@
 				1A0D14152988B0250087474E /* ActualFeelToggle.swift */,
 				1A713EBA28F9DFD000AEA66B /* ChartScreen.swift */,
 				1A0D1423298AEE1B0087474E /* ColorToggle.swift */,
+				1A7861C0298D756B009D03F7 /* HeatMapToggle.swift */,
 				1A84529328D37DA900C28047 /* ContentView.swift */,
 				1A713EB428F9DCDA00AEA66B /* CurrentScreen.swift */,
 				1A713EBE28FA0A4B00AEA66B /* ForecastScreen.swift */,
 				1A79703528FDE9BC00569E68 /* HeatMapScreen.swift */,
-				1A0D1425298C3B550087474E /* HeatMap2Screen.swift */,
 				1A5A7235297F033A00BC1EC9 /* LottieView.swift */,
 				1A0D1421298AEDC80087474E /* Settings.swift */,
 				1A97783E297D7489006CFB86 /* TemperatureUnitToggle.swift */,
@@ -292,10 +292,10 @@
 				1A713EC328FC3EF900AEA66B /* StringExtension.swift in Sources */,
 				1A713EC528FC4E5700AEA66B /* ViewExtension.swift in Sources */,
 				1A0D14162988B0250087474E /* ActualFeelToggle.swift in Sources */,
-				1A0D1426298C3B550087474E /* HeatMap2Screen.swift in Sources */,
 				1A713EC828FC5C5000AEA66B /* LocationService.swift in Sources */,
 				1A713EBD28F9FDB800AEA66B /* DateExtension.swift in Sources */,
 				1AB73A8C297D8A3100DCF9A9 /* MeasureExtension.swift in Sources */,
+				1A7861C1298D756B009D03F7 /* HeatMapToggle.swift in Sources */,
 				1A79703628FDE9BC00569E68 /* HeatMapScreen.swift in Sources */,
 				1A713EB528F9DCDA00AEA66B /* CurrentScreen.swift in Sources */,
 				1A84529428D37DA900C28047 /* ContentView.swift in Sources */,

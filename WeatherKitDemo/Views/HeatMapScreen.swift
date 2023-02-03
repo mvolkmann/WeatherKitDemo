@@ -49,6 +49,8 @@ struct HeatMapScreen: View {
         }
     }
 
+    private var daysOnTop: Bool { weatherVM.heatMapDaysOnTop }
+
     private var heatMapHeight: Double {
         // The + 1 is for the x-axis labels and the key.
         Double(WeatherService.days + 1) * markHeight
@@ -88,19 +90,21 @@ struct HeatMapScreen: View {
                 ScrollView {
                     HStack(alignment: .top, spacing: 0) {
                         dayLabels
-                        ScrollView(.horizontal) {
+                        ScrollView(daysOnTop ? .vertical : .horizontal) {
                             heatMap(hourlyForecast: sortedHourlyForecast)
                                 // Prevent scrollbar from overlapping legend.
                                 .padding(.bottom, 10)
                         }
-                        .if(isWide) { view in
-                            view.frame(
-                                width: heatMapWidth,
-                                height: heatMapHeight
-                            )
-                        }
+                        /*
+                         .if(isWide) { view in
+                             view.frame(
+                                 width: heatMapWidth,
+                                 height: heatMapHeight
+                             )
+                         }
+                         */
                     }
-                    // .rotationEffect(.degrees(90))
+                    .rotationEffect(.degrees(daysOnTop ? 90 : 0))
                 }
                 .padding(.top)
             }
@@ -198,7 +202,8 @@ struct HeatMapScreen: View {
                         weatherVM.temperatureUnitSymbol
                 )
                 .rotationEffect(.degrees(-90))
-                .font(.body)
+                // .font(.body)
+                .font(.system(size: daysOnTop ? 13 : 17))
                 .frame(width: 60)
             }
         }

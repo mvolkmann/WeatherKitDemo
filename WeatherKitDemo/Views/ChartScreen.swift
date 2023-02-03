@@ -50,43 +50,52 @@ struct ChartScreen: View {
         Template {
             let futureForecast = weatherVM.futureForecast
             Text("drag-help").font(.subheadline)
-            Chart {
-                ForEach(futureForecast.indices, id: \.self) { index in
-                    let forecast = futureForecast[index]
-                    let date = PlottableValue.value(
-                        "Date",
-                        forecast.date
-                    )
-                    let temperature = PlottableValue.value(
-                        "Temperature",
-                        forecast.converted
-                    )
+            ZStack(alignment: .top) {
+                HStack {
+                    Text("Temperature").opacity(0.5).padding(.top, 45)
+                    Spacer()
+                }
 
-                    LineMark(x: date, y: temperature)
-                        .interpolationMethod(.catmullRom)
-                        .lineStyle(StrokeStyle(lineWidth: 3))
+                Chart {
+                    ForEach(futureForecast.indices, id: \.self) { index in
+                        let forecast = futureForecast[index]
+                        let date = PlottableValue.value(
+                            "Date",
+                            forecast.date
+                        )
+                        let temperature = PlottableValue.value(
+                            "Temperature",
+                            forecast.converted
+                        )
 
-                    // PointMark(x: date, y: temperature)
+                        LineMark(x: date, y: temperature)
+                            .interpolationMethod(.catmullRom)
+                            .lineStyle(StrokeStyle(lineWidth: 3))
 
-                    AreaMark(x: date, y: temperature)
-                        .foregroundStyle(areaColor.opacity(0.6))
+                        // PointMark(x: date, y: temperature)
 
-                    if selectedDate == forecast.date {
-                        RuleMark(x: date)
-                            .annotation(position: annotationPosition(index)) {
-                                annotation
-                            }
-                            // Display a red, dashed, vertical line.
-                            .foregroundStyle(.red)
-                            .lineStyle(StrokeStyle(dash: [10, 5]))
+                        AreaMark(x: date, y: temperature)
+                            .foregroundStyle(areaColor.opacity(0.6))
+
+                        if selectedDate == forecast.date {
+                            RuleMark(x: date)
+                                .annotation(
+                                    position: annotationPosition(index)
+                                ) {
+                                    annotation
+                                }
+                                // Display a red, dashed, vertical line.
+                                .foregroundStyle(.red)
+                                .lineStyle(StrokeStyle(dash: [10, 5]))
+                        }
                     }
                 }
+                .padding(.top, 80) // leaves room for top annotation
+                .chartYAxis {
+                    AxisMarks(position: .leading)
+                }
+                .chartOverlay { proxy in chartOverlay(proxy: proxy) }
             }
-            .padding(.top, 80) // leaves room for top annotation
-            .chartYAxis {
-                AxisMarks(position: .leading)
-            }
-            .chartOverlay { proxy in chartOverlay(proxy: proxy) }
         }
     }
 
@@ -119,7 +128,8 @@ struct ChartScreen: View {
                             )
                             if let (date, _) = proxy.value(
                                 at: location,
-                                as: (Date, Double).self // date and temperature
+                                as: (Date, Double)
+                                    .self // date and temperature
                             ) {
                                 selectedDate = date.removeSeconds()
                             }

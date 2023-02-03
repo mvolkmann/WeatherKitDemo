@@ -155,7 +155,7 @@ struct Template<Content: View>: View {
         .sheet(isPresented: $isSettingsPresented) {
             Settings()
                 // Need at least this height for iPhone SE.
-                .presentationDetents([.height(235)])
+                .presentationDetents([.height(340)])
                 .presentationDragIndicator(.visible)
         }
 

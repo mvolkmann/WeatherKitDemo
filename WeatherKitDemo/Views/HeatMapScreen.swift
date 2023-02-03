@@ -149,7 +149,7 @@ struct HeatMapScreen: View {
         .chartForegroundStyleScale(range: weatherVM.gradient)
 
         // I can't get legend to render in a good place when daysOnTop is true.
-        // TODO: Why does this also hide x-axis labels?
+        // TODO: Why does hiding the legend also hide x-axis labels?
         .chartLegend(daysOnTop ? .hidden : .visible)
 
         .chartXAxis {

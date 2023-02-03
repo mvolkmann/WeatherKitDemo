@@ -23,6 +23,7 @@ struct ContentView: View {
                 .tabItem { Label("Chart", systemImage: "chart.xyaxis.line") }
                 .tag("chart")
             HeatMapScreen()
+                // HeatMap2Screen()
                 .tabItem { Label("Heat Map", systemImage: "thermometer.sun") }
                 .tag("heatmap")
         }

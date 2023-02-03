@@ -32,6 +32,7 @@
 "Temperature" = "Température";
 "Thu" = "jeu";
 "Time" = "Temps";
+"Today" = "Auj";
 "Tue" = "mar";
 "weatherkit-slow" = "WeatherKit prend plus de temps que d'habitude pour renvoyer les données météorologiques.";
 "Wed" = "mer";

@@ -2,10 +2,10 @@ import Charts
 import SwiftUI
 import WeatherKit
 
-private let markHeight = 70.0 // 90.0
-private let markWidth = 30.0
+private let markHeight = 30.0
+private let markWidth = 60.0
 
-struct HeatMapScreen: View {
+struct HeatMap2Screen: View {
     // MARK: - State
 
     @Environment(
@@ -28,24 +28,13 @@ struct HeatMapScreen: View {
     // MARK: - Variables
 
     private var dayLabels: some View {
-        // Create an array of the day abbreviations to appear in the heat map.
-        var days: [String] = []
-        let startDayNumber = Date().dayOfWeekNumber
-        let endDayNumber = startDayNumber + WeatherService.days
-        for dayNumber in stride(
-            from: endDayNumber - 1,
-            to: startDayNumber - 1,
-            by: -1
-        ) {
-            days.append(Self.daysOfWeek[(dayNumber - 1) % 7])
-        }
-
-        // Instead of showing the abbreviation of the day for today,
-        // display the word "Today".
-        days[WeatherService.days - 1] = "Today"
-
-        return VStack(spacing: 0) {
-            ForEach(days, id: \.self) { day in dayLabel(day) }
+        HStack(spacing: 0) {
+            let startIndex = Date().dayOfWeekNumber - 1
+            let range =
+                startIndex ..< startIndex + WeatherService.days
+            ForEach(range, id: \.self) { index in
+                dayLabel(Self.daysOfWeek[index % 7])
+            }
         }
     }
 
@@ -66,30 +55,16 @@ struct HeatMapScreen: View {
 
     private var isWide: Bool { horizontalSizeClass != .compact }
 
-    // This reorders the hourly forecasts so the dates are in reverse order.
-    // It is needed so the bottom row can be for today
-    // and the top row can be for four days later.
-    private var sortedHourlyForecast: [HourWeather] {
-        var sorted: [HourWeather] = []
-        let days = WeatherService.days
-        for index in 0 ..< days {
-            let startIndex = (days - 1 - index) * 24
-            let slice = hourlyForecast[startIndex ..< startIndex + 24]
-            sorted.append(contentsOf: slice)
-        }
-        return sorted
-    }
-
     var body: some View {
         Template {
             if hourlyForecast.isEmpty {
                 Text("Forecast data is not available.").font(.title)
             } else {
                 ScrollView {
-                    HStack(alignment: .top, spacing: 0) {
+                    VStack(spacing: 0) {
                         dayLabels
-                        ScrollView(.horizontal) {
-                            heatMap(hourlyForecast: sortedHourlyForecast)
+                        ScrollView {
+                            heatMap(hourlyForecast: hourlyForecast)
                                 // Prevent scrollbar from overlapping legend.
                                 .padding(.bottom, 10)
                         }
@@ -100,7 +75,6 @@ struct HeatMapScreen: View {
                             )
                         }
                     }
-                    // .rotationEffect(.degrees(90))
                 }
                 .padding(.top)
             }
@@ -118,35 +92,42 @@ struct HeatMapScreen: View {
     private func dayLabel(_ day: String) -> some View {
         // TODO: Why does "Mon" in French get elided?
         Text(day.localized)
-            .frame(height: markHeight)
-            .rotationEffect(Angle.degrees(-90))
+            .frame(width: markWidth)
     }
 
     /*
      private func emptyMark(day: String, hour: Int) -> some ChartContent {
-         return Plot {
-             RectangleMark(
-                 // Why do String values work, but Int values do not?
-                 x: .value("Time", "\(hour)"),
-                 y: .value("Day", day),
-                 width: .ratio(1),
-                 height: .ratio(1)
-             )
-             .foregroundStyle(.clear)
-         }
+     return Plot {
+     RectangleMark(
+     // Why do String values work, but Int values do not?
+     x: .value("Time", "\(hour)"),
+     y: .value("Day", day),
+     width: .ratio(1),
+     height: .ratio(1)
+     )
+     .foregroundStyle(.clear)
+     }
      }
      */
 
     private func heatMap(hourlyForecast: [HourWeather]) -> some View {
         Chart {
-            ForEach(hourlyForecast.reversed().indices, id: \.self) { index in
+            let initial = hourlyForecast.prefix(2)
+            // ForEach(hourlyForecast.indices, id: \.self) { index in
+            ForEach(initial.indices, id: \.self) { index in
                 let forecast = hourlyForecast[index]
                 mark(forecast: forecast)
             }
         }
         .chartForegroundStyleScale(range: weatherVM.gradient)
+
         // .chartLegend(.hidden) // TODO: Why does this also hide x-axis labels?
-        .chartXAxis {
+
+        // I can't get the y-axis labels to appear to the left of each row.
+        // They display above each row.
+        .chartXAxis(.hidden)
+
+        .chartYAxis {
             AxisMarks(position: .bottom, values: .automatic) { axisValue in
                 AxisTick()
                 AxisValueLabel(centered: true) {
@@ -159,10 +140,6 @@ struct HeatMapScreen: View {
                 }
             }
         }
-
-        // I can't get the y-axis labels to appear to the left of each row.
-        // They display above each row.
-        .chartYAxis(.hidden)
 
         .frame(width: heatMapWidth, height: heatMapHeight)
     }
@@ -183,10 +160,10 @@ struct HeatMapScreen: View {
         return Plot {
             RectangleMark(
                 // Why do String values work, but Int values do not?
-                x: .value("Time", "\(date.hour)"),
-                y: .value("Day", date.dayOfWeek),
-                width: .ratio(1),
-                height: .ratio(1)
+                x: .value("Day", date.dayOfWeek),
+                y: .value("Time", "\(date.hour)")
+                // width: .ratio(1),
+                // height: .ratio(1)
             )
 
             .foregroundStyle(by: .value("Temperature", temperature))
@@ -197,9 +174,8 @@ struct HeatMapScreen: View {
                     "\(String(format: "%.0f", temperature))" +
                         weatherVM.temperatureUnitSymbol
                 )
-                .rotationEffect(.degrees(-90))
                 .font(.body)
-                .frame(width: 60)
+                .frame(width: markWidth)
             }
         }
         .accessibilityLabel("\(date.md) \(date.h)")

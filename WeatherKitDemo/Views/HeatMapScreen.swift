@@ -53,17 +53,21 @@ struct HeatMapScreen: View {
 
     private var heatMapHeight: Double {
         // TODO: Change 350 to something based on the screen width.
-        daysOnTop ? 350 : // markWidth * 24 :
+        let result = daysOnTop ? 350 : // markWidth * 24 :
             // The + 1 is for the x-axis labels and the key.
             Double(WeatherService.days + 1) * markHeight
+        print("heatMapHeight =", result)
+        return result
     }
 
     private var heatMapWidth: Double {
         // TODO: Can we calculate the value instead of using 700?
-        daysOnTop ? 700 :
+        let result = daysOnTop ? 700 :
             // The + 1 is for the x-axis labels and the key.
             // Double(WeatherService.days + 1) * markHeight :
             markWidth * 24
+        print("heatMapWidth =", result)
+        return result
     }
 
     private var helpText: some View {
@@ -100,14 +104,17 @@ struct HeatMapScreen: View {
                     ScrollView(.horizontal) {
                         heatMap(hourlyForecast: sortedHourlyForecast)
                             // Prevent scrollbar from overlapping legend.
-                            .padding(.bottom, 10)
+                            .padding(.bottom, daysOnTop ? 0 : 10)
+                            .border(.green)
                     }
+                    // .frame(width: daysOnTop ? 450 : nil)
                     .if(isWide) { view in
                         view.frame(
                             width: heatMapWidth,
                             height: heatMapHeight
                         )
                     }
+                    .border(.red)
                 }
                 .rotationEffect(.degrees(daysOnTop ? 90 : 0))
                 .padding(.top)

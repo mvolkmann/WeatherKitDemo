@@ -26,6 +26,7 @@
 		1A713EC528FC4E5700AEA66B /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A713EC428FC4E5700AEA66B /* ViewExtension.swift */; };
 		1A713EC828FC5C5000AEA66B /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A713EC728FC5C5000AEA66B /* LocationService.swift */; };
 		1A7861C1298D756B009D03F7 /* HeatMapToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7861C0298D756B009D03F7 /* HeatMapToggle.swift */; };
+		1A7861C3298D85C6009D03F7 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7861C2298D85C6009D03F7 /* Stack.swift */; };
 		1A79703628FDE9BC00569E68 /* HeatMapScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A79703528FDE9BC00569E68 /* HeatMapScreen.swift */; };
 		1A84529228D37DA900C28047 /* WeatherKitDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A84529128D37DA900C28047 /* WeatherKitDemoApp.swift */; };
 		1A84529428D37DA900C28047 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A84529328D37DA900C28047 /* ContentView.swift */; };
@@ -61,6 +62,7 @@
 		1A713EC428FC4E5700AEA66B /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
 		1A713EC728FC5C5000AEA66B /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		1A7861C0298D756B009D03F7 /* HeatMapToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatMapToggle.swift; sourceTree = "<group>"; };
+		1A7861C2298D85C6009D03F7 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
 		1A79703528FDE9BC00569E68 /* HeatMapScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatMapScreen.swift; sourceTree = "<group>"; };
 		1A84528E28D37DA900C28047 /* WeatherKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A84529128D37DA900C28047 /* WeatherKitDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherKitDemoApp.swift; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 				1A79703528FDE9BC00569E68 /* HeatMapScreen.swift */,
 				1A5A7235297F033A00BC1EC9 /* LottieView.swift */,
 				1A0D1421298AEDC80087474E /* Settings.swift */,
+				1A7861C2298D85C6009D03F7 /* Stack.swift */,
 				1A97783E297D7489006CFB86 /* TemperatureUnitToggle.swift */,
 				1A713EC028FA0CD500AEA66B /* Template.swift */,
 				1A97783A297D6F4C006CFB86 /* Toggle2.swift */,
@@ -287,6 +290,7 @@
 				1A713EBB28F9DFD000AEA66B /* ChartScreen.swift in Sources */,
 				1AB0621528D64E8500602C7B /* ImageExtension.swift in Sources */,
 				1AB0621828D6572200602C7B /* WeatherSummary.swift in Sources */,
+				1A7861C3298D85C6009D03F7 /* Stack.swift in Sources */,
 				1AB0621328D64E3700602C7B /* HourWeatherExtension.swift in Sources */,
 				1A713EC128FA0CD500AEA66B /* Template.swift in Sources */,
 				1A713EC328FC3EF900AEA66B /* StringExtension.swift in Sources */,

@@ -2,7 +2,7 @@ import Charts
 import SwiftUI
 import WeatherKit
 
-private let markHeight = 70.0 // 90.0
+private let markHeight = 70.0
 private let markWidth = 30.0
 
 struct HeatMapScreen: View {
@@ -52,11 +52,19 @@ struct HeatMapScreen: View {
     private var daysOnTop: Bool { weatherVM.heatMapDaysOnTop }
 
     private var heatMapHeight: Double {
-        // The + 1 is for the x-axis labels and the key.
-        Double(WeatherService.days + 1) * markHeight
+        // TODO: Change 350 to something based on the screen width.
+        daysOnTop ? 350 : // markWidth * 24 :
+            // The + 1 is for the x-axis labels and the key.
+            Double(WeatherService.days + 1) * markHeight
     }
 
-    private var heatMapWidth: Double { markWidth * 24 }
+    private var heatMapWidth: Double {
+        // TODO: Can we calculate the value instead of using 700?
+        daysOnTop ? 700 :
+            // The + 1 is for the x-axis labels and the key.
+            // Double(WeatherService.days + 1) * markHeight :
+            markWidth * 24
+    }
 
     private var helpText: some View {
         let low = weatherVM.useFahrenheit ? "0℉" : "-17.8℃"
@@ -87,30 +95,28 @@ struct HeatMapScreen: View {
             if hourlyForecast.isEmpty {
                 Text("Forecast data is not available.").font(.title)
             } else {
-                ScrollView {
-                    HStack(alignment: .top, spacing: 0) {
-                        dayLabels
-                        ScrollView(daysOnTop ? .vertical : .horizontal) {
-                            heatMap(hourlyForecast: sortedHourlyForecast)
-                                // Prevent scrollbar from overlapping legend.
-                                .padding(.bottom, 10)
-                        }
-                        /*
-                         .if(isWide) { view in
-                             view.frame(
-                                 width: heatMapWidth,
-                                 height: heatMapHeight
-                             )
-                         }
-                         */
+                HStack(alignment: .top, spacing: 0) {
+                    dayLabels
+                    ScrollView(.horizontal) {
+                        heatMap(hourlyForecast: sortedHourlyForecast)
+                            // Prevent scrollbar from overlapping legend.
+                            .padding(.bottom, 10)
                     }
-                    .rotationEffect(.degrees(daysOnTop ? 90 : 0))
+                    .if(isWide) { view in
+                        view.frame(
+                            width: heatMapWidth,
+                            height: heatMapHeight
+                        )
+                    }
                 }
+                .rotationEffect(.degrees(daysOnTop ? 90 : 0))
                 .padding(.top)
             }
         }
         // Run this closure again every time the selected placemark changes.
         .task(id: weatherVM.summary) {
+            print("HeatMapScreen: daysOnTop =", daysOnTop)
+            print("HeatMapScreen: isWide =", isWide)
             if let summary = weatherVM.summary {
                 hourlyForecast = summary.hourlyForecast
             }
@@ -122,24 +128,9 @@ struct HeatMapScreen: View {
     private func dayLabel(_ day: String) -> some View {
         // TODO: Why does "Mon" in French get elided?
         Text(day.localized)
-            .frame(height: markHeight)
+            .frame(height: daysOnTop ? markHeight * 0.91 : markHeight)
             .rotationEffect(Angle.degrees(-90))
     }
-
-    /*
-     private func emptyMark(day: String, hour: Int) -> some ChartContent {
-         return Plot {
-             RectangleMark(
-                 // Why do String values work, but Int values do not?
-                 x: .value("Time", "\(hour)"),
-                 y: .value("Day", day),
-                 width: .ratio(1),
-                 height: .ratio(1)
-             )
-             .foregroundStyle(.clear)
-         }
-     }
-     */
 
     private func heatMap(hourlyForecast: [HourWeather]) -> some View {
         Chart {
@@ -149,17 +140,25 @@ struct HeatMapScreen: View {
             }
         }
         .chartForegroundStyleScale(range: weatherVM.gradient)
-        // .chartLegend(.hidden) // TODO: Why does this also hide x-axis labels?
+
+        // I can't get legend to render in a good place when daysOnTop is true.
+        // TODO: Why does this also hide x-axis labels?
+        .chartLegend(daysOnTop ? .hidden : .visible)
+
         .chartXAxis {
             AxisMarks(position: .bottom, values: .automatic) { axisValue in
                 AxisTick()
-                AxisValueLabel(centered: true) {
+                AxisValueLabel(
+                    centered: true,
+                    orientation: daysOnTop ? .verticalReversed : .horizontal
+                ) {
                     let index = axisValue.index
                     let mod = index % 12
                     let hour = mod == 0 ? 12 : mod
                     // TODO: Use 24-hour clock in French without AM/PM.
                     Text("\(hour)\n\(index < 12 ? "AM" : "PM")")
                         .multilineTextAlignment(.center)
+                        .frame(width: daysOnTop ? 27 : nil)
                 }
             }
         }

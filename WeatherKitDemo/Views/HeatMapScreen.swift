@@ -105,18 +105,26 @@ struct HeatMapScreen: View {
                         heatMap(hourlyForecast: sortedHourlyForecast)
                             // Prevent scrollbar from overlapping legend.
                             .padding(.bottom, daysOnTop ? 0 : 10)
-                            .border(.green)
+                        // .border(.green)
                     }
-                    // .frame(width: daysOnTop ? 450 : nil)
+
+                    // TODO: Why does this cause dayLabels to disappear?
+                    // .frame(width: daysOnTop ? 500 : nil)
+
                     .if(isWide) { view in
                         view.frame(
                             width: heatMapWidth,
                             height: heatMapHeight
                         )
                     }
-                    .border(.red)
+                    // .border(.red)
                 }
-                .rotationEffect(.degrees(daysOnTop ? 90 : 0))
+                .rotationEffect(
+                    .degrees(daysOnTop ? 90 : 0)
+                    // The default anchor value is .center and
+                    // that seems much better than all the other options.
+                )
+                // .offset(y: daysOnTop ? 150 : 0)
                 .padding(.top)
             }
         }

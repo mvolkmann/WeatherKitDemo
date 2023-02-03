@@ -10,7 +10,6 @@ struct Template<Content: View>: View {
 
     @State private var location: String = ""
     @State private var isLiked: Bool = false
-    @State private var isSettingsPresented = false
 
     @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
@@ -39,34 +38,10 @@ struct Template<Content: View>: View {
         endPoint: .bottom
     )
 
-    private var buttons: some View {
-        HStack {
-            Button(action: refreshForecast) {
-                Image(systemName: "arrow.clockwise")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 20)
-            }
-            Spacer()
-            Button(action: { isSettingsPresented = true }) {
-                Image(systemName: "gear")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 25)
-            }
-        }
-        .padding(.horizontal)
-    }
-
     private let content: Content
 
     private var heading: some View {
         VStack(spacing: 0) {
-            Text("Feather Weather")
-                .font(.title)
-                .fontWeight(.bold)
-                .foregroundColor(.primary)
-
             HStack {
                 place
                 if !location.isEmpty { likeButton }
@@ -128,7 +103,6 @@ struct Template<Content: View>: View {
     var body: some View {
         ZStack(alignment: .top) {
             background
-            buttons
             VStack(spacing: 0) {
                 heading
 
@@ -150,13 +124,6 @@ struct Template<Content: View>: View {
 
         .onChange(of: scenePhase) { newPhase in
             if newPhase == .active { refreshForecast() }
-        }
-
-        .sheet(isPresented: $isSettingsPresented) {
-            Settings()
-                // Need at least this height for iPhone SE.
-                .presentationDetents([.height(340)])
-                .presentationDragIndicator(.visible)
         }
 
         // We are using task instead of onAppear so we can specify a dependency.

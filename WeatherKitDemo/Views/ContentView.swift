@@ -4,6 +4,7 @@ import WeatherKit
 
 struct ContentView: View {
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.openURL) var openURL
 
     @State private var isSettingsPresented = false
     @State private var selectedTab: String = "current"
@@ -72,6 +73,16 @@ struct ContentView: View {
             let haveLatest = await haveLatestVersion()
             if !haveLatest {
                 print("You do not have the latest version!")
+                let urlPrefix = "https://apps.apple.com/us/app/"
+                let appName = "feather-weather-forecasts"
+                let appID = "1667050253"
+                let appURL = "\(urlPrefix)\(appName)/id\(appID)"
+                print("appURL =", appURL)
+                if let url = URL(string: appURL) { openURL(url) }
+                // To let the user tap a button to open the App Store ...
+                // Link(destination: url) {
+                //     Text("Get latest version")
+                // }
             }
         }
     }
@@ -86,6 +97,9 @@ struct ContentView: View {
         else {
             return true // can't determine
         }
+
+        print("identifier =", identifier)
+        print("url =", url)
 
         do {
             let (data, _) = try await URLSession.shared.data(from: url)

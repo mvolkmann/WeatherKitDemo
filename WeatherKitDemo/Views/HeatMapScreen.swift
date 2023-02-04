@@ -56,7 +56,6 @@ struct HeatMapScreen: View {
         let result = daysOnTop ? 350 : // markWidth * 24 :
             // The + 1 is for the x-axis labels and the key.
             Double(WeatherService.days + 1) * markHeight
-        print("heatMapHeight =", result)
         return result
     }
 
@@ -66,7 +65,6 @@ struct HeatMapScreen: View {
             // The + 1 is for the x-axis labels and the key.
             // Double(WeatherService.days + 1) * markHeight :
             markWidth * 24
-        print("heatMapWidth =", result)
         return result
     }
 
@@ -130,8 +128,6 @@ struct HeatMapScreen: View {
         }
         // Run this closure again every time the selected placemark changes.
         .task(id: weatherVM.summary) {
-            print("HeatMapScreen: daysOnTop =", daysOnTop)
-            print("HeatMapScreen: isWide =", isWide)
             if let summary = weatherVM.summary {
                 hourlyForecast = summary.hourlyForecast
             }
@@ -191,12 +187,6 @@ struct HeatMapScreen: View {
         let measurement = weatherVM.showFeel ?
             forecast.apparentTemperature : forecast.temperature
         let temperature = measurement.converted
-
-        /*
-         // TODO: Is there a bug that sometimes causes temperatures to be elided?
-         let t = String(format: "%.0f", temperature)
-         print("temperature = \(temperature), t = \(t)")
-         */
 
         return Plot {
             RectangleMark(

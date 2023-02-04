@@ -67,6 +67,51 @@ struct ContentView: View {
                 }
             }
         }
+
+        .task {
+            let haveLatest = await haveLatestVersion()
+            if !haveLatest {
+                print("You do not have the latest version!")
+            }
+        }
+    }
+
+    private func haveLatestVersion() async -> Bool {
+        let urlPrefix = "https://itunes.apple.com/lookup?bundleId="
+        guard let info = Bundle.main.infoDictionary,
+              let installedVersion =
+              info["CFBundleShortVersionString"] as? String,
+              let identifier = info["CFBundleIdentifier"] as? String,
+              let url = URL(string: "\(urlPrefix)\(identifier)")
+        else {
+            return true // can't determine
+        }
+
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+
+            guard let json = try JSONSerialization.jsonObject(
+                with: data,
+                options: [.allowFragments]
+            ) as? [String: Any] else {
+                return true // can't determine
+            }
+
+            guard let results = (json["results"] as? [Any])?
+                .first as? [String: Any] else {
+                return true // can't determine
+            }
+
+            guard let storeVersion = results["version"] as? String else {
+                return true // can't determine
+            }
+
+            print("installed version =", installedVersion)
+            print("store version =", storeVersion)
+            return installedVersion == storeVersion
+        } catch {
+            return true // can't determine
+        }
     }
 
     private func customizeNavBar() {

@@ -17,9 +17,11 @@ struct AppInfo {
         guard let url else {
             throw "AppStoreService: bad URL \(String(describing: url))"
         }
-        // print("url =", url)
+        print("url =", url)
 
-        let (data, _) = try await URLSession.shared.data(from: url)
+        // let (data, _) = try await URLSession.shared.data(from: url)
+        let session = URLSession(configuration: .ephemeral)
+        let (data, _) = try await session.data(from: url)
         guard let json = try JSONSerialization.jsonObject(
             with: data,
             options: [.allowFragments]
@@ -56,18 +58,16 @@ struct AppInfo {
     }
 
     var appId: Int { int("trackId") }
-    var appURL: String { string("trackViewUrl") }
+    var appURL: String { string("trackViewUrl") + "&country=US" }
     var author: String { string("sellerName") }
     var bundleId: String { string("bundleId") }
     var description: String { string("description") }
+    var iconURL: String { string("artworkUrl100") }
     var supportURL: String { string("sellerUrl") }
 
     var haveLatestVersion: Bool {
-        // print("installedVersion =", installedVersion)
-        // TODO: Why is this not the latest version actually in the App Store?
-        // print("storeVersion =", storeVersion)
+        print("AppInfo: storeVersion =", storeVersion)
         let order = storeVersion.compare(installedVersion, options: .numeric)
-        // print("order =", order)
         return order != .orderedDescending
     }
 

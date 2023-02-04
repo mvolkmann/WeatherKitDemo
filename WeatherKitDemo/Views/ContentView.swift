@@ -7,6 +7,7 @@ struct ContentView: View {
     @Environment(\.openURL) var openURL
 
     @State private var appInfo: AppInfo?
+    @State private var isInfoPresented = false
     @State private var isSettingsPresented = false
     @State private var selectedTab: String = "current"
 
@@ -40,24 +41,40 @@ struct ContentView: View {
             .navigationTitle("Feather Weather")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    if let appInfo {
-                        Link(destination: URL(string: appInfo.supportURL)!) {
-                            Image(systemName: "questionmark.circle")
+                ToolbarItem(placement: .navigationBarLeading) {
+                    // Using HStack to reduce space between toolbar items.
+                    HStack(spacing: 0) {
+                        Button(action: { isInfoPresented = true }) {
+                            Image(systemName: "info.circle")
+                        }
+                        if let appInfo {
+                            Link(destination: URL(
+                                string: appInfo
+                                    .supportURL
+                            )!) {
+                                Image(systemName: "questionmark.circle")
+                            }
                         }
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: refreshForecast) {
-                        Image(systemName: "arrow.clockwise")
-                    }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { isSettingsPresented = true }) {
-                        Image(systemName: "gear")
+                    // Using HStack to reduce space between toolbar items.
+                    HStack(spacing: 0) {
+                        Button(action: refreshForecast) {
+                            Image(systemName: "arrow.clockwise")
+                        }
+                        Button(action: { isSettingsPresented = true }) {
+                            Image(systemName: "gear")
+                        }
                     }
                 }
             }
+        }
+
+        .sheet(isPresented: $isInfoPresented) {
+            Info(appInfo: appInfo)
+                .presentationDetents([.height(400)])
+                .presentationDragIndicator(.visible)
         }
 
         .sheet(isPresented: $isSettingsPresented) {
@@ -97,7 +114,7 @@ struct ContentView: View {
             // When the font size is 30 or more, this causes the error
             // "[LayoutConstraints] Unable to simultaneously
             // satisfy constraints", but it still works.
-            .font: UIFont.systemFont(ofSize: 28, weight: .bold)
+            .font: UIFont.systemFont(ofSize: 24, weight: .bold)
         ]
         UINavigationBar.appearance().standardAppearance = navigationAppearance
     }

@@ -19,7 +19,7 @@ struct AppInfo {
         }
         print("url =", url)
 
-        // let (data, _) = try await URLSession.shared.data(from: url)
+        // Using the ephemeral configuration avoids caching.
         let session = URLSession(configuration: .ephemeral)
         let (data, _) = try await session.data(from: url)
         guard let json = try JSONSerialization.jsonObject(

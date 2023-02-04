@@ -19,6 +19,12 @@ struct CurrentScreen: View {
     @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
 
+    let appInfo: AppInfo?
+
+    init(appInfo: AppInfo?) {
+        self.appInfo = appInfo
+    }
+
     // MARK: - Properties
 
     private var attributionLogoURL: URL? {
@@ -113,6 +119,12 @@ struct CurrentScreen: View {
     var body: some View {
         Template {
             VStack {
+                if let appInfo,
+                   !appInfo.haveLatestVersion,
+                   let url = URL(string: appInfo.appURL) {
+                    Link("Update Available", destination: url)
+                }
+
                 if locationVM.searchLocations.isEmpty {
                     currentData()
                 }

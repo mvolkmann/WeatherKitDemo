@@ -49,7 +49,9 @@ struct ChartScreen: View {
     var body: some View {
         Template {
             let futureForecast = weatherVM.futureForecast
-            Text("drag-help").font(.subheadline)
+            Text("drag-help")
+                .font(.subheadline)
+                .padding(.top)
             ZStack(alignment: .top) {
                 HStack {
                     Text("Temperature").opacity(0.5).padding(.top, 45)

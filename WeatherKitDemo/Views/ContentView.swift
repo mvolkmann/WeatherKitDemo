@@ -6,6 +6,7 @@ struct ContentView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.openURL) var openURL
 
+    @State private var appInfo: AppInfo?
     @State private var isSettingsPresented = false
     @State private var selectedTab: String = "current"
 
@@ -19,7 +20,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             TabView(selection: $selectedTab) {
-                CurrentScreen()
+                CurrentScreen(appInfo: appInfo)
                     .tabItem { Label("Current", systemImage: "clock") }
                     .tag("current")
                 ForecastScreen()
@@ -38,14 +39,25 @@ struct ContentView: View {
             }
             .navigationTitle("Feather Weather")
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(
-                leading: Button(action: refreshForecast) {
-                    Image(systemName: "arrow.clockwise")
-                },
-                trailing: Button(action: { isSettingsPresented = true }) {
-                    Image(systemName: "gear")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    if let appInfo {
+                        Link(destination: URL(string: appInfo.supportURL)!) {
+                            Image(systemName: "questionmark.circle")
+                        }
+                    }
                 }
-            )
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: refreshForecast) {
+                        Image(systemName: "arrow.clockwise")
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: { isSettingsPresented = true }) {
+                        Image(systemName: "gear")
+                    }
+                }
+            }
         }
 
         .sheet(isPresented: $isSettingsPresented) {
@@ -70,61 +82,11 @@ struct ContentView: View {
         }
 
         .task {
-            let haveLatest = await haveLatestVersion()
-            if !haveLatest {
-                print("You do not have the latest version!")
-                let urlPrefix = "https://apps.apple.com/us/app/"
-                let appName = "feather-weather-forecasts"
-                let appID = "1667050253"
-                let appURL = "\(urlPrefix)\(appName)/id\(appID)"
-                print("appURL =", appURL)
-                if let url = URL(string: appURL) { openURL(url) }
-                // To let the user tap a button to open the App Store ...
-                // Link(destination: url) {
-                //     Text("Get latest version")
-                // }
+            do {
+                appInfo = try await AppInfo.create()
+            } catch {
+                print("Error getting AppInfo:", error)
             }
-        }
-    }
-
-    private func haveLatestVersion() async -> Bool {
-        let urlPrefix = "https://itunes.apple.com/lookup?bundleId="
-        guard let info = Bundle.main.infoDictionary,
-              let installedVersion =
-              info["CFBundleShortVersionString"] as? String,
-              let identifier = info["CFBundleIdentifier"] as? String,
-              let url = URL(string: "\(urlPrefix)\(identifier)")
-        else {
-            return true // can't determine
-        }
-
-        print("identifier =", identifier)
-        print("url =", url)
-
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-
-            guard let json = try JSONSerialization.jsonObject(
-                with: data,
-                options: [.allowFragments]
-            ) as? [String: Any] else {
-                return true // can't determine
-            }
-
-            guard let results = (json["results"] as? [Any])?
-                .first as? [String: Any] else {
-                return true // can't determine
-            }
-
-            guard let storeVersion = results["version"] as? String else {
-                return true // can't determine
-            }
-
-            print("installed version =", installedVersion)
-            print("store version =", storeVersion)
-            return installedVersion == storeVersion
-        } catch {
-            return true // can't determine
         }
     }
 
@@ -132,7 +94,10 @@ struct ContentView: View {
         let navigationAppearance = UINavigationBarAppearance()
         navigationAppearance.titleTextAttributes = [
             .foregroundColor: UIColor.systemBlue,
-            .font: UIFont.systemFont(ofSize: 30, weight: .bold)
+            // When the font size is 30 or more, this causes the error
+            // "[LayoutConstraints] Unable to simultaneously
+            // satisfy constraints", but it still works.
+            .font: UIFont.systemFont(ofSize: 28, weight: .bold)
         ]
         UINavigationBar.appearance().standardAppearance = navigationAppearance
     }

@@ -66,7 +66,7 @@ struct ForecastScreen: View {
     var body: some View {
         Template {
             VStack {
-                header
+                header.padding(.top)
                 List {
                     ForEach(
                         weatherVM.futureForecast,

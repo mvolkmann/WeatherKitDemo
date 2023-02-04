@@ -34,7 +34,7 @@
 "Time" = "Temps";
 "Today" = "Auj";
 "Tue" = "mar";
-"Update Available": "Mise à jour disponible";
+"Update Available" = "Mise à jour disponible";
 "weatherkit-slow" = "WeatherKit prend plus de temps que d'habitude pour renvoyer les données météorologiques.";
 "Wed" = "mer";
 "Wind" = "Vent";

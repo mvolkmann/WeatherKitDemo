@@ -75,7 +75,7 @@ struct AppInfo {
     var identifier: String { info("CFBundleIdentifier") }
     var minimumOsVersion: String { string("minimumOsVersion") }
     var name: String { string("trackName") }
-    // "Promotional Text" is not present in the App Store JSON!
+    // "Promotional Text" is not present in the App Store JSON.
     var price: Double { double("price") }
     var releaseDate: Date { date("currentVersionReleaseDate") }
     var releaseNotes: String { string("releaseNotes") }

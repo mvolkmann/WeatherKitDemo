@@ -3,6 +3,8 @@
 This demonstrates using the Apple WeatherKit library and Swift Charts
 in a SwiftUI app.
 
+Here are some screenshots from the app:
+
 <img alt="Feather Weather Current" style="width: 45%"
   src="https://mvolkmann.github.io/blog/assets/feather-weather/2-iphone-6.5-current.png"
   title="Feather Weather Current">

@@ -56,6 +56,10 @@ class LocationViewModel: NSObject, ObservableObject {
         LocationService.state(from: selectedPlacemark)
     }
 
+    var timeZone: TimeZone? {
+        selectedPlacemark?.timeZone
+    }
+
     var usingCurrent: Bool {
         selectedPlacemark != nil && selectedPlacemark == currentPlacemark
     }

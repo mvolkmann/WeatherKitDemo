@@ -17,6 +17,7 @@ extension WeatherService {
         for location: CLLocation,
         colorScheme _: ColorScheme
     ) async throws -> WeatherSummary {
+        print("WeatherServiceExtension.summary: location =", location)
         let weather = try await weather(for: location)
         let current = weather.currentWeather
 
@@ -28,7 +29,10 @@ extension WeatherService {
 
         // Only keep forecasts from midnight this morning
         // to a given number of days in the future.
-        let startDate = Date().startOfDay
+        var startDate = Date().startOfDay
+        let hourOffset = timeZoneOffset(date: startDate)
+        startDate = startDate.hoursAfter(hourOffset)
+
         let endDate = startDate.addingTimeInterval(
             Double((Self.days * 24 - 1) * 60 * 60)
         )
@@ -50,5 +54,15 @@ extension WeatherService {
             attributionDarkLogoURL: attr.combinedMarkDarkURL,
             attributionPageURL: attr.legalPageURL
         )
+    }
+
+    private func timeZoneOffset(date: Date) -> Int {
+        let currentSeconds = TimeZone.current.secondsFromGMT(for: date)
+        let locationVM = LocationViewModel.shared
+        let targetSeconds = locationVM.timeZone?.secondsFromGMT(for: date)
+        if let targetSeconds {
+            return (targetSeconds - currentSeconds) / 60 / 60
+        }
+        return 0
     }
 }

@@ -25,7 +25,7 @@ struct HeatMapScreen: View {
     // The above looks better than using [.blue, .yellow, .red].
     // private static let gradient = Gradient(colors: hueColors)
 
-    // MARK: - Variables
+    // MARK: - Properties
 
     private var dayLabels: some View {
         // Create an array of the day abbreviations to appear in the heat map.
@@ -95,7 +95,7 @@ struct HeatMapScreen: View {
     var body: some View {
         Template {
             if hourlyForecast.isEmpty {
-                Text("Forecast data is not available.").font(.title)
+                ProgressView()
             } else {
                 HStack(alignment: .top, spacing: 0) {
                     dayLabels
@@ -103,7 +103,6 @@ struct HeatMapScreen: View {
                         heatMap(hourlyForecast: sortedHourlyForecast)
                             // Prevent scrollbar from overlapping legend.
                             .padding(.bottom, daysOnTop ? 0 : 10)
-                        // .border(.green)
                     }
 
                     // TODO: Why does this cause dayLabels to disappear?
@@ -166,10 +165,16 @@ struct HeatMapScreen: View {
                     let index = axisValue.index
                     let mod = index % 12
                     let hour = mod == 0 ? 12 : mod
-                    // TODO: Use 24-hour clock in French without AM/PM.
-                    Text("\(hour)\n\(index < 12 ? "AM" : "PM")")
+
+                    // This honors the Settings ... General ...
+                    // Date & Time ... 24-Hour Time switch.
+                    let is24Hour = Date.is24Hour()
+                    let text = is24Hour ?
+                        (index == 0 ? "12" : "\(index)") :
+                        "\(hour)\n\(index < 12 ? "AM" : "PM")"
+                    Text(text)
                         .multilineTextAlignment(.center)
-                        .frame(width: daysOnTop ? 27 : nil)
+                        .frame(width: daysOnTop ? (is24Hour ? 14 : 27) : nil)
                 }
             }
         }

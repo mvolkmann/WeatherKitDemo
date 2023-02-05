@@ -14,9 +14,7 @@ struct ForecastScreen: View {
 
     init() {
         // For dates, show the abbreviated day of week and time.
-        let use24Hour = Locale.current.identifier.starts(with: "fr")
-        let pattern = "EEE " + (use24Hour ? "H" : "h:a")
-        dateFormatter.setLocalizedDateFormatFromTemplate(pattern)
+        dateFormatter.setLocalizedDateFormatFromTemplate("EEE h:a")
 
         measurementFormatter.numberFormatter.maximumFractionDigits = 0
     }
@@ -87,7 +85,8 @@ struct ForecastScreen: View {
 
     private func forecastView(_ forecast: HourWeather) -> some View {
         HStack {
-            // TODO: Use 24-hour clock in French without AM/PM.
+            // This honors the Settings ... General ...
+            // Date & Time ... 24-Hour Time switch.
             Text(dateFormatter.string(from: forecast.date))
                 .frame(width: dateWidth, alignment: .leading)
 

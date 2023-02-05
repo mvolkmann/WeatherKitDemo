@@ -20,12 +20,8 @@ struct ChartScreen: View {
         VStack {
             if let date = selectedDate,
                let temperature = weatherVM.dateToTemperatureMap[date] {
-                // Text(date.formatted(.dateTime.month().day()))
                 Text(date.formatted(.dateTime.weekday(.wide)))
-
-                // TODO: Use 24-hour clock in French without AM/PM.
                 Text(date.formatted(.dateTime.hour()))
-
                 Text(
                     String(format: "%.0f", temperature.converted) +
                         weatherVM.temperatureUnitSymbol

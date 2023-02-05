@@ -60,7 +60,7 @@ struct HeatMapScreen: View {
     }
 
     private var heatMapWidth: Double {
-        // TODO: Can we calculate the value instead of using 700?
+        // TODO: Can this value be calculated instead of using 700?
         let result = daysOnTop ? 700 :
             // The + 1 is for the x-axis labels and the key.
             // Double(WeatherService.days + 1) * markHeight :
@@ -86,6 +86,7 @@ struct HeatMapScreen: View {
         let days = WeatherService.days
         for index in 0 ..< days {
             let startIndex = (days - 1 - index) * 24
+            // Getting "Fatal error: Array index is out of range" for Brisbane.
             let slice = hourlyForecast[startIndex ..< startIndex + 24]
             sorted.append(contentsOf: slice)
         }
@@ -136,7 +137,6 @@ struct HeatMapScreen: View {
     // MARK: - Methods
 
     private func dayLabel(_ day: String) -> some View {
-        // TODO: Why does "Mon" in French get elided?
         Text(day.localized)
             .frame(height: daysOnTop ? markHeight * 0.91 : markHeight)
             .rotationEffect(Angle.degrees(-90))
@@ -197,6 +197,7 @@ struct HeatMapScreen: View {
             RectangleMark(
                 // Why do String values work, but Int values do not?
                 x: .value("Time", "\(date.hour)"),
+                // x: .value("Time", "\((date.hour + 16) % 24)"),
                 y: .value("Day", date.dayOfWeek),
                 width: .ratio(1),
                 height: .ratio(1)

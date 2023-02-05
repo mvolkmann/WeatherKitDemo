@@ -17,7 +17,8 @@ extension WeatherService {
         for location: CLLocation,
         colorScheme _: ColorScheme
     ) async throws -> WeatherSummary {
-        print("WeatherServiceExtension.summary: location =", location)
+        // The daily forecasts always start at midnight
+        // in the timezone of the location you specify.
         let weather = try await weather(for: location)
         let current = weather.currentWeather
 
@@ -29,9 +30,23 @@ extension WeatherService {
 
         // Only keep forecasts from midnight this morning
         // to a given number of days in the future.
+
+        /*
+         let timeZone = try await LocationViewModel.shared.getTimeZone()
+         print("timeZone: \(timeZone.identifier)")
+         let secondsFrom = timeZone.secondsFromGMT(for: Date())
+         print("secondsFrom: \(secondsFrom)")
+
+         // TODO: Get start of day for date in location!
+         let now = Date()
+         var startDate = secondsFrom > 0 ? now.tomorrow : now
+         startDate = startDate.startOfDay
+         print("startDate: \(startDate)")
+         let hourOffset = timeZoneOffset(date: startDate)
+         print("hourOffset: \(hourOffset)")
+         startDate = startDate.hoursAfter(hourOffset)
+         */
         var startDate = Date().startOfDay
-        let hourOffset = timeZoneOffset(date: startDate)
-        startDate = startDate.hoursAfter(hourOffset)
 
         let endDate = startDate.addingTimeInterval(
             Double((Self.days * 24 - 1) * 60 * 60)
@@ -40,6 +55,12 @@ extension WeatherService {
         let keepForecast = forecast.filter {
             startDate <= $0.date && $0.date <= endDate
         }
+
+        /*
+         let firstForecast = keepForecast.first!
+         print("date =", firstForecast.date)
+         print("temperature F =", firstForecast.temperature.fahrenheit)
+         */
 
         let attr = try await attribution
 
@@ -60,9 +81,7 @@ extension WeatherService {
         let currentSeconds = TimeZone.current.secondsFromGMT(for: date)
         let locationVM = LocationViewModel.shared
         let targetSeconds = locationVM.timeZone?.secondsFromGMT(for: date)
-        if let targetSeconds {
-            return (targetSeconds - currentSeconds) / 60 / 60
-        }
-        return 0
+        guard let targetSeconds else { return 0 }
+        return (targetSeconds - currentSeconds) / 60 / 60
     }
 }

@@ -21,7 +21,7 @@ extension Date {
         return dateFormatter.string(from: self)
     }
 
-    // Returns the hour of a `Date`.
+    // Returns the hour of a `Date` in the current timezone.
     var hour: Int {
         Calendar.current.component(.hour, from: self)
     }
@@ -53,15 +53,25 @@ extension Date {
         return dateFormatter.string(from: self)
     }
 
-    var startOfDay: Date {
-        Calendar.current.startOfDay(for: self)
-    }
-
     func removeSeconds() -> Date {
         let components = Calendar.current.dateComponents(
             [.year, .month, .day, .hour], // not seconds or nanoseconds
             from: self
         )
         return Calendar.current.date(from: components)!
+    }
+
+    var startOfDay: Date {
+        Calendar.current.startOfDay(for: self)
+    }
+
+    var tomorrow: Date {
+        let begin = startOfDay
+        return Calendar.current.date(byAdding: .day, value: 1, to: begin)!
+    }
+
+    var yesterday: Date {
+        let begin = startOfDay
+        return Calendar.current.date(byAdding: .day, value: -1, to: begin)!
     }
 }

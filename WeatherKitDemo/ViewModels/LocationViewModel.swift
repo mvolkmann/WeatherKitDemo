@@ -66,6 +66,19 @@ class LocationViewModel: NSObject, ObservableObject {
 
     // MARK: - Methods
 
+    func getTimeZone() async throws -> TimeZone {
+        guard let location = selectedPlacemark?.location else {
+            throw "no placemark selected"
+        }
+
+        let geocoder = CLGeocoder()
+        let placemarks = try await geocoder.reverseGeocodeLocation(location)
+        guard let pm = placemarks.first else {
+            throw "reverse geocode failed"
+        }
+        return pm.timeZone!
+    }
+
     func isLikedLocation(_ location: String) -> Bool {
         likedLocations.contains(location)
     }

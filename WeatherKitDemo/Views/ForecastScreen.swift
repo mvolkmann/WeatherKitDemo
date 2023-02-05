@@ -79,6 +79,14 @@ struct ForecastScreen: View {
             .frame(maxWidth: isWide ? listWidth : .infinity)
         }
         .onRotate { orientation = $0 }
+        /* For debugging Heat Map issue with Brisbane.
+         .onAppear {
+             if let first = weatherVM.futureForecast.first {
+                 print("date =", first.date)
+                 print("temperature F =", first.temperature.fahrenheit)
+             }
+         }
+         */
     }
 
     // MARK: - Methods

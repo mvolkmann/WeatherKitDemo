@@ -21,7 +21,7 @@ extension Date {
         return dateFormatter.string(from: self)
     }
 
-    // Returns the hour of a `Date` in the current timezone.
+    // Returns the hour of a `Date` in the current time zone.
     var hour: Int {
         Calendar.current.component(.hour, from: self)
     }

@@ -4,11 +4,10 @@ import WeatherKit
 struct ForecastScreen: View {
     // MARK: - State
 
+    // @Environment(\.dynamicTypeSize) var dynamicTypeSize
     @Environment(
         \.horizontalSizeClass
     ) var horizontalSizeClass: UserInterfaceSizeClass?
-
-    @State private var orientation = UIDeviceOrientation.unknown
 
     // MARK: - Initializer
 
@@ -72,7 +71,7 @@ struct ForecastScreen: View {
                         weatherVM.futureForecast,
                         id: \.self
                     ) { forecast in
-                        forecastView(forecast)
+                        forecastRow(forecast)
                     }
                 }
                 .listStyle(.plain)
@@ -80,22 +79,28 @@ struct ForecastScreen: View {
             }
             .frame(maxWidth: isWide ? listWidth : .infinity)
         }
-        .onRotate { orientation = $0 }
+        /*
+         .onAppear {
+             print("ForecastScreen: dynamicTypeSize =", dynamicTypeSize)
+         }
+         */
     }
 
     // MARK: - Methods
 
-    private func forecastView(_ forecast: HourWeather) -> some View {
+    private func forecastRow(_ forecast: HourWeather) -> some View {
         HStack {
             // This honors the Settings ... General ...
             // Date & Time ... 24-Hour Time switch.
             Text(dateFormatter.string(from: forecast.date))
+                .dynamicTypeSize(...DynamicTypeSize.medium) // not working!
                 .frame(width: dateWidth, alignment: .leading)
 
             Image.symbol(symbolName: forecast.symbolName)
                 .frame(width: symbolWidth)
 
             Text(formatTemperature(forecast: forecast))
+                .dynamicTypeSize(...DynamicTypeSize.medium) // not working!
                 .foregroundColor(Color(UIColor.systemBackground))
                 .frame(width: temperatureWidth)
                 .padding(.vertical, 5)
@@ -104,11 +109,14 @@ struct ForecastScreen: View {
                 )
 
             Text(measurementFormatter.string(from: forecast.wind.speed))
+                .dynamicTypeSize(...DynamicTypeSize.medium) // not working!
                 .frame(width: windWidth)
 
             Text(precipitationReport(forecast))
+                .dynamicTypeSize(...DynamicTypeSize.medium) // not working!
                 .frame(width: precipitationWidth)
         }
+        .dynamicTypeSize(...DynamicTypeSize.medium) // not working!
     }
 
     private func formatTemperature(forecast: HourWeather) -> String {

@@ -18,7 +18,7 @@ extension WeatherService {
         colorScheme _: ColorScheme
     ) async throws -> WeatherSummary {
         // The daily forecasts always start at midnight
-        // in the timezone of the location you specify.
+        // in the time zone of the location you specify.
         let weather = try await weather(for: location)
         let current = weather.currentWeather
 

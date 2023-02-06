@@ -10,6 +10,7 @@ struct CurrentScreen: View {
     @AppStorage("likedLocations") var likedLocations: String = ""
 
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
     @Environment(
         \.horizontalSizeClass
     ) var horizontalSizeClass: UserInterfaceSizeClass?
@@ -184,8 +185,12 @@ struct CurrentScreen: View {
         if let summary = weatherVM.summary {
             VStack {
                 ZStack(alignment: .top) {
-                    Image.symbol(symbolName: summary.symbolName, size: 70)
-                        .padding(.top, 28)
+                    // Only display the weather condition symbol if
+                    // the user has not selected a really large font size.
+                    if dynamicTypeSize < .xxLarge {
+                        Image.symbol(symbolName: summary.symbolName, size: 70)
+                            .padding(.top, 28)
+                    }
                     VStack {
                         LabeledContent("Condition", value: summary.condition)
                         LabeledContent("Temperature", value: formattedActual)
@@ -202,6 +207,10 @@ struct CurrentScreen: View {
                 }
             }
             .font(.headline)
+
+            // Don't allow the text size to be larger than .xLarge.
+            .dynamicTypeSize(...DynamicTypeSize.xLarge)
+
             .foregroundColor(.primary)
             .padding(.top)
         } else {

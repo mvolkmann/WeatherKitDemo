@@ -102,7 +102,7 @@ struct ContentView: View {
             do {
                 appInfo = try await AppInfo.create()
             } catch {
-                print("Error getting AppInfo:", error)
+                print("ContentView: error getting AppInfo:", error)
             }
         }
     }

@@ -63,8 +63,15 @@ class WeatherViewModel: NSObject, ObservableObject {
 
     var futureForecast: [HourWeather] {
         guard let summary else { return [] }
+
+        // The array summary.hourlyForecast holds
+        // forecasts starting at the beginning of the day.
+        // Drop the forecasts at the beginning for past hours.
         let now = Date()
-        return summary.hourlyForecast.filter { $0.date >= now }
+        let hour = Calendar.current.component(.hour, from: now)
+        let forecasts = summary.hourlyForecast.dropFirst(hour + 1)
+
+        return Array(forecasts)
     }
 
     // Returns a color gradient from the lowest to highest temperatures

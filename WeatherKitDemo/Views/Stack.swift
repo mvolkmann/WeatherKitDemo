@@ -27,14 +27,12 @@ struct Stack<Content: View>: View {
     var body: some View {
         Group {
             if vertical {
-                let _ = print("using VStack")
                 VStack(
                     alignment: horizontalAlignment,
                     spacing: spacing,
                     content: content
                 )
             } else {
-                let _ = print("using HStack")
                 HStack(
                     alignment: verticalAlignment,
                     spacing: spacing,

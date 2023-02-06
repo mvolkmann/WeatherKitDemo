@@ -193,12 +193,16 @@ struct HeatMapScreen: View {
             forecast.apparentTemperature : forecast.temperature
         let temperature = measurement.converted
 
+        // TODO: It still seems like the Heat Map for Brisbane is wrong.
+        let x = PlottableValue.value("Time", "\(date.hour)")
+        let y = PlottableValue.value("Day", date.dayOfWeek)
+        // print("x = \(x), y = \(y)")
+
         return Plot {
             RectangleMark(
                 // Why do String values work, but Int values do not?
-                x: .value("Time", "\(date.hour)"),
-                // x: .value("Time", "\((date.hour + 16) % 24)"),
-                y: .value("Day", date.dayOfWeek),
+                x: x,
+                y: y,
                 width: .ratio(1),
                 height: .ratio(1)
             )

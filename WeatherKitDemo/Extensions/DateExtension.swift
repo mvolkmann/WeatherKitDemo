@@ -26,6 +26,15 @@ extension Date {
         Calendar.current.component(.hour, from: self)
     }
 
+    func hoursAfter(_ hours: Double) -> Date {
+        let calendar = Calendar.current
+        return calendar.date(
+            byAdding: .minute,
+            value: Int(hours * 60),
+            to: self
+        )!
+    }
+
     func hoursAfter(_ hours: Int) -> Date {
         let calendar = Calendar.current
         return calendar.date(
@@ -63,6 +72,14 @@ extension Date {
 
     var startOfDay: Date {
         Calendar.current.startOfDay(for: self)
+    }
+
+    var timeZoneOffset: Double {
+        let currentSeconds = TimeZone.current.secondsFromGMT(for: self)
+        let locationVM = LocationViewModel.shared
+        let targetSeconds = locationVM.timeZone?.secondsFromGMT(for: self)
+        guard let targetSeconds else { return 0 }
+        return Double(targetSeconds - currentSeconds) / 60.0 / 60.0
     }
 
     var tomorrow: Date {

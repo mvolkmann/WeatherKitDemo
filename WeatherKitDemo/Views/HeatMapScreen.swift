@@ -13,6 +13,7 @@ struct HeatMapScreen: View {
     ) var horizontalSizeClass: UserInterfaceSizeClass?
 
     @State private var hourlyForecast: [HourWeather] = []
+    @State private var timeZoneDelta = 0
     @StateObject private var weatherVM = WeatherViewModel.shared
 
     // MARK: - Constants
@@ -82,12 +83,22 @@ struct HeatMapScreen: View {
     // It is needed so the bottom row can be for today
     // and the top row can be for four days later.
     private var sortedHourlyForecast: [HourWeather] {
+        let targetSeconds = LocationViewModel.shared.timeZone?
+            .secondsFromGMT(for: Date())
+        let targetHours = (targetSeconds ?? 0) / 60 / 60
+        let dropCount = targetHours <= 0 ? 0 : targetHours - 2 // TODO: Why -2?
+
+        // We need to wrap the SubSequence from `dropFirst` in `Array`
+        // so indexes start at zero.
+        let forecastsForTimeZone = Array(
+            hourlyForecast.dropFirst(Int(dropCount))
+        )
+
         var sorted: [HourWeather] = []
         let days = WeatherService.days
         for index in 0 ..< days {
             let startIndex = (days - 1 - index) * 24
-            // Getting "Fatal error: Array index is out of range" for Brisbane.
-            let slice = hourlyForecast[startIndex ..< startIndex + 24]
+            let slice = forecastsForTimeZone[startIndex ..< startIndex + 24]
             sorted.append(contentsOf: slice)
         }
         return sorted
@@ -128,6 +139,7 @@ struct HeatMapScreen: View {
         }
         // Run this closure again every time the selected placemark changes.
         .task(id: weatherVM.summary) {
+            timeZoneDelta = computeTimeZoneDelta()
             if let summary = weatherVM.summary {
                 hourlyForecast = summary.hourlyForecast
             }
@@ -135,6 +147,16 @@ struct HeatMapScreen: View {
     }
 
     // MARK: - Methods
+
+    private func computeTimeZoneDelta() -> Int {
+        let now = Date()
+        let currentSeconds = TimeZone.current.secondsFromGMT(for: now)
+        let currentHours = currentSeconds / 60 / 60
+        let targetSeconds = LocationViewModel.shared.timeZone?
+            .secondsFromGMT(for: now)
+        let targetHours = (targetSeconds ?? 0) / 60 / 60
+        return targetHours - currentHours
+    }
 
     private func dayLabel(_ day: String) -> some View {
         Text(day.localized)
@@ -189,20 +211,16 @@ struct HeatMapScreen: View {
     // This creates an individual cell in the heat map.
     private func mark(forecast: HourWeather) -> some ChartContent {
         let date = forecast.date
+        let day = date.hoursAfter(timeZoneDelta).dayOfWeek
         let measurement = weatherVM.showFeel ?
             forecast.apparentTemperature : forecast.temperature
         let temperature = measurement.converted
 
-        // TODO: It still seems like the Heat Map for Brisbane is wrong.
-        let x = PlottableValue.value("Time", "\(date.hour)")
-        let y = PlottableValue.value("Day", date.dayOfWeek)
-        // print("x = \(x), y = \(y)")
-
         return Plot {
             RectangleMark(
                 // Why do String values work, but Int values do not?
-                x: x,
-                y: y,
+                x: PlottableValue.value("Time", "\(date.hour)"),
+                y: PlottableValue.value("Day", day),
                 width: .ratio(1),
                 height: .ratio(1)
             )

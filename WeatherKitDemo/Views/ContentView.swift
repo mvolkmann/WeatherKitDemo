@@ -32,7 +32,6 @@ struct ContentView: View {
                     }
                     .tag("chart")
                 HeatMapScreen()
-                    // HeatMap2Screen()
                     .tabItem {
                         Label("Heat Map", systemImage: "thermometer.sun")
                     }

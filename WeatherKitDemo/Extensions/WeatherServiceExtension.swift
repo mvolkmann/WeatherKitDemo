@@ -34,8 +34,9 @@ extension WeatherService {
         let hourOffset = Date().timeZoneOffset
         let gmtDate = Date().hoursAfter(hourOffset)
         let startDate = gmtDate.startOfDay
+        let days = Self.days + 1 // for time zones past the current one
         let endDate = startDate.addingTimeInterval(
-            Double((Self.days * 24 - 1) * 60 * 60)
+            Double((days * 24 - 1) * 60 * 60)
         )
 
         let forecastsInRange = forecast.filter {

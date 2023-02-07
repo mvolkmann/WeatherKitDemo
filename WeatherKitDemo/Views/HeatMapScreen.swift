@@ -13,7 +13,7 @@ struct HeatMapScreen: View {
     ) var horizontalSizeClass: UserInterfaceSizeClass?
 
     @State private var hourlyForecast: [HourWeather] = []
-    @State private var timeZoneDelta = 0
+    @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
 
     // MARK: - Constants
@@ -83,30 +83,11 @@ struct HeatMapScreen: View {
     // It is needed so the bottom row can be for today
     // and the top row can be for four days later.
     private var sortedHourlyForecast: [HourWeather] {
-        let targetHours = LocationViewModel.shared.timeZone?.hoursFromGMT() ?? 0
-        print("targetHours =", targetHours)
-        let dropCount = targetHours <= 0 ? 0 : targetHours - 2 // TODO: Why -2?
-        print("dropCount =", dropCount)
-
-        /*
-         // We only have forecasts starting at midnight this morning in CST,
-         // so we don't have a forecast for midnight in London!
-         for forecast in hourlyForecast {
-             print(forecast.date, forecast.temperature.fahrenheit)
-         }
-         */
-
-        // We need to wrap the SubSequence from `dropFirst` in `Array`
-        // so indexes start at zero.
-        let forecastsForTimeZone = Array(
-            hourlyForecast.dropFirst(Int(dropCount))
-        )
-
         var sorted: [HourWeather] = []
         let days = WeatherService.days
         for index in 0 ..< days {
             let startIndex = (days - 1 - index) * 24
-            let slice = forecastsForTimeZone[startIndex ..< startIndex + 24]
+            let slice = hourlyForecast[startIndex ..< startIndex + 24]
             sorted.append(contentsOf: slice)
         }
         return sorted
@@ -147,7 +128,6 @@ struct HeatMapScreen: View {
         }
         // Run this closure again every time the selected placemark changes.
         .task(id: weatherVM.summary) {
-            timeZoneDelta = computeTimeZoneDelta()
             if let summary = weatherVM.summary {
                 hourlyForecast = summary.hourlyForecast
             }
@@ -155,12 +135,6 @@ struct HeatMapScreen: View {
     }
 
     // MARK: - Methods
-
-    private func computeTimeZoneDelta() -> Int {
-        let currentHours = TimeZone.current.hoursFromGMT()
-        let targetHours = LocationViewModel.shared.timeZone?.hoursFromGMT() ?? 0
-        return targetHours - currentHours
-    }
 
     private func dayLabel(_ day: String) -> some View {
         Text(day.localized)
@@ -215,7 +189,7 @@ struct HeatMapScreen: View {
     // This creates an individual cell in the heat map.
     private func mark(forecast: HourWeather) -> some ChartContent {
         let date = forecast.date
-        let day = date.hoursAfter(timeZoneDelta).dayOfWeek
+        let day = date.hoursAfter(locationVM.timeZoneDelta).dayOfWeek
         let measurement = weatherVM.showFeel ?
             forecast.apparentTemperature : forecast.temperature
         let temperature = measurement.converted

@@ -92,7 +92,13 @@ struct ContentView: View {
                         colorScheme: colorScheme
                     )
                 } catch {
-                    print("ContentView: error loading weather forecast:", error)
+                    // TODO: Why do we sometimes get a "cancelled" error?
+                    if error.localizedDescription != "cancelled" {
+                        print(
+                            "ContentView: error loading forecast:",
+                            error.localizedDescription
+                        )
+                    }
                 }
             }
         }

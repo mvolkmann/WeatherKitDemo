@@ -31,7 +31,8 @@ struct HeatMapScreen: View {
     private var dayLabels: some View {
         // Create an array of the day abbreviations to appear in the heat map.
         var days: [String] = []
-        let startDayNumber = Date().dayOfWeekNumber
+        let targetDate = Date().hoursAfter(locationVM.timeZoneDelta)
+        let startDayNumber = targetDate.dayOfWeekNumber
         let endDayNumber = startDayNumber + WeatherService.days
         for dayNumber in stride(
             from: endDayNumber - 1,

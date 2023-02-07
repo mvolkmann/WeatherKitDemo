@@ -84,6 +84,7 @@ struct HeatMapScreen: View {
     // It is needed so the bottom row can be for today
     // and the top row can be for four days later.
     private var sortedHourlyForecast: [HourWeather] {
+        print("hourlyForecast.count =", hourlyForecast.count)
         var sorted: [HourWeather] = []
         let days = WeatherService.days
         for index in 0 ..< days {
@@ -91,6 +92,7 @@ struct HeatMapScreen: View {
             let slice = hourlyForecast[startIndex ..< startIndex + 24]
             sorted.append(contentsOf: slice)
         }
+        print("sorted.count =", sorted.count)
         return sorted
     }
 
@@ -116,7 +118,6 @@ struct HeatMapScreen: View {
                             height: heatMapHeight
                         )
                     }
-                    // .border(.red)
                 }
                 .rotationEffect(
                     .degrees(daysOnTop ? 90 : 0)

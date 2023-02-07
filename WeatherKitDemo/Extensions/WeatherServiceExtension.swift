@@ -43,10 +43,7 @@ extension WeatherService {
         // regardless of which hour we start on the first day.
         let endDate = startDate.daysAfter(Self.days + 1)
         let query = WeatherQuery.hourly(startDate: startDate, endDate: endDate)
-        var myHourlyWeather = try await weather(for: location, including: query)
-
-        // TODO: Why do I have to sort these?
-        myHourlyWeather.forecast.sort { $0.date < $1.date }
+        let myHourlyWeather = try await weather(for: location, including: query)
 
         let attr = try await attribution
 

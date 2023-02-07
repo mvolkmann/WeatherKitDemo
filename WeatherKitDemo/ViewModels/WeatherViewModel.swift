@@ -30,12 +30,21 @@ class WeatherViewModel: NSObject, ObservableObject {
 
     // var loadingLocation: CLLocation?
 
-    // Returns the highest temperature in Fahrenheit over the next five days.
-    // TODO: Does summary.hourlyForecast really contain exactly 5 days of data?
-    var forecastTempMax: Double {
+    var fiveDayForecast: [HourWeather] {
         guard let forecasts = summary?.hourlyForecast, !forecasts.isEmpty else {
-            return 100.0
+            return []
         }
+        let now = Date()
+        let index = forecasts.firstIndex { $0.date >= now } ?? 0
+        let count = WeatherService.days * 24
+        let fiveDays = forecasts.dropFirst(index).prefix(count)
+        return Array(fiveDays)
+    }
+
+    // Returns the highest temperature in Fahrenheit over the next five days.
+    var forecastTempMax: Double {
+        let forecasts = fiveDayForecast
+        guard !forecasts.isEmpty else { return 100.0 }
         let forecast = forecasts.max {
             $0.temperature.value < $1.temperature.value
         }
@@ -43,11 +52,9 @@ class WeatherViewModel: NSObject, ObservableObject {
     }
 
     // Returns the lowest temperature in Fahrenheit over the next five days.
-    // TODO: Does summary.hourlyForecast really contain exactly 5 days of data?
     var forecastTempMin: Double {
-        guard let forecasts = summary?.hourlyForecast, !forecasts.isEmpty else {
-            return 0.0
-        }
+        let forecasts = fiveDayForecast
+        guard !forecasts.isEmpty else { return 0.0 }
         let forecast = forecasts.min {
             $0.temperature.value < $1.temperature.value
         }

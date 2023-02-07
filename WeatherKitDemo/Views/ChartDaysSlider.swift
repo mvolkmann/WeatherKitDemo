@@ -8,7 +8,7 @@ struct ChartDaysSlider: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Text("Chart shows \(weatherVM.chartDays) days.")
+            Text("chart-days \(weatherVM.chartDays)")
             Slider(
                 value: $days,
                 in: 1 ... 5,

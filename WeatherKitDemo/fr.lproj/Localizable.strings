@@ -4,6 +4,7 @@
 "AM" = "";
 "Celsius" = "Celsius";
 "Chart" = "Graphique";
+"chart-days %lld" = "Le graphique montre %lld jours.";
 "Colors" = "Couleurs";
 "Condition" = "Condition";
 "Current" = "Courante";

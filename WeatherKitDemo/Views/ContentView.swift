@@ -92,7 +92,7 @@ struct ContentView: View {
                         colorScheme: colorScheme
                     )
                 } catch {
-                    print("error loading weather forecast:", error)
+                    print("ContentView: error loading weather forecast:", error)
                 }
             }
         }

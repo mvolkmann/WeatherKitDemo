@@ -17,31 +17,36 @@ extension WeatherService {
         for location: CLLocation,
         colorScheme _: ColorScheme
     ) async throws -> WeatherSummary {
-        // The daily forecasts always start at midnight
-        // in the time zone of the location you specify.
-        let weather = try await weather(for: location)
-        let current = weather.currentWeather
-
+        // The `Weather` object returned here has a `hourlyForecast` property
+        // which has a `forecast` property
+        // which is an array of `HourWeather` objects
+        // that start at midnight today in the local time zone.
+        let myWeather = try await weather(for: location)
+        let current = myWeather.currentWeather
         let wind = current.wind
         let windSpeed = wind.speed.formatted()
         let windDirection = wind.compassDirection
 
-        let forecast = await hourlyForecast(for: location)
+        // But we want to start at midnight in the timezone
+        // of the given location, so we need another weather query.
+        let timeZone = LocationViewModel.shared.timeZone!
+        var startDate = timeZone.date.startOfDay
 
-        // Only keep forecasts from midnight this morning
-        // to a given number of days in the future.
+        let now = Date()
+        let currentOffset = TimeZone.current.hoursFromGMT(for: now)
+        let targetOffset = LocationViewModel.shared.timeZone?
+            .hoursFromGMT(for: now) ?? 0
+        let deltaOffset = targetOffset - currentOffset
+        startDate = startDate.hoursBefore(deltaOffset)
 
-        let hourOffset = Date().timeZoneOffset
-        let gmtDate = Date().hoursAfter(hourOffset)
-        let startDate = gmtDate.startOfDay
-        let days = Self.days + 1 // for time zones past the current one
-        let endDate = startDate.addingTimeInterval(
-            Double((days * 24 - 1) * 60 * 60)
-        )
+        // The +1 ensures we have enough data for Self.days
+        // regardless of which hour we start on the first day.
+        let endDate = startDate.daysAfter(Self.days + 1)
+        let query = WeatherQuery.hourly(startDate: startDate, endDate: endDate)
+        var myHourlyWeather = try await weather(for: location, including: query)
 
-        let forecastsInRange = forecast.filter {
-            startDate <= $0.date && $0.date <= endDate
-        }
+        // TODO: Why do I have to sort these?
+        myHourlyWeather.forecast.sort { $0.date < $1.date }
 
         let attr = try await attribution
 
@@ -51,7 +56,7 @@ extension WeatherService {
             temperature: current.temperature,
             apparentTemperature: current.apparentTemperature,
             wind: "\(windSpeed) from \(windDirection)",
-            hourlyForecast: forecastsInRange,
+            hourlyForecast: myHourlyWeather.forecast,
             attributionLightLogoURL: attr.combinedMarkLightURL,
             attributionDarkLogoURL: attr.combinedMarkDarkURL,
             attributionPageURL: attr.legalPageURL

@@ -13,6 +13,24 @@ extension Date {
         Calendar.current.dateComponents([.weekday], from: self).weekday!
     }
 
+    func daysAfter(_ days: Int) -> Date {
+        let calendar = Calendar.current
+        return calendar.date(
+            byAdding: .day,
+            value: days,
+            to: self
+        )!
+    }
+
+    func daysBefore(_ days: Int) -> Date {
+        let calendar = Calendar.current
+        return calendar.date(
+            byAdding: .day,
+            value: -days,
+            to: self
+        )!
+    }
+
     // Returns a String representation of the Date
     // showing only the hour and AM|PM.
     var h: String {
@@ -44,6 +62,24 @@ extension Date {
         )!
     }
 
+    func hoursBefore(_ hours: Double) -> Date {
+        let calendar = Calendar.current
+        return calendar.date(
+            byAdding: .minute,
+            value: -Int(hours * 60),
+            to: self
+        )!
+    }
+
+    func hoursBefore(_ hours: Int) -> Date {
+        let calendar = Calendar.current
+        return calendar.date(
+            byAdding: .hour,
+            value: -hours,
+            to: self
+        )!
+    }
+
     // From https://stackoverflow.com/questions/28162729/
     // nsdateformatter-detect-24-hour-clock-in-os-x-and-ios
     static func is24Hour() -> Bool {
@@ -61,6 +97,8 @@ extension Date {
         dateFormatter.dateFormat = "M/d"
         return dateFormatter.string(from: self)
     }
+
+    var nextHour: Date { removeSeconds().hoursAfter(1) }
 
     func removeSeconds() -> Date {
         let components = Calendar.current.dateComponents(

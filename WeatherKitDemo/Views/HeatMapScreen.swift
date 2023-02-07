@@ -83,10 +83,18 @@ struct HeatMapScreen: View {
     // It is needed so the bottom row can be for today
     // and the top row can be for four days later.
     private var sortedHourlyForecast: [HourWeather] {
-        let targetSeconds = LocationViewModel.shared.timeZone?
-            .secondsFromGMT(for: Date())
-        let targetHours = (targetSeconds ?? 0) / 60 / 60
+        let targetHours = LocationViewModel.shared.timeZone?.hoursFromGMT() ?? 0
+        print("targetHours =", targetHours)
         let dropCount = targetHours <= 0 ? 0 : targetHours - 2 // TODO: Why -2?
+        print("dropCount =", dropCount)
+
+        /*
+         // We only have forecasts starting at midnight this morning in CST,
+         // so we don't have a forecast for midnight in London!
+         for forecast in hourlyForecast {
+             print(forecast.date, forecast.temperature.fahrenheit)
+         }
+         */
 
         // We need to wrap the SubSequence from `dropFirst` in `Array`
         // so indexes start at zero.
@@ -149,12 +157,8 @@ struct HeatMapScreen: View {
     // MARK: - Methods
 
     private func computeTimeZoneDelta() -> Int {
-        let now = Date()
-        let currentSeconds = TimeZone.current.secondsFromGMT(for: now)
-        let currentHours = currentSeconds / 60 / 60
-        let targetSeconds = LocationViewModel.shared.timeZone?
-            .secondsFromGMT(for: now)
-        let targetHours = (targetSeconds ?? 0) / 60 / 60
+        let currentHours = TimeZone.current.hoursFromGMT()
+        let targetHours = LocationViewModel.shared.timeZone?.hoursFromGMT() ?? 0
         return targetHours - currentHours
     }
 

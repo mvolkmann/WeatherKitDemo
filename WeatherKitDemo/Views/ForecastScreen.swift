@@ -35,6 +35,21 @@ struct ForecastScreen: View {
     private let dateFormatter = DateFormatter()
     private let measurementFormatter = MeasurementFormatter()
 
+    private var futureForecasts: [HourWeather] {
+        guard let forecasts = weatherVM.summary?.hourlyForecast else {
+            return []
+        }
+
+        let now = Date()
+        let dropCountBegin = forecasts.firstIndex { $0.date > now } ?? 0
+        let dropCountEnd =
+            forecasts.count - dropCountBegin - WeatherService.days * 24
+        let result = Array(
+            forecasts.dropFirst(dropCountBegin).dropLast(dropCountEnd)
+        )
+        return result
+    }
+
     private var header: some View {
         HStack(spacing: 8) {
             Text("Day/Time").frame(width: dateWidth)
@@ -67,23 +82,13 @@ struct ForecastScreen: View {
             VStack {
                 header.padding(.top)
                 List {
-                    ForEach(
-                        weatherVM.futureForecast,
-                        id: \.self
-                    ) { forecast in
-                        forecastRow(forecast)
-                    }
+                    ForEach(futureForecasts) { forecastRow($0) }
                 }
                 .listStyle(.plain)
                 .cornerRadius(10)
             }
             .frame(maxWidth: isWide ? listWidth : .infinity)
         }
-        /*
-         .onAppear {
-             print("ForecastScreen: dynamicTypeSize =", dynamicTypeSize)
-         }
-         */
     }
 
     // MARK: - Methods

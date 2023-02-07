@@ -32,10 +32,9 @@ extension WeatherService {
         let timeZone = LocationViewModel.shared.timeZone!
         var startDate = timeZone.date.startOfDay
 
-        let now = Date()
-        let currentOffset = TimeZone.current.hoursFromGMT(for: now)
+        let currentOffset = TimeZone.current.hoursFromGMT(for: Date.now)
         let targetOffset = LocationViewModel.shared.timeZone?
-            .hoursFromGMT(for: now) ?? 0
+            .hoursFromGMT(for: Date.now) ?? 0
         let deltaOffset = targetOffset - currentOffset
         startDate = startDate.hoursBefore(deltaOffset)
 

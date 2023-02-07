@@ -37,7 +37,7 @@ struct AppInfo {
     }
 
     private func date(_ key: String) -> Date {
-        json[key] as? Date ?? Date()
+        json[key] as? Date ?? Date.now
     }
 
     private func double(_ key: String) -> Double {

@@ -34,8 +34,7 @@ class WeatherViewModel: NSObject, ObservableObject {
         guard let forecasts = summary?.hourlyForecast, !forecasts.isEmpty else {
             return []
         }
-        let now = Date()
-        let index = forecasts.firstIndex { $0.date >= now } ?? 0
+        let index = forecasts.firstIndex { $0.date >= Date.now } ?? 0
         let count = WeatherService.days * 24
         let fiveDays = forecasts.dropFirst(index).prefix(count)
         return Array(fiveDays)
@@ -76,8 +75,7 @@ class WeatherViewModel: NSObject, ObservableObject {
         // The array summary.hourlyForecast holds
         // forecasts starting at the beginning of the day.
         // Drop the forecasts at the beginning for past hours.
-        let now = Date()
-        let hour = Calendar.current.component(.hour, from: now)
+        let hour = Calendar.current.component(.hour, from: Date.now)
         let forecasts = summary.hourlyForecast.dropFirst(hour + 1)
 
         return Array(forecasts)
@@ -180,7 +178,7 @@ class WeatherViewModel: NSObject, ObservableObject {
                 }
             }
 
-            timestamp = Date()
+            timestamp = Date.now
         }
     }
 }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct HeatMapToggle: View {
-    @AppStorage("rotateHeatMap") var heatMapDaysOnTop: Bool?
+    @AppStorage("showHeatMapDaysOnTop") private var showHeatMapDaysOnTop: Bool?
     @StateObject private var weatherVM = WeatherViewModel.shared
 
     var body: some View {
@@ -14,7 +14,7 @@ struct HeatMapToggle: View {
             )
             // Keep AppStorage in sync with setting in WeatherViewModel.
             .onChange(of: weatherVM.heatMapDaysOnTop) {
-                heatMapDaysOnTop = $0
+                showHeatMapDaysOnTop = $0
             }
         }
     }

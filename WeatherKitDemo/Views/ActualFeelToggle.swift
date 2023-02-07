@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ActualFeelToggle: View {
-    @AppStorage("showFeel") var showFeel = false
+    @AppStorage("showFeel") private var showFeel = false
     @StateObject private var weatherVM = WeatherViewModel.shared
 
     var body: some View {
@@ -11,8 +11,6 @@ struct ActualFeelToggle: View {
             isOn: $weatherVM.useFeel
         )
         // Keep AppStorage in sync with setting in WeatherViewModel.
-        .onChange(of: weatherVM.useFeel) { useFeel in
-            showFeel = useFeel
-        }
+        .onChange(of: weatherVM.useFeel) { showFeel = $0 }
     }
 }

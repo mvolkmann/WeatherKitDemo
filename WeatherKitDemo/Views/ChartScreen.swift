@@ -44,7 +44,8 @@ struct ChartScreen: View {
 
     var body: some View {
         Template {
-            let futureForecast = weatherVM.futureForecast
+            let futureForecast =
+                weatherVM.futureForecast.prefix(weatherVM.chartDays * 24)
             Text("drag-help")
                 .font(.subheadline)
                 .padding(.top)
@@ -100,12 +101,10 @@ struct ChartScreen: View {
     // This chooses a position based on whether
     // the data point is near one of the chart edges.
     private func annotationPosition(_ index: Int) -> AnnotationPosition {
-        guard let summary = weatherVM.summary else { return .top }
-
-        let percent = Double(index) / Double(summary.hourlyForecast.count)
+        let percent = Double(index) / Double(weatherVM.chartDays * 24)
         // These percent values work well for iPhone SE.
-        return percent < 0.15 ? .topTrailing :
-            percent >= 0.75 ? .topLeading :
+        return percent < 0.20 ? .topTrailing :
+            percent >= 0.80 ? .topLeading :
             .top
     }
 

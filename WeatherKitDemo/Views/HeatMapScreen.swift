@@ -190,7 +190,7 @@ struct HeatMapScreen: View {
     private func mark(forecast: HourWeather) -> some ChartContent {
         let date = forecast.date
         let day = date.hoursAfter(locationVM.timeZoneDelta).dayOfWeek
-        let measurement = weatherVM.showFeel ?
+        let measurement = weatherVM.useFeel ?
             forecast.apparentTemperature : forecast.temperature
         let temperature = measurement.converted
 

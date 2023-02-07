@@ -7,7 +7,7 @@ import WeatherKit
 struct CurrentScreen: View {
     // MARK: - State
 
-    @AppStorage("likedLocations") var likedLocations: String = ""
+    @AppStorage("likedLocations") private var likedLocations: String = ""
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dynamicTypeSize) var dynamicTypeSize

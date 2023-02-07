@@ -3,7 +3,7 @@ import SwiftUI
 struct Template<Content: View>: View {
     // MARK: - State
 
-    @AppStorage("likedLocations") var likedLocations: String = ""
+    @AppStorage("likedLocations") private var likedLocations: String = ""
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.scenePhase) var scenePhase

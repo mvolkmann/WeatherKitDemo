@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ColorToggle: View {
-    @AppStorage("showAbsoluteColors") var showAbsoluteColors = false
+    @AppStorage("showAbsoluteColors") private var showAbsoluteColors = false
     @StateObject private var weatherVM = WeatherViewModel.shared
 
     private var helpText: some View {
@@ -20,10 +20,8 @@ struct ColorToggle: View {
                 isOn: $weatherVM.useAbsoluteColors
             )
             // Keep AppStorage in sync with setting in WeatherViewModel.
-            .onChange(
-                of: weatherVM.useAbsoluteColors
-            ) { useAbsoluteColors in
-                showAbsoluteColors = useAbsoluteColors
+            .onChange(of: weatherVM.useAbsoluteColors) {
+                showAbsoluteColors = $0
             }
 
             helpText

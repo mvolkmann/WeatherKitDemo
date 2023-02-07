@@ -79,7 +79,7 @@ struct ContentView: View {
         .sheet(isPresented: $isSettingsPresented) {
             Settings()
                 // Need at least this height for iPhone SE.
-                .presentationDetents([.height(340)])
+                .presentationDetents([.height(430)])
                 .presentationDragIndicator(.visible)
         }
 

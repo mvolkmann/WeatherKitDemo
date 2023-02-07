@@ -124,7 +124,7 @@ struct ForecastScreen: View {
     }
 
     private func formatTemperature(forecast: HourWeather) -> String {
-        let temperature = weatherVM.showFeel ?
+        let temperature = weatherVM.useFeel ?
             forecast.apparentTemperature : forecast.temperature
         return String(format: "%.0f", temperature.converted) +
             weatherVM.temperatureUnitSymbol

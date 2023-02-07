@@ -5,6 +5,7 @@ struct Settings: View {
         VStack(spacing: 20) {
             TemperatureUnitToggle()
             ActualFeelToggle()
+            ChartDaysSlider()
             HeatMapToggle()
             ColorToggle()
             Spacer()

@@ -18,6 +18,7 @@
 		1A5A7236297F033B00BC1EC9 /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5A7235297F033A00BC1EC9 /* LottieView.swift */; };
 		1A6BAC17298ECD5200035DE7 /* Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6BAC16298ECD5200035DE7 /* Info.swift */; };
 		1A6BAC1B2991B92F00035DE7 /* TimeZoneExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6BAC1A2991B92F00035DE7 /* TimeZoneExtension.swift */; };
+		1A6BAC1D2992CE5C00035DE7 /* ChartDaysSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6BAC1C2992CE5C00035DE7 /* ChartDaysSlider.swift */; };
 		1A713EB528F9DCDA00AEA66B /* CurrentScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A713EB428F9DCDA00AEA66B /* CurrentScreen.swift */; };
 		1A713EB728F9DD4100AEA66B /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A713EB628F9DD4100AEA66B /* WeatherViewModel.swift */; };
 		1A713EBB28F9DFD000AEA66B /* ChartScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A713EBA28F9DFD000AEA66B /* ChartScreen.swift */; };
@@ -57,6 +58,7 @@
 		1A5A7235297F033A00BC1EC9 /* LottieView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
 		1A6BAC16298ECD5200035DE7 /* Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Info.swift; sourceTree = "<group>"; };
 		1A6BAC1A2991B92F00035DE7 /* TimeZoneExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeZoneExtension.swift; sourceTree = "<group>"; };
+		1A6BAC1C2992CE5C00035DE7 /* ChartDaysSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDaysSlider.swift; sourceTree = "<group>"; };
 		1A713EB428F9DCDA00AEA66B /* CurrentScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentScreen.swift; sourceTree = "<group>"; };
 		1A713EB628F9DD4100AEA66B /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
 		1A713EBA28F9DFD000AEA66B /* ChartScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartScreen.swift; sourceTree = "<group>"; };
@@ -167,13 +169,14 @@
 			isa = PBXGroup;
 			children = (
 				1A0D14152988B0250087474E /* ActualFeelToggle.swift */,
+				1A6BAC1C2992CE5C00035DE7 /* ChartDaysSlider.swift */,
 				1A713EBA28F9DFD000AEA66B /* ChartScreen.swift */,
 				1A0D1423298AEE1B0087474E /* ColorToggle.swift */,
-				1A7861C0298D756B009D03F7 /* HeatMapToggle.swift */,
 				1A84529328D37DA900C28047 /* ContentView.swift */,
 				1A713EB428F9DCDA00AEA66B /* CurrentScreen.swift */,
 				1A713EBE28FA0A4B00AEA66B /* ForecastScreen.swift */,
 				1A79703528FDE9BC00569E68 /* HeatMapScreen.swift */,
+				1A7861C0298D756B009D03F7 /* HeatMapToggle.swift */,
 				1A6BAC16298ECD5200035DE7 /* Info.swift */,
 				1A5A7235297F033A00BC1EC9 /* LottieView.swift */,
 				1A0D1421298AEDC80087474E /* Settings.swift */,
@@ -316,6 +319,7 @@
 				1A84529428D37DA900C28047 /* ContentView.swift in Sources */,
 				1A5A7204297DF48F00BC1EC9 /* AppDelegate.swift in Sources */,
 				1A84529228D37DA900C28047 /* WeatherKitDemoApp.swift in Sources */,
+				1A6BAC1D2992CE5C00035DE7 /* ChartDaysSlider.swift in Sources */,
 				1A50CC3228D381CC005B1D36 /* LocationViewModel.swift in Sources */,
 				1A5A7236297F033B00BC1EC9 /* LottieView.swift in Sources */,
 				1A7861C5298E8CAC009D03F7 /* AppInfo.swift in Sources */,
@@ -460,7 +464,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = WeatherKitDemo/WeatherKitDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherKitDemo/Preview Content\"";
 				DEVELOPMENT_TEAM = 4BG3523GAZ;
 				ENABLE_PREVIEWS = YES;
@@ -477,7 +481,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.2;
+				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "r.mark.volkmann-gmail.com.FeatherWeather";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -494,7 +498,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = WeatherKitDemo/WeatherKitDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherKitDemo/Preview Content\"";
 				DEVELOPMENT_TEAM = 4BG3523GAZ;
 				ENABLE_PREVIEWS = YES;
@@ -511,7 +515,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.2;
+				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "r.mark.volkmann-gmail.com.FeatherWeather";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

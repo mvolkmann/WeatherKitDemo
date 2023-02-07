@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TemperatureUnitToggle: View {
-    @AppStorage("showFahrenheit") var showFahrenheit: Bool?
+    @AppStorage("showFahrenheit") private var showFahrenheit: Bool?
     @StateObject private var weatherVM = WeatherViewModel.shared
 
     var body: some View {
@@ -11,8 +11,6 @@ struct TemperatureUnitToggle: View {
             isOn: $weatherVM.useFahrenheit
         )
         // Keep AppStorage in sync with setting in WeatherViewModel.
-        .onChange(of: weatherVM.useFahrenheit) { useFahrenheit in
-            showFahrenheit = useFahrenheit
-        }
+        .onChange(of: weatherVM.useFahrenheit) { showFahrenheit = $0 }
     }
 }

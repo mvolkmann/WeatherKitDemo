@@ -8,6 +8,7 @@ private let markWidth = 30.0
 struct HeatMapScreen: View {
     // MARK: - State
 
+    @AppStorage("heatMapDaysOnTop") private var heatMapDaysOnTop = false
     @AppStorage("showAbsoluteColors") private var showAbsoluteColors = false
     @AppStorage("showFeel") private var showFeel = false
     @Environment(
@@ -52,11 +53,9 @@ struct HeatMapScreen: View {
         }
     }
 
-    private var daysOnTop: Bool { weatherVM.heatMapDaysOnTop }
-
     private var heatMapHeight: Double {
         // TODO: Change 350 to something based on the screen width.
-        let result = daysOnTop ? 350 : // markWidth * 24 :
+        let result = heatMapDaysOnTop ? 350 : // markWidth * 24 :
             // The + 1 is for the x-axis labels and the key.
             Double(WeatherService.days + 1) * markHeight
         return result
@@ -64,7 +63,7 @@ struct HeatMapScreen: View {
 
     private var heatMapWidth: Double {
         // TODO: Can this value be calculated instead of using 700?
-        let result = daysOnTop ? 700 :
+        let result = heatMapDaysOnTop ? 700 :
             // The + 1 is for the x-axis labels and the key.
             // Double(WeatherService.days + 1) * markHeight :
             markWidth * 24
@@ -105,7 +104,7 @@ struct HeatMapScreen: View {
                     ScrollView(.horizontal) {
                         heatMap(hourlyForecast: sortedHourlyForecast)
                             // Prevent scrollbar from overlapping legend.
-                            .padding(.bottom, daysOnTop ? 0 : 10)
+                            .padding(.bottom, heatMapDaysOnTop ? 0 : 10)
                     }
 
                     // TODO: Why does this cause dayLabels to disappear?
@@ -119,7 +118,7 @@ struct HeatMapScreen: View {
                     }
                 }
                 .rotationEffect(
-                    .degrees(daysOnTop ? 90 : 0)
+                    .degrees(heatMapDaysOnTop ? 90 : 0)
                     // The default anchor value is .center and
                     // that seems much better than all the other options.
                 )
@@ -139,7 +138,7 @@ struct HeatMapScreen: View {
 
     private func dayLabel(_ day: String) -> some View {
         Text(day.localized)
-            .frame(height: daysOnTop ? markHeight * 0.91 : markHeight)
+            .frame(height: heatMapDaysOnTop ? markHeight * 0.91 : markHeight)
             .rotationEffect(Angle.degrees(-90))
     }
 
@@ -154,14 +153,15 @@ struct HeatMapScreen: View {
 
         // I can't get legend to render in a good place when daysOnTop is true.
         // TODO: Why does hiding the legend also hide x-axis labels?
-        .chartLegend(daysOnTop ? .hidden : .visible)
+        .chartLegend(heatMapDaysOnTop ? .hidden : .visible)
 
         .chartXAxis {
             AxisMarks(position: .bottom, values: .automatic) { axisValue in
                 AxisTick()
                 AxisValueLabel(
                     centered: true,
-                    orientation: daysOnTop ? .verticalReversed : .horizontal
+                    orientation:
+                    heatMapDaysOnTop ? .verticalReversed : .horizontal
                 ) {
                     let index = axisValue.index
                     let mod = index % 12
@@ -175,7 +175,10 @@ struct HeatMapScreen: View {
                         "\(hour)\n\(index < 12 ? "AM" : "PM")"
                     Text(text)
                         .multilineTextAlignment(.center)
-                        .frame(width: daysOnTop ? (is24Hour ? 14 : 27) : nil)
+                        .frame(
+                            width: heatMapDaysOnTop ?
+                                (is24Hour ? 14 : 27) : nil
+                        )
                 }
             }
         }
@@ -214,7 +217,7 @@ struct HeatMapScreen: View {
                 )
                 .rotationEffect(.degrees(-90))
                 // .font(.body)
-                .font(.system(size: daysOnTop ? 13 : 17))
+                .font(.system(size: heatMapDaysOnTop ? 13 : 17))
                 .frame(width: 60)
             }
         }

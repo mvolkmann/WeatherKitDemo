@@ -3,6 +3,7 @@ import WeatherKit
 
 struct ChartDaysSlider: View {
     @AppStorage("chartDays") private var chartDays = WeatherService.days
+    // This is needed because the Slider value must be a Double.
     @State private var days = 0.0
     @StateObject private var weatherVM = WeatherViewModel.shared
 

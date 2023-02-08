@@ -12,11 +12,10 @@ class WeatherViewModel: NSObject, ObservableObject {
     @AppStorage("chartDays") private var chartDays = WeatherService.days
     @AppStorage("showFahrenheit") private var showFahrenheit: Bool?
     @AppStorage("showFeel") private var showFeel = false
-    @AppStorage("showHeatMapDaysOnTop") private var showHeatMapDaysOnTop = false
+    @AppStorage("heatMapDaysOnTop") private var heatMapDaysOnTop = false
 
     @Published var dateToTemperatureMap: [Date: Measurement<UnitTemperature>] =
         [:]
-    @Published var heatMapDaysOnTop = false
     @Published var slow = false
     @Published var summary: WeatherSummary?
     @Published var timestamp: Date?
@@ -153,7 +152,6 @@ class WeatherViewModel: NSObject, ObservableObject {
 
         await MainActor.run {
             // Initialize to values from AppStorage.
-            heatMapDaysOnTop = showHeatMapDaysOnTop
             useFahrenheit = showFahrenheit ??
                 (LocationViewModel.shared.country == "United States")
 

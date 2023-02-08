@@ -10,6 +10,7 @@ struct HeatMapScreen: View {
 
     @AppStorage("heatMapDaysOnTop") private var heatMapDaysOnTop = false
     @AppStorage("showAbsoluteColors") private var showAbsoluteColors = false
+    @AppStorage("showFahrenheit") private var showFahrenheit = false
     @AppStorage("showFeel") private var showFeel = false
     @Environment(
         \.horizontalSizeClass
@@ -71,8 +72,8 @@ struct HeatMapScreen: View {
     }
 
     private var helpText: some View {
-        let low = weatherVM.useFahrenheit ? "0℉" : "-17.8℃"
-        let high = weatherVM.useFahrenheit ? "100℉" : "37.8℃"
+        let low = showFahrenheit ? "0℉" : "-17.8℃"
+        let high = showFahrenheit ? "100℉" : "37.8℃"
         return showAbsoluteColors ?
             Text("absolute-help \(low) \(high)") :
             Text("relative-help")

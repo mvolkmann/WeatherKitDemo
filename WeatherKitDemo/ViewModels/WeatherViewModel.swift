@@ -19,7 +19,6 @@ class WeatherViewModel: NSObject, ObservableObject {
     @Published var slow = false
     @Published var summary: WeatherSummary?
     @Published var timestamp: Date?
-    @Published var useFahrenheit = false
 
     // This is a singleton class.
     static let shared = WeatherViewModel()
@@ -106,7 +105,7 @@ class WeatherViewModel: NSObject, ObservableObject {
         return Gradient(colors: hueColors)
     }
 
-    var temperatureUnitSymbol: String { useFahrenheit ? "℉" : "℃" }
+    var temperatureUnitSymbol: String { showFahrenheit == true ? "℉" : "℃" }
 
     // MARK: - Methods
 
@@ -151,10 +150,12 @@ class WeatherViewModel: NSObject, ObservableObject {
         }
 
         await MainActor.run {
-            // Initialize to values from AppStorage.
-            useFahrenheit = showFahrenheit ??
-                (LocationViewModel.shared.country == "United States")
+            if showFahrenheit == nil {
+                showFahrenheit =
+                    LocationViewModel.shared.country == "United States"
+            }
 
+            // Clear this while gathering weather data for a new location.
             summary = nil
         }
 

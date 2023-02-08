@@ -3,8 +3,9 @@ import SwiftUI
 extension Measurement<UnitTemperature> {
     /// Temperature in Celsius or Fahrenheit based on the value of `showFahrenheit`.
     var converted: Double {
-        let useFahrenheit = WeatherViewModel.shared.useFahrenheit
-        return converted(to: useFahrenheit ? .fahrenheit : .celsius).value
+        let showFahrenheit =
+            UserDefaults.standard.bool(forKey: "showFahrenheit")
+        return converted(to: showFahrenheit ? .fahrenheit : .celsius).value
     }
 
     var fahrenheit: Double {

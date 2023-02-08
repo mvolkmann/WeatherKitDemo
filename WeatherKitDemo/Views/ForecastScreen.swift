@@ -4,7 +4,7 @@ import WeatherKit
 struct ForecastScreen: View {
     // MARK: - State
 
-    // @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    @AppStorage("showFeel") private var showFeel = false
     @Environment(
         \.horizontalSizeClass
     ) var horizontalSizeClass: UserInterfaceSizeClass?
@@ -124,7 +124,7 @@ struct ForecastScreen: View {
     }
 
     private func formatTemperature(forecast: HourWeather) -> String {
-        let temperature = weatherVM.useFeel ?
+        let temperature = showFeel ?
             forecast.apparentTemperature : forecast.temperature
         return String(format: "%.0f", temperature.converted) +
             weatherVM.temperatureUnitSymbol

@@ -2,13 +2,13 @@ import SwiftUI
 import WeatherKit
 
 struct ChartDaysSlider: View {
-    @AppStorage("showChartDays") private var showChartDays = WeatherService.days
+    @AppStorage("chartDays") private var chartDays = WeatherService.days
     @State private var days = 0.0
     @StateObject private var weatherVM = WeatherViewModel.shared
 
     var body: some View {
         VStack(spacing: 0) {
-            Text("chart-days \(weatherVM.chartDays)")
+            Text("chart-days \(chartDays)")
             Slider(
                 value: $days,
                 in: 1 ... 5,
@@ -21,12 +21,11 @@ struct ChartDaysSlider: View {
             )
             // Keep AppStorage in sync with setting in WeatherViewModel.
             .onChange(of: days) {
-                weatherVM.chartDays = Int($0)
-                showChartDays = Int($0)
+                chartDays = Int($0)
             }
         }
         .onAppear {
-            days = Double(weatherVM.chartDays)
+            days = Double(chartDays)
         }
     }
 }

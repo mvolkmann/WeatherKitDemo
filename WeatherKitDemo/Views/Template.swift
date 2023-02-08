@@ -4,6 +4,7 @@ struct Template<Content: View>: View {
     // MARK: - State
 
     @AppStorage("likedLocations") private var likedLocations: String = ""
+    @AppStorage("showFeel") private var showFeel = false
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.scenePhase) var scenePhase
@@ -53,7 +54,7 @@ struct Template<Content: View>: View {
                     Text(weatherVM.formattedTimestamp)
                 }
                 .font(.system(size: 16))
-                let tempKind = weatherVM.useFeel ? "feels like" : "actual"
+                let tempKind = showFeel ? "feels like" : "actual"
                 Text("showing \(tempKind) temperatures")
             }
         }

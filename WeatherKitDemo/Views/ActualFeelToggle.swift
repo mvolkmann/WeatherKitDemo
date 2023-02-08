@@ -8,9 +8,7 @@ struct ActualFeelToggle: View {
         Toggle2(
             off: "Actual Temperature",
             on: "Feels Like Temperature",
-            isOn: $weatherVM.useFeel
+            isOn: $showFeel
         )
-        // Keep AppStorage in sync with setting in WeatherViewModel.
-        .onChange(of: weatherVM.useFeel) { showFeel = $0 }
     }
 }

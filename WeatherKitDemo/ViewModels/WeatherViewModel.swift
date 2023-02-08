@@ -9,12 +9,11 @@ class WeatherViewModel: NSObject, ObservableObject {
     // MARK: - State
 
     @AppStorage("showAbsoluteColors") private var showAbsoluteColors = false
-    @AppStorage("showChartDays") private var showChartDays = WeatherService.days
+    @AppStorage("chartDays") private var chartDays = WeatherService.days
     @AppStorage("showFahrenheit") private var showFahrenheit: Bool?
     @AppStorage("showFeel") private var showFeel = false
     @AppStorage("showHeatMapDaysOnTop") private var showHeatMapDaysOnTop = false
 
-    @Published var chartDays = 0
     @Published var dateToTemperatureMap: [Date: Measurement<UnitTemperature>] =
         [:]
     @Published var heatMapDaysOnTop = false
@@ -22,7 +21,6 @@ class WeatherViewModel: NSObject, ObservableObject {
     @Published var summary: WeatherSummary?
     @Published var timestamp: Date?
     @Published var useAbsoluteColors = false
-    @Published var useFeel = false
     @Published var useFahrenheit = false
 
     // This is a singleton class.
@@ -156,12 +154,10 @@ class WeatherViewModel: NSObject, ObservableObject {
 
         await MainActor.run {
             // Initialize to values from AppStorage.
-            chartDays = showChartDays
             heatMapDaysOnTop = showHeatMapDaysOnTop
             useAbsoluteColors = showAbsoluteColors
             useFahrenheit = showFahrenheit ??
                 (LocationViewModel.shared.country == "United States")
-            useFeel = showFeel
 
             summary = nil
         }

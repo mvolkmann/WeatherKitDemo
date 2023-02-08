@@ -3,10 +3,9 @@ import SwiftUI
 import WeatherKit
 
 struct ChartScreen: View {
+    @AppStorage("chartDays") private var chartDays = WeatherService.days
     @Environment(\.colorScheme) private var colorScheme
-
     @State private var selectedDate: Date?
-
     @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
 
@@ -45,7 +44,7 @@ struct ChartScreen: View {
     var body: some View {
         Template {
             let futureForecast =
-                weatherVM.futureForecast.prefix(weatherVM.chartDays * 24)
+                weatherVM.futureForecast.prefix(chartDays * 24)
             Text("drag-help")
                 .font(.subheadline)
                 .padding(.top)
@@ -101,7 +100,7 @@ struct ChartScreen: View {
     // This chooses a position based on whether
     // the data point is near one of the chart edges.
     private func annotationPosition(_ index: Int) -> AnnotationPosition {
-        let percent = Double(index) / Double(weatherVM.chartDays * 24)
+        let percent = Double(index) / Double(chartDays * 24)
         // These percent values work well for iPhone SE.
         return percent < 0.20 ? .topTrailing :
             percent >= 0.80 ? .topLeading :

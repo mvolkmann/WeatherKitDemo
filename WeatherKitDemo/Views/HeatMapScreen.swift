@@ -8,10 +8,10 @@ private let markWidth = 30.0
 struct HeatMapScreen: View {
     // MARK: - State
 
+    @AppStorage("showFeel") private var showFeel = false
     @Environment(
         \.horizontalSizeClass
     ) var horizontalSizeClass: UserInterfaceSizeClass?
-
     @State private var hourlyForecast: [HourWeather] = []
     @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
@@ -190,7 +190,7 @@ struct HeatMapScreen: View {
     private func mark(forecast: HourWeather) -> some ChartContent {
         let date = forecast.date
         let day = date.hoursAfter(locationVM.timeZoneDelta).dayOfWeek
-        let measurement = weatherVM.useFeel ?
+        let measurement = showFeel ?
             forecast.apparentTemperature : forecast.temperature
         let temperature = measurement.converted
 

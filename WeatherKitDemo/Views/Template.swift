@@ -9,7 +9,8 @@ struct Template<Content: View>: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.scenePhase) var scenePhase
 
-    @State private var location: String = ""
+    @State private var selectedLocation: String = ""
+    @State private var locations: [String] = []
     @State private var isLiked: Bool = false
 
     @StateObject private var locationVM = LocationViewModel.shared
@@ -45,7 +46,7 @@ struct Template<Content: View>: View {
         VStack(spacing: 0) {
             HStack {
                 place
-                if !location.isEmpty { likeButton }
+                if !selectedLocation.isEmpty { likeButton }
             }
 
             if weatherVM.timestamp != nil {
@@ -61,7 +62,7 @@ struct Template<Content: View>: View {
     }
 
     private var icon: String {
-        locationVM.isLikedLocation(location) ? "heart.fill" : "heart"
+        locationVM.isLikedLocation(selectedLocation) ? "heart.fill" : "heart"
     }
 
     private var likeButton: some View {
@@ -94,11 +95,23 @@ struct Template<Content: View>: View {
     }
 
     private var place: some View {
-        Text(location)
-            .lineLimit(1)
-            .font(.body)
-            .minimumScaleFactor(0.75)
-            .bold()
+        /*
+         Text(location)
+             .lineLimit(1)
+             .font(.body)
+             .minimumScaleFactor(0.75)
+             .bold()
+         */
+        Picker("Location", selection: $selectedLocation) {
+            ForEach(locations, id: \.self) { location in
+                Text(location)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .pickerStyle(.menu)
+        .onChange(of: selectedLocation) { _ in
+            selectLocation(selectedLocation)
+        }
     }
 
     var body: some View {
@@ -127,20 +140,26 @@ struct Template<Content: View>: View {
             if newPhase == .active { refreshForecast() }
         }
 
+        .onChange(of: locationVM.likedLocations) { _ in
+            updateLocations()
+        }
+
         // We are using task instead of onAppear so we can specify a dependency.
         .task(id: locationVM.selectedPlacemark) {
             // likedLocations = "" // uncomment to reset AppStorage
 
-            location = LocationService.description(
+            selectedLocation = LocationService.description(
                 from: locationVM.selectedPlacemark
             )
-            isLiked = locationVM.isLikedLocation(location)
+            isLiked = locationVM.isLikedLocation(selectedLocation)
 
             if locationVM.likedLocations.isEmpty {
                 // Restore from AppStorage.
                 locationVM.likedLocations =
                     likedLocations.split(separator: "|").map(String.init)
             }
+
+            updateLocations()
         }
     }
 
@@ -156,5 +175,30 @@ struct Template<Content: View>: View {
                 colorScheme: colorScheme
             )
         }
+    }
+
+    private func selectLocation(_ location: String) {
+        Task {
+            do {
+                let placemark = try await LocationService
+                    .getPlacemark(from: location)
+                locationVM.select(placemark: placemark)
+            } catch {
+                print("Template.selectLocation error:", error)
+            }
+        }
+    }
+
+    // These are used in the Picker.
+    private func updateLocations() {
+        locations = []
+        let currentLocation = LocationService.description(
+            from: locationVM.selectedPlacemark
+        )
+        let liked = locationVM.likedLocations
+        if !currentLocation.isEmpty, !liked.contains(currentLocation) {
+            locations = [currentLocation]
+        }
+        locations.append(contentsOf: liked)
     }
 }

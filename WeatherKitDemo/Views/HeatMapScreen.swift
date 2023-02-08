@@ -8,6 +8,7 @@ private let markWidth = 30.0
 struct HeatMapScreen: View {
     // MARK: - State
 
+    @AppStorage("showAbsoluteColors") private var showAbsoluteColors = false
     @AppStorage("showFeel") private var showFeel = false
     @Environment(
         \.horizontalSizeClass
@@ -73,7 +74,7 @@ struct HeatMapScreen: View {
     private var helpText: some View {
         let low = weatherVM.useFahrenheit ? "0℉" : "-17.8℃"
         let high = weatherVM.useFahrenheit ? "100℉" : "37.8℃"
-        return weatherVM.useAbsoluteColors ?
+        return showAbsoluteColors ?
             Text("absolute-help \(low) \(high)") :
             Text("relative-help")
     }

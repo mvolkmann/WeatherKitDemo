@@ -20,7 +20,6 @@ class WeatherViewModel: NSObject, ObservableObject {
     @Published var slow = false
     @Published var summary: WeatherSummary?
     @Published var timestamp: Date?
-    @Published var useAbsoluteColors = false
     @Published var useFahrenheit = false
 
     // This is a singleton class.
@@ -91,9 +90,9 @@ class WeatherViewModel: NSObject, ObservableObject {
 
         // We want these values to range from
         // bluePercent for the coldest to redPercent for the warmest.
-        let realStart = useAbsoluteColors ?
+        let realStart = showAbsoluteColors ?
             bluePercent - bluePercent * tempMax / 100 : redPercent
-        let realEnd = useAbsoluteColors ?
+        let realEnd = showAbsoluteColors ?
             bluePercent - bluePercent * tempMin / 100 : bluePercent
 
         // red has a hue of zero and blue has hue of 2/3.
@@ -121,9 +120,9 @@ class WeatherViewModel: NSObject, ObservableObject {
         let tempMin = max(forecastTempMin, 0)
         let tempMax = min(forecastTempMax, 100)
 
-        let realStart = useAbsoluteColors ?
+        let realStart = showAbsoluteColors ?
             bluePercent - bluePercent * tempMax / 100 : redPercent
-        let realEnd = useAbsoluteColors ?
+        let realEnd = showAbsoluteColors ?
             bluePercent - bluePercent * tempMin / 100 : bluePercent
         let percent = max(temperature - tempMin, 0) / (tempMax - tempMin)
         let hue = realEnd - percent * (realEnd - realStart)
@@ -155,7 +154,6 @@ class WeatherViewModel: NSObject, ObservableObject {
         await MainActor.run {
             // Initialize to values from AppStorage.
             heatMapDaysOnTop = showHeatMapDaysOnTop
-            useAbsoluteColors = showAbsoluteColors
             useFahrenheit = showFahrenheit ??
                 (LocationViewModel.shared.country == "United States")
 

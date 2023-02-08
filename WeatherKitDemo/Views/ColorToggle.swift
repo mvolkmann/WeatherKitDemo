@@ -7,7 +7,7 @@ struct ColorToggle: View {
     private var helpText: some View {
         let low = weatherVM.useFahrenheit ? "0℉" : "-17.8℃"
         let high = weatherVM.useFahrenheit ? "100℉" : "37.8℃"
-        return weatherVM.useAbsoluteColors ?
+        return showAbsoluteColors ?
             Text("absolute-help \(low) \(high)") :
             Text("relative-help")
     }
@@ -17,12 +17,8 @@ struct ColorToggle: View {
             Toggle2(
                 off: "Relative Colors",
                 on: "Absolute Colors",
-                isOn: $weatherVM.useAbsoluteColors
+                isOn: $showAbsoluteColors
             )
-            // Keep AppStorage in sync with setting in WeatherViewModel.
-            .onChange(of: weatherVM.useAbsoluteColors) {
-                showAbsoluteColors = $0
-            }
 
             helpText
                 // .font(.footnote)

@@ -58,16 +58,7 @@ struct ContentView: View {
                 default: break
                 }
 
-                if AppReview.shared.shouldRequest {
-                    Task {
-                        // Wait 3 seconds before requesting an app review.
-                        try await Task.sleep(
-                            until: .now + .seconds(3),
-                            clock: .suspending
-                        )
-                        requestReview()
-                    }
-                }
+                appReview()
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -95,6 +86,7 @@ struct ContentView: View {
                         Button(action: {
                             settingsVisits += 1
                             isSettingsPresented = true
+                            appReview()
                         }) {
                             Image(systemName: "gear")
                         }
@@ -153,6 +145,19 @@ struct ContentView: View {
             } catch {
                 print("ContentView: error getting AppInfo:", error)
             }
+        }
+    }
+
+    private func appReview() {
+        guard AppReview.shared.shouldRequest else { return }
+
+        Task {
+            // Wait 3 seconds before requesting an app review.
+            try await Task.sleep(
+                until: .now + .seconds(3),
+                clock: .suspending
+            )
+            requestReview()
         }
     }
 

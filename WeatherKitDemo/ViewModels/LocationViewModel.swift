@@ -126,10 +126,12 @@ extension LocationViewModel: CLLocationManagerDelegate {
                 location
             ) { [weak self] placemarks, error in
                 if let error {
+                    // TODO: Handle this better?
                     print("LocationViewModel.locationManager: error =", error)
                 } else if let self {
-                    self.currentPlacemark = placemarks?.first
-                    self.selectedPlacemark = self.currentPlacemark
+                    let placemark = placemarks?.first
+                    self.currentPlacemark = placemark
+                    self.selectedPlacemark = placemark
 
                     // Once we have the location, stop trying to update it.
                     self.locationManager.stopUpdatingLocation()

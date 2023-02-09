@@ -6,6 +6,7 @@ struct AppReview {
     @AppStorage("forecastVisits") private var forecastVisits = 0
     @AppStorage("heatMapVisits") private var heatMapVisits = 0
     @AppStorage("lastReviewedAppVersion") var lastReviewedAppVersion = ""
+    @AppStorage("heatMapVisits") private var settingsVisits = 0
 
     // Singleton
     static let shared = AppReview()
@@ -43,7 +44,8 @@ struct AppReview {
             chartVisits >= target &&
             currentVisits >= target &&
             forecastVisits >= target &&
-            heatMapVisits >= target
+            heatMapVisits >= target &&
+            settingsVisits >= 1
         print("usedEnough =", usedEnough)
         if usedEnough {
             lastReviewedAppVersion = appVersion
@@ -57,6 +59,7 @@ struct AppReview {
         currentVisits = 0
         forecastVisits = 0
         heatMapVisits = 0
+        settingsVisits = 0
     }
 
     func printVisits() {
@@ -64,5 +67,6 @@ struct AppReview {
         print("forecastVisits =", forecastVisits)
         print("chartVisits =", chartVisits)
         print("heatMapVisits =", heatMapVisits)
+        print("settingsVisits =", settingsVisits)
     }
 }

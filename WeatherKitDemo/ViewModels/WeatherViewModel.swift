@@ -14,10 +14,18 @@ class WeatherViewModel: NSObject, ObservableObject {
     @AppStorage("showFeel") private var showFeel = false
     @AppStorage("heatMapDaysOnTop") private var heatMapDaysOnTop = false
 
+    // This is used by ChartScreen.
     @Published var dateToTemperatureMap: [Date: Measurement<UnitTemperature>] =
         [:]
-    @Published var slow = false
+
+    // When true a message is displayed that informs the user
+    // that WeatherKit is taking longer than usual to return data.
+    @Published var isSlow = false
+
     @Published var summary: WeatherSummary?
+
+    // This holds the timestamp of the last time
+    // data was obtained from WeatherKit.
     @Published var timestamp: Date?
 
     // This is a singleton class.
@@ -26,7 +34,9 @@ class WeatherViewModel: NSObject, ObservableObject {
 
     // MARK: - Properties
 
-    // var loadingLocation: CLLocation?
+    var lastError: Error?
+
+    var loadingCoordinate: CLLocationCoordinate2D?
 
     var fiveDayForecast: [HourWeather] {
         guard let forecasts = summary?.hourlyForecast, !forecasts.isEmpty else {
@@ -127,26 +137,31 @@ class WeatherViewModel: NSObject, ObservableObject {
         return color(forHue: hue)
     }
 
-    func load(location: CLLocation, colorScheme: ColorScheme) async throws {
-        /*
-         // This logic for avoiding duplicate weather lookups
-         // sometimes results in no weather data being fetched
-         // and I don't know why.
-         if let loadingLocation {
-             if location.description == loadingLocation.description {
-                 return
-             }
-         }
+    // This returns a Bool indicating whether
+    // weather for a given location is currently being loaded or
+    // the location was the last location whose weather was loaded.
+    func isLoading(location: CLLocation) -> Bool {
+        // CLLocation objects contain a timestamp which is
+        // the time at which the location was determined.
+        // We don't want two of these objects to be considered
+        // different just because their timestamps differ.
+        // That is why we are comparing their coordinates.
+        if let loadingCoordinate {
+            return loadingCoordinate == location.coordinate
+        }
+        return false
+    }
 
-         loadingLocation = location
-         defer { loadingLocation = nil }
-         */
+    func load(location: CLLocation, colorScheme: ColorScheme) async throws {
+        if lastError != nil, isLoading(location: location) { return }
+
+        loadingCoordinate = location.coordinate
 
         // If WeatherKit takes more than 5 seconds to return data,
         // consider it slow.
         let waitSeconds = 5.0
         DispatchQueue.main.asyncAfter(deadline: .now() + waitSeconds) {
-            if self.summary == nil { self.slow = true }
+            if self.summary == nil { self.isSlow = true }
         }
 
         await MainActor.run {
@@ -160,23 +175,34 @@ class WeatherViewModel: NSObject, ObservableObject {
         }
 
         // This method is defined in WeatherServiceExtension.swift.
-        let weatherSummary = try await WeatherService.shared.summary(
-            for: location,
-            colorScheme: colorScheme
-        )
+        print("WeatherViewModel.load: LOADING", location.coordinate)
+        do {
+            let weatherSummary = try await WeatherService.shared.summary(
+                for: location,
+                colorScheme: colorScheme
+            )
+            print("WeatherViewModel.load: LOADED", location.coordinate)
+            lastError = nil
 
-        Task { @MainActor in
-            summary = weatherSummary
-            slow = false
+            Task { @MainActor in
+                summary = weatherSummary
+                isSlow = false
 
-            dateToTemperatureMap = [:]
-            if let forecasts = summary?.hourlyForecast {
-                for forecast in forecasts {
-                    dateToTemperatureMap[forecast.date] = forecast.temperature
+                dateToTemperatureMap = [:]
+                if let forecasts = summary?.hourlyForecast {
+                    for forecast in forecasts {
+                        dateToTemperatureMap[forecast.date] = forecast
+                            .temperature
+                    }
                 }
-            }
 
-            timestamp = Date.now
+                timestamp = Date.now
+                print("WeatherViewModel.load: UPDATED")
+            }
+        } catch {
+            lastError = error
+            loadingCoordinate = nil
+            throw error
         }
     }
 }

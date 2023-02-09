@@ -126,7 +126,7 @@ struct Template<Content: View>: View {
                     Spacer()
                     LottieView(name: "weather-progress", loopMode: .loop)
                         .frame(width: 200, height: 200)
-                    if weatherVM.slow {
+                    if weatherVM.isSlow {
                         Text("weatherkit-slow").font(.title2)
                     }
                 } else {
@@ -168,8 +168,9 @@ struct Template<Content: View>: View {
     // MARK: - Methods
 
     private func refreshForecast() {
-        guard let location = locationVM.selectedPlacemark?.location
-        else { return }
+        guard let location = locationVM.selectedPlacemark?.location else {
+            return
+        }
 
         Task {
             try? await weatherVM.load(

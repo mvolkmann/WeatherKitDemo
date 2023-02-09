@@ -8,6 +8,7 @@ struct ContentView: View {
     @AppStorage("currentVisits") private var currentVisits = 0
     @AppStorage("forecastVisits") private var forecastVisits = 0
     @AppStorage("heatMapVisits") private var heatMapVisits = 0
+    @AppStorage("settingsVisits") private var settingsVisits = 0
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.openURL) var openURL
@@ -91,7 +92,10 @@ struct ContentView: View {
                         Button(action: refreshForecast) {
                             Image(systemName: "arrow.clockwise")
                         }
-                        Button(action: { isSettingsPresented = true }) {
+                        Button(action: {
+                            settingsVisits += 1
+                            isSettingsPresented = true
+                        }) {
                             Image(systemName: "gear")
                         }
                     }
@@ -114,20 +118,23 @@ struct ContentView: View {
 
         // Run this closure again every time the selected placemark changes.
         .task(id: locationVM.selectedPlacemark, priority: .background) {
-            if let location = locationVM.selectedPlacemark?.location {
-                do {
-                    try await weatherVM.load(
-                        location: location,
-                        colorScheme: colorScheme
+            guard let location = locationVM.selectedPlacemark?.location else {
+                return
+            }
+
+            do {
+                try await weatherVM.load(
+                    location: location,
+                    colorScheme: colorScheme
+                )
+            } catch {
+                // TODO: Why do we sometimes get a "cancelled" error?
+                if error.localizedDescription != "cancelled" {
+                    // TODO: Handle this better?
+                    print(
+                        "ContentView: error loading forecast:",
+                        error.localizedDescription
                     )
-                } catch {
-                    // TODO: Why do we sometimes get a "cancelled" error?
-                    if error.localizedDescription != "cancelled" {
-                        print(
-                            "ContentView: error loading forecast:",
-                            error.localizedDescription
-                        )
-                    }
                 }
             }
         }
@@ -154,8 +161,9 @@ struct ContentView: View {
     }
 
     private func refreshForecast() {
-        guard let location = locationVM.selectedPlacemark?.location
-        else { return }
+        guard let location = locationVM.selectedPlacemark?.location else {
+            return
+        }
 
         Task {
             try? await weatherVM.load(

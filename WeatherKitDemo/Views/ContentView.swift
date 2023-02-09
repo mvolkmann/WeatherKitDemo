@@ -4,8 +4,16 @@ import SwiftUI
 import WeatherKit
 
 struct ContentView: View {
+    @AppStorage("chartVisits") private var chartVisits = 0
+    @AppStorage("currentVisits") private var currentVisits = 0
+    @AppStorage("forecastVisits") private var forecastVisits = 0
+    @AppStorage("heatMapVisits") private var heatMapVisits = 0
+
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.openURL) var openURL
+
+    // This must be called from inside a view.
+    @Environment(\.requestReview) var realRequestReview
 
     @State private var appInfo: AppInfo?
     @State private var isInfoPresented = false
@@ -40,6 +48,25 @@ struct ContentView: View {
             }
             .navigationTitle("Feather Weather")
             .navigationBarTitleDisplayMode(.inline)
+            .onChange(of: selectedTab) { _ in
+                switch selectedTab {
+                case "chart": chartVisits += 1
+                case "current": currentVisits += 1
+                case "forecast": forecastVisits += 1
+                case "heatmap": heatMapVisits += 1
+                default: break
+                }
+
+                if AppReview.shared.shouldRequest {
+                    Task {
+                        try await Task.sleep(
+                            until: .now + .seconds(1),
+                            clock: .suspending
+                        )
+                        realRequestReview()
+                    }
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     // Using HStack to reduce space between toolbar items.
@@ -71,10 +98,7 @@ struct ContentView: View {
             }
         }
 
-        .sheet(
-            isPresented: $isInfoPresented,
-            onDismiss: { AppReview.shared.requestReview() }
-        ) {
+        .sheet(isPresented: $isInfoPresented) {
             Info(appInfo: appInfo!)
                 .presentationDetents([.height(400)])
                 .presentationDragIndicator(.visible)

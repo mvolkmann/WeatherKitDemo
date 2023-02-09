@@ -1,9 +1,11 @@
 import SwiftUI
 
 struct AppReview {
+    @AppStorage("chartVisits") private var chartVisits = 0
+    @AppStorage("currentVisits") private var currentVisits = 0
+    @AppStorage("forecastVisits") private var forecastVisits = 0
+    @AppStorage("heatMapVisits") private var heatMapVisits = 0
     @AppStorage("lastReviewedAppVersion") var lastReviewedAppVersion = ""
-    @AppStorage("triggerCount") var triggerCount = 0
-    @Environment(\.requestReview) var realRequestReview
 
     // Singleton
     static let shared = AppReview()
@@ -11,7 +13,7 @@ struct AppReview {
 
     private let triggerTarget = 3
 
-    var appVersion: String {
+    private var appVersion: String {
         let infoDict = Bundle.main.infoDictionary!
         let key = "CFBundleShortVersionString"
         return infoDict[key] as? String ?? ""
@@ -19,18 +21,6 @@ struct AppReview {
 
     var haveNewVersion: Bool {
         appVersion != lastReviewedAppVersion
-    }
-
-    func requestReview() {
-        if shouldRequest {
-            Task {
-                try await Task.sleep(
-                    until: .now + .seconds(1),
-                    clock: .suspending
-                )
-                await realRequestReview()
-            }
-        }
     }
 
     func reviewURL(appId: Int) -> URL? {
@@ -42,23 +32,37 @@ struct AppReview {
 
     var shouldRequest: Bool {
         guard haveNewVersion else {
-            print("no update since last request")
-            triggerCount = 0
+            print("no app update since last request")
+            clearVisits()
             return false
         }
 
-        triggerCount += 1
-        print("triggerCount: \(triggerCount)")
-
-        if triggerCount >= triggerTarget {
-            print("target reached - requesting review")
+        printVisits()
+        let target = 3
+        let usedEnough =
+            chartVisits >= target &&
+            currentVisits >= target &&
+            forecastVisits >= target &&
+            heatMapVisits >= target
+        print("usedEnough =", usedEnough)
+        if usedEnough {
             lastReviewedAppVersion = appVersion
-            print("lastReviewedAppVersion: \(lastReviewedAppVersion)")
-            triggerCount = 0
-            return true
+            clearVisits()
         }
+        return usedEnough
+    }
 
-        print("target not reached")
-        return false
+    private func clearVisits() {
+        chartVisits = 0
+        currentVisits = 0
+        forecastVisits = 0
+        heatMapVisits = 0
+    }
+
+    func printVisits() {
+        print("currentVisits =", currentVisits)
+        print("forecastVisits =", forecastVisits)
+        print("chartVisits =", chartVisits)
+        print("heatMapVisits =", heatMapVisits)
     }
 }

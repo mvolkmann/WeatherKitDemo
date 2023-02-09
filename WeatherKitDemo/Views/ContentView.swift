@@ -13,7 +13,7 @@ struct ContentView: View {
     @Environment(\.openURL) var openURL
 
     // This must be called from inside a view.
-    @Environment(\.requestReview) var realRequestReview
+    @Environment(\.requestReview) var requestReview
 
     @State private var appInfo: AppInfo?
     @State private var isInfoPresented = false
@@ -59,11 +59,12 @@ struct ContentView: View {
 
                 if AppReview.shared.shouldRequest {
                     Task {
+                        // Wait 3 seconds before requesting an app review.
                         try await Task.sleep(
-                            until: .now + .seconds(1),
+                            until: .now + .seconds(3),
                             clock: .suspending
                         )
-                        realRequestReview()
+                        requestReview()
                     }
                 }
             }

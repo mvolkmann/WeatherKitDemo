@@ -96,7 +96,7 @@ struct HeatMapScreen: View {
     }
 
     var body: some View {
-        Template {
+        Template(parent: "heatmap") {
             if hourlyForecast.isEmpty {
                 ProgressView()
             } else {

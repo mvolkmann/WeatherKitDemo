@@ -12,6 +12,7 @@ struct Template<Content: View>: View {
     @State private var selectedLocation: String = ""
     @State private var locations: [String] = []
     @State private var isLiked: Bool = false
+    @State private var lastScenePhase = ScenePhase.inactive
 
     @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
@@ -19,11 +20,14 @@ struct Template<Content: View>: View {
     // MARK: - Initializer
 
     // This is needed to use @ViewBuilder.
-    init(@ViewBuilder content: () -> Content) {
+    init(parent: String, @ViewBuilder content: () -> Content) {
+        self.parent = parent
         self.content = content()
     }
 
     // MARK: - Properties
+
+    private let parent: String
 
     private var background: some View {
         Rectangle()
@@ -138,8 +142,21 @@ struct Template<Content: View>: View {
             .padding(.horizontal)
         }
 
-        .onChange(of: scenePhase) { newPhase in
-            if newPhase == .active { refreshForecast() }
+        // To get old and new values ... add to blog.
+        // .onChange(of: scenePhase) { [scenePhase] newPhase in
+        .onChange(of: scenePhase) { _ in
+            // This is invoked once for each screen in the app
+            // because every screen uses this Template struct.
+            // But we only want to process this once.
+            guard parent == "current" else { return }
+            print("scenePhase =", scenePhase)
+            // Check for change from .background to .inactive.
+            if lastScenePhase == .background, scenePhase == .inactive {
+                lastScenePhase = scenePhase
+                refreshForecast()
+            } else {
+                lastScenePhase = scenePhase
+            }
         }
 
         .onChange(of: locationVM.likedLocations) { _ in

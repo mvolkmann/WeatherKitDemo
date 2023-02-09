@@ -42,7 +42,7 @@ struct ChartScreen: View {
     }
 
     var body: some View {
-        Template {
+        Template(parent: "chart") {
             let futureForecast =
                 weatherVM.futureForecast.prefix(chartDays * 24)
             Text("drag-help")

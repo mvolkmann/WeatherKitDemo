@@ -118,7 +118,7 @@ struct CurrentScreen: View {
     }
 
     var body: some View {
-        Template {
+        Template(parent: "current") {
             VStack {
                 if let appInfo,
                    !appInfo.haveLatestVersion,
@@ -130,7 +130,7 @@ struct CurrentScreen: View {
                     currentData()
                 }
 
-                if locationVM.authorized && !locationVM.usingCurrent {
+                if locationVM.authorized, !locationVM.usingCurrent {
                     currentLocationButton
                 }
 

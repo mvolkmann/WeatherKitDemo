@@ -116,8 +116,16 @@ struct ContentView: View {
                 .presentationDragIndicator(.visible)
         }
 
-        // Run this closure again every time the selected placemark changes.
-        .task(id: locationVM.selectedPlacemark, priority: .background) {
+        // Run this closure again every time the selected coordinate changes.
+        // We can't just check for changes in `selectedPlacement`
+        // or its `location` because CLLocation has a timestamp property
+        // that provides the time at which the location was determined and
+        // we don't want to load weather data again
+        // if only the timestamp changed.
+        .task(
+            id: locationVM.selectedPlacemark?.location?.coordinate,
+            priority: .background
+        ) {
             guard let location = locationVM.selectedPlacemark?.location else {
                 return
             }

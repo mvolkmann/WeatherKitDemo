@@ -77,7 +77,7 @@ struct ForecastScreen: View {
     private var temperatureWidth: Double { isWide ? 120 : 55 }
 
     var body: some View {
-        Template {
+        Template(parent: "forecast") {
             VStack {
                 header.padding(.top)
                 List {

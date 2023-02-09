@@ -34,10 +34,6 @@ class WeatherViewModel: NSObject, ObservableObject {
 
     // MARK: - Properties
 
-    var lastError: Error?
-
-    var loadingCoordinate: CLLocationCoordinate2D?
-
     var fiveDayForecast: [HourWeather] {
         guard let forecasts = summary?.hourlyForecast, !forecasts.isEmpty else {
             return []
@@ -137,26 +133,7 @@ class WeatherViewModel: NSObject, ObservableObject {
         return color(forHue: hue)
     }
 
-    // This returns a Bool indicating whether
-    // weather for a given location is currently being loaded or
-    // the location was the last location whose weather was loaded.
-    func isLoading(location: CLLocation) -> Bool {
-        // CLLocation objects contain a timestamp which is
-        // the time at which the location was determined.
-        // We don't want two of these objects to be considered
-        // different just because their timestamps differ.
-        // That is why we are comparing their coordinates.
-        if let loadingCoordinate {
-            return loadingCoordinate == location.coordinate
-        }
-        return false
-    }
-
     func load(location: CLLocation, colorScheme: ColorScheme) async throws {
-        if lastError != nil, isLoading(location: location) { return }
-
-        loadingCoordinate = location.coordinate
-
         // If WeatherKit takes more than 5 seconds to return data,
         // consider it slow.
         let waitSeconds = 5.0
@@ -175,34 +152,24 @@ class WeatherViewModel: NSObject, ObservableObject {
         }
 
         // This method is defined in WeatherServiceExtension.swift.
-        print("WeatherViewModel.load: LOADING", location.coordinate)
-        do {
-            let weatherSummary = try await WeatherService.shared.summary(
-                for: location,
-                colorScheme: colorScheme
-            )
-            print("WeatherViewModel.load: LOADED", location.coordinate)
-            lastError = nil
+        let weatherSummary = try await WeatherService.shared.summary(
+            for: location,
+            colorScheme: colorScheme
+        )
 
-            Task { @MainActor in
-                summary = weatherSummary
-                isSlow = false
+        Task { @MainActor in
+            summary = weatherSummary
+            isSlow = false
 
-                dateToTemperatureMap = [:]
-                if let forecasts = summary?.hourlyForecast {
-                    for forecast in forecasts {
-                        dateToTemperatureMap[forecast.date] = forecast
-                            .temperature
-                    }
+            dateToTemperatureMap = [:]
+            if let forecasts = summary?.hourlyForecast {
+                for forecast in forecasts {
+                    dateToTemperatureMap[forecast.date] = forecast
+                        .temperature
                 }
-
-                timestamp = Date.now
-                print("WeatherViewModel.load: UPDATED")
             }
-        } catch {
-            lastError = error
-            loadingCoordinate = nil
-            throw error
+
+            timestamp = Date.now
         }
     }
 }

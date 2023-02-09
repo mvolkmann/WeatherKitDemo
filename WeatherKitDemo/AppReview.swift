@@ -33,7 +33,6 @@ struct AppReview {
 
     var shouldRequest: Bool {
         guard haveNewVersion else {
-            print("no app update since last request")
             clearVisits()
             return false
         }

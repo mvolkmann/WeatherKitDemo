@@ -164,7 +164,7 @@ struct CurrentScreen: View {
     @ViewBuilder
     private func attributionLink() -> some View {
         if let summary = weatherVM.summary {
-            Link(destination: summary.attributionPageURL) {
+            HStack(alignment: .bottom) {
                 AsyncImage(
                     url: attributionLogoURL,
                     content: { image in image.resizable() },
@@ -173,6 +173,9 @@ struct CurrentScreen: View {
                 .aspectRatio(contentMode: .fit)
                 .opacity(0.3)
                 .frame(height: 20)
+                Link(destination: summary.attributionPageURL) {
+                    Text("WeatherKit")
+                }
             }
         } else {
             EmptyView()

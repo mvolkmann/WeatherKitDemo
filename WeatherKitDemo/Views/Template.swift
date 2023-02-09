@@ -149,7 +149,6 @@ struct Template<Content: View>: View {
             // because every screen uses this Template struct.
             // But we only want to process this once.
             guard parent == "current" else { return }
-            print("scenePhase =", scenePhase)
             // Check for change from .background to .inactive.
             if lastScenePhase == .background, scenePhase == .inactive {
                 lastScenePhase = scenePhase

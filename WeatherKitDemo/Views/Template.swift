@@ -45,8 +45,10 @@ struct Template<Content: View>: View {
     private var heading: some View {
         VStack(spacing: 0) {
             HStack {
-                place
-                if !selectedLocation.isEmpty { likeButton }
+                if !selectedLocation.isEmpty {
+                    place
+                    likeButton
+                }
             }
 
             if weatherVM.timestamp != nil {

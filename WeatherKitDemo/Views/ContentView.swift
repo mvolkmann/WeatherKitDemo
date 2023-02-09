@@ -1,4 +1,5 @@
 import CoreLocation
+import StoreKit
 import SwiftUI
 import WeatherKit
 
@@ -70,8 +71,11 @@ struct ContentView: View {
             }
         }
 
-        .sheet(isPresented: $isInfoPresented) {
-            Info(appInfo: appInfo)
+        .sheet(
+            isPresented: $isInfoPresented,
+            onDismiss: { AppReview.shared.requestReview() }
+        ) {
+            Info(appInfo: appInfo!)
                 .presentationDetents([.height(400)])
                 .presentationDragIndicator(.visible)
         }

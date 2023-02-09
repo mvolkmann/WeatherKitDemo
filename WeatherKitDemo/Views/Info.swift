@@ -1,9 +1,9 @@
 import SwiftUI
 
 struct Info: View {
-    let appInfo: AppInfo?
+    let appInfo: AppInfo!
 
-    init(appInfo: AppInfo?) {
+    init(appInfo: AppInfo) {
         self.appInfo = appInfo
     }
 
@@ -11,7 +11,7 @@ struct Info: View {
         VStack(spacing: 20) {
             if let appInfo {
                 Text(appInfo.name).font(.headline)
-                Image("AppIcon") // doesn't work
+                // Image("AppIcon") // doesn't work
                 Image(uiImage: UIImage(named: "AppIcon")!) // works
                     .resizable()
                     .frame(width: 100, height: 100)
@@ -32,6 +32,18 @@ struct Info: View {
                     string: "https://github.com/mvolkmann/WeatherKitDemo"
                 )!
             )
+
+            let appReview = AppReview.shared
+            if !appReview.haveNewVersion {
+                // This only works on a real device, not in the Simulator.
+                if let appId = appInfo.appId,
+                   let url = appReview.reviewURL(appId: appId) {
+                    Link(destination: url) {
+                        Text("Write a Review")
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+            }
         }
         .padding()
     }

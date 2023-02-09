@@ -31,6 +31,7 @@
 		1A7861C1298D756B009D03F7 /* HeatMapToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7861C0298D756B009D03F7 /* HeatMapToggle.swift */; };
 		1A7861C3298D85C6009D03F7 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7861C2298D85C6009D03F7 /* Stack.swift */; };
 		1A7861C5298E8CAC009D03F7 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7861C4298E8CAC009D03F7 /* AppInfo.swift */; };
+		1A7883A329943BE400E1BC72 /* AppReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7883A229943BE400E1BC72 /* AppReview.swift */; };
 		1A79703628FDE9BC00569E68 /* HeatMapScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A79703528FDE9BC00569E68 /* HeatMapScreen.swift */; };
 		1A84529228D37DA900C28047 /* WeatherKitDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A84529128D37DA900C28047 /* WeatherKitDemoApp.swift */; };
 		1A84529428D37DA900C28047 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A84529328D37DA900C28047 /* ContentView.swift */; };
@@ -71,6 +72,7 @@
 		1A7861C0298D756B009D03F7 /* HeatMapToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatMapToggle.swift; sourceTree = "<group>"; };
 		1A7861C2298D85C6009D03F7 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
 		1A7861C4298E8CAC009D03F7 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
+		1A7883A229943BE400E1BC72 /* AppReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppReview.swift; sourceTree = "<group>"; };
 		1A79703528FDE9BC00569E68 /* HeatMapScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatMapScreen.swift; sourceTree = "<group>"; };
 		1A84528E28D37DA900C28047 /* WeatherKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A84529128D37DA900C28047 /* WeatherKitDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherKitDemoApp.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 				1A84529128D37DA900C28047 /* WeatherKitDemoApp.swift */,
 				1A5A7203297DF48F00BC1EC9 /* AppDelegate.swift */,
 				1A7861C4298E8CAC009D03F7 /* AppInfo.swift */,
+				1A7883A229943BE400E1BC72 /* AppReview.swift */,
 				1A84529528D37DAA00C28047 /* Assets.xcassets */,
 				1A5A7233297F02EE00BC1EC9 /* weather-progress.json */,
 				1A977839297B4DEE006CFB86 /* Info.plist */,
@@ -305,6 +308,7 @@
 				1A7861C3298D85C6009D03F7 /* Stack.swift in Sources */,
 				1AB0621328D64E3700602C7B /* HourWeatherExtension.swift in Sources */,
 				1A713EC128FA0CD500AEA66B /* Template.swift in Sources */,
+				1A7883A329943BE400E1BC72 /* AppReview.swift in Sources */,
 				1A713EC328FC3EF900AEA66B /* StringExtension.swift in Sources */,
 				1A713EC528FC4E5700AEA66B /* ViewExtension.swift in Sources */,
 				1A0D14162988B0250087474E /* ActualFeelToggle.swift in Sources */,
@@ -464,7 +468,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = WeatherKitDemo/WeatherKitDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherKitDemo/Preview Content\"";
 				DEVELOPMENT_TEAM = 4BG3523GAZ;
 				ENABLE_PREVIEWS = YES;
@@ -481,7 +485,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.1;
+				MARKETING_VERSION = 1.4.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "r.mark.volkmann-gmail.com.FeatherWeather";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -498,7 +502,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = WeatherKitDemo/WeatherKitDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherKitDemo/Preview Content\"";
 				DEVELOPMENT_TEAM = 4BG3523GAZ;
 				ENABLE_PREVIEWS = YES;
@@ -515,7 +519,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.1;
+				MARKETING_VERSION = 1.4.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "r.mark.volkmann-gmail.com.FeatherWeather";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

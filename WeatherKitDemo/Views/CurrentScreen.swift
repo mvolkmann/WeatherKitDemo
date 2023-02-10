@@ -249,7 +249,7 @@ struct CurrentScreen: View {
                 locationVM.select(placemark: placemark)
                 dismissKeyboard()
             } catch {
-                print("CurrentScreen.selectLocation error:", error)
+                Log.error("error getting placemark: \(error)")
             }
         }
     }

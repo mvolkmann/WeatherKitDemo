@@ -203,7 +203,7 @@ struct Template<Content: View>: View {
                     .getPlacemark(from: location)
                 locationVM.select(placemark: placemark)
             } catch {
-                print("Template.selectLocation error:", error)
+                Log.error("error getting placemark: \(error)")
             }
         }
     }

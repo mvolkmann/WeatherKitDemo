@@ -130,11 +130,7 @@ struct ContentView: View {
             } catch {
                 // TODO: Why do we sometimes get a "cancelled" error?
                 if error.localizedDescription != "cancelled" {
-                    // TODO: Handle this better?
-                    print(
-                        "ContentView: error loading forecast:",
-                        error.localizedDescription
-                    )
+                    Log.error("error loading forecast: \(error)")
                 }
             }
         }
@@ -143,7 +139,7 @@ struct ContentView: View {
             do {
                 appInfo = try await AppInfo.create()
             } catch {
-                print("ContentView: error getting AppInfo:", error)
+                Log.error("error getting AppInfo: \(error)")
             }
         }
     }

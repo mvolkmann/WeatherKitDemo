@@ -126,8 +126,7 @@ extension LocationViewModel: CLLocationManagerDelegate {
                 location
             ) { [weak self] placemarks, error in
                 if let error {
-                    // TODO: Handle this better?
-                    print("LocationViewModel.locationManager: error =", error)
+                    Log.error("error getting reverse geolocation: \(error)")
                 } else if let self {
                     let placemark = placemarks?.first
                     self.currentPlacemark = placemark

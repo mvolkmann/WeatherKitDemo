@@ -97,7 +97,7 @@ struct ContentView: View {
 
         .sheet(isPresented: $isInfoPresented) {
             Info(appInfo: appInfo!)
-                .presentationDetents([.height(400)])
+                .presentationDetents([.height(410)])
                 .presentationDragIndicator(.visible)
         }
 

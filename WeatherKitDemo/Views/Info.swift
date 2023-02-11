@@ -1,16 +1,17 @@
 import SwiftUI
 
 struct Info: View {
-    let appInfo: AppInfo!
+    let appInfo: AppInfo?
 
-    init(appInfo: AppInfo) {
+    init(appInfo: AppInfo?) {
         self.appInfo = appInfo
     }
 
     var body: some View {
         VStack(spacing: 20) {
             if let appInfo {
-                Text(appInfo.name).font(.headline)
+                let title = appInfo.name + " " + appInfo.installedVersion
+                Text(title).font(.headline)
                 // Image("AppIcon") // doesn't work
                 Image(uiImage: UIImage(named: "AppIcon")!) // works
                     .resizable()
@@ -36,7 +37,7 @@ struct Info: View {
             let appReview = AppReview.shared
             if !appReview.haveNewVersion {
                 // This only works on a real device, not in the Simulator.
-                if let appId = appInfo.appId,
+                if let appInfo, let appId = appInfo.appId,
                    let url = appReview.reviewURL(appId: appId) {
                     Link(destination: url) {
                         Text("Write a Review")

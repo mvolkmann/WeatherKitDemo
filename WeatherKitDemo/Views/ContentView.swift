@@ -69,8 +69,7 @@ struct ContentView: View {
                         }
                         if let appInfo {
                             Link(destination: URL(
-                                string: appInfo
-                                    .supportURL
+                                string: appInfo.supportURL
                             )!) {
                                 Image(systemName: "questionmark.circle")
                             }

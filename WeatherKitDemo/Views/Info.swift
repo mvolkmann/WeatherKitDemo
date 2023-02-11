@@ -13,9 +13,11 @@ struct Info: View {
                 let title = appInfo.name + " " + appInfo.installedVersion
                 Text(title).font(.headline)
                 // Image("AppIcon") // doesn't work
-                Image(uiImage: UIImage(named: "AppIcon")!) // works
-                    .resizable()
-                    .frame(width: 100, height: 100)
+                if let uiImage = UIImage(named: "AppIcon") {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .frame(width: 100, height: 100)
+                }
                 Text("Created by R. Mark Volkmann")
             } else {
                 Text("Failed to access AppInfo.")

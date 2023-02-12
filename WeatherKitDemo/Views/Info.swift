@@ -7,14 +7,23 @@ struct Info: View {
         self.appInfo = appInfo
     }
 
+    private var appIcon: UIImage? {
+        guard let infoDict = Bundle.main.infoDictionary,
+              let icons = infoDict["CFBundleIcons"] as? [String: Any],
+              let primaryIcons = icons["CFBundlePrimaryIcon"] as? [String: Any],
+              let iconFiles = primaryIcons["CFBundleIconFiles"] as? [String],
+              let icon = iconFiles.first else { return nil }
+        return UIImage(named: icon)
+    }
+
     var body: some View {
         VStack(spacing: 20) {
             if let appInfo {
                 let title = appInfo.name + " " + appInfo.installedVersion
                 Text(title).font(.headline)
                 // Image("AppIcon") // doesn't work
-                if let uiImage = UIImage(named: "AppIcon") {
-                    Image(uiImage: uiImage)
+                if let appIcon {
+                    Image(uiImage: appIcon)
                         .resizable()
                         .frame(width: 100, height: 100)
                 }

@@ -6,7 +6,6 @@ struct AppInfo {
     var json: [String: Any] = [:]
 
     private init(json: [String: Any]) {
-        // print("json =", json)
         self.json = json
     }
 
@@ -32,6 +31,12 @@ struct AppInfo {
             (json["results"] as? [Any])?.first as? [String: Any] else {
             throw "AppStoreService: JSON missing results"
         }
+
+        // After a new version is released, there seems to be a
+        // delay in the app detecting that from the URL above.
+        // Perhaps users won't see the "Update Available" link
+        // until the next day.
+        // print("AppInfo.create: version =", results["version"])
 
         return Self(json: results)
     }

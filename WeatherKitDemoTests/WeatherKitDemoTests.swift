@@ -13,7 +13,7 @@ final class WeatherKitDemoTests: XCTestCase {
     // so those cannot be directly tested by XCTest.
     func testAppInfo() async throws {
         let appInfo = try! await AppInfo.create()
-        print("appInfo.author =", appInfo.author)
+        // print("appInfo.author =", appInfo.author)
         XCTAssertEqual(appInfo.author, "Richard Mark Volkmann")
     }
 }

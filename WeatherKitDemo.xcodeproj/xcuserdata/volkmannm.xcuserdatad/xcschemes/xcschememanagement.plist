@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>ScreenshotTests.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>WeatherKitDemo.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -12,6 +17,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>1A292E6F299F083A0050AC39</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>1A84528D28D37DA900C28047</key>
 		<dict>
 			<key>primary</key>

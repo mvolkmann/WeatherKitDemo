@@ -1,11 +1,13 @@
 import XCTest
 
-final class WeatherKitDemoUITests: XCTestCase {
-    let waitSeconds = 100.0
+final class ScreenshotTests: XCTestCase {
+    let waitSeconds = 100.0 // waiting for WeatherKit data to be returned
 
     // This method is called before the invocation of each test method.
     override func setUpWithError() throws {
-        XCUIApplication().launch()
+        let app = XCUIApplication()
+        setupSnapshot(app)
+        app.launch()
 
         // It is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
@@ -14,52 +16,37 @@ final class WeatherKitDemoUITests: XCTestCase {
     // This method is called after the invocation of each test method.
     override func tearDownWithError() throws {}
 
-    func testApp() throws {
-        try titleTest()
+    func testScreenshots() throws {
         try forecastScreen()
         try chartScreen()
         try heatMapScreen()
         try currentScreen()
     }
 
-    func titleTest() throws {
-        try textExists("Feather Weather")
-    }
-
     func chartScreen() throws {
         tapTabBarButton(label: "Chart")
-        // Only passes with this wait.
         try textExists(
             "Drag across the chart to see hourly details.",
             wait: waitSeconds
         )
-        try textExists("Temperature")
+        snapshot("3-chart")
     }
 
     func currentScreen() throws {
         tapTabBarButton(label: "Current")
-        // Only passes with this wait.
         try textExists("Condition", wait: waitSeconds)
-        try textExists("Temperature")
-        try textExists("Feels Like")
-        try textExists("Humidity")
-        try textExists("Winds")
-        // "Favorite Locations" is only present if
-        // at least one location has been favorited.
+        snapshot("1-current")
     }
 
     func forecastScreen() throws {
         tapTabBarButton(label: "Forecast")
-        // Only passes with this wait.
         try textExists("Day/Time", wait: waitSeconds)
-        try textExists("Temp")
-        try textExists("Wind")
-        try textExists("Prec")
+        snapshot("2-forecast")
     }
 
     func heatMapScreen() throws {
         tapTabBarButton(label: "Heat Map")
-        // Only passes with this wait.
         try textExists("Today", wait: waitSeconds)
+        snapshot("4-heatmap")
     }
 }

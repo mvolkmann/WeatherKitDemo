@@ -27,3 +27,6 @@ fastlane/test_output
 
 iOSInjectionProject/
 
+WeatherKitDemo.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+WeatherKitDemo.xcodeproj/xcshareddata/
+

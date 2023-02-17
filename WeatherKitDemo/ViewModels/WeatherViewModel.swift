@@ -151,11 +151,20 @@ class WeatherViewModel: NSObject, ObservableObject {
             summary = nil
         }
 
-        // This method is defined in WeatherServiceExtension.swift.
-        let weatherSummary = try await WeatherService.shared.summary(
-            for: location,
-            colorScheme: colorScheme
-        )
+        // This is used to create Data/weather-summary.json
+        // which is used in tests instead of making calls to WeatherKit.
+        // dumpJSON(weatherSummary)
+
+        let path = ProcessInfo.processInfo
+            .environment["XCTestConfigurationFilePath"]
+        let inTest = path != nil
+
+        // The summary method is defined in WeatherServiceExtension.swift.
+        let weatherSummary = inTest ? loadFromJSON() :
+            try await WeatherService.shared.summary(
+                for: location,
+                colorScheme: colorScheme
+            )
 
         Task { @MainActor in
             summary = weatherSummary
@@ -171,5 +180,28 @@ class WeatherViewModel: NSObject, ObservableObject {
 
             timestamp = Date.now
         }
+    }
+
+    // This is used to capture the weather summary as JSON
+    // so it can be used in tests and avoid using WeatherKit.
+    func dumpJSON(_ summary: WeatherSummary) {
+        let encoder = JSONEncoder()
+        do {
+            let encoded = try encoder.encode(summary)
+            if let json = String(data: encoded, encoding: .utf8) {
+                print(json)
+            } else {
+                print("WeatherViewModel.load: failed to encode JSON")
+            }
+        } catch {
+            print("WeatherViewModel.load: failed to save JSON")
+        }
+    }
+
+    func loadFromJSON() -> WeatherSummary {
+        Bundle.main.decode(
+            WeatherSummary.self,
+            from: "weather-summary.json"
+        )
     }
 }

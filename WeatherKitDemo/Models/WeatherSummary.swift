@@ -1,7 +1,7 @@
 import Foundation // for URL
 import WeatherKit
 
-struct WeatherSummary: Equatable {
+struct WeatherSummary: Codable, Equatable {
     let condition: String
     let symbolName: String
     let temperature: Measurement<UnitTemperature>

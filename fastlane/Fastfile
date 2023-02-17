@@ -16,17 +16,27 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Generate localized screenshots"
-  lane :screenshots do
-    capture_screenshots(scheme: "ScreenshotTests")
-    # upload_to_app_store(skip_binary_upload: true, skip_metadata: true)
+
+  desc "Deploy to TestFlight"
+  lane :beta do
+    sync_code_signing(type: "appstore") # see code signing guide for more info
+    build_app(scheme: "WeatherKitDemo")
+    upload_to_testflight
   end
 
+  # This fails and I don't know why.
+  # The same tests pass when run from Xcode.
   desc "Run all tests"
   lane :tests do
     run_tests(
       devices: ["iPhone 14 Pro"],
       scheme: "WeatherKitDemo"
     )
+  end
+
+  desc "Generate localized screenshots"
+  lane :screenshots do
+    capture_screenshots(scheme: "ScreenshotTests")
+    # upload_to_app_store(skip_binary_upload: true, skip_metadata: true)
   end
 end

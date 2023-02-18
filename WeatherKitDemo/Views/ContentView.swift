@@ -32,18 +32,27 @@ struct ContentView: View {
         NavigationStack {
             TabView(selection: $selectedTab) {
                 CurrentScreen(appInfo: appInfo)
-                    .tabItem { Label("Current", systemImage: "clock") }
+                    .tabItem {
+                        Label("Current", systemImage: "clock")
+                            .accessibilityIdentifier("current-tab")
+                    }
                     .tag("current")
                 ForecastScreen()
-                    .tabItem { Label("Forecast", systemImage: "tablecells") }
+                    .tabItem {
+                        Label("Forecast", systemImage: "tablecells")
+                            .accessibilityIdentifier("forecast-tab")
+                    }
                     .tag("forecast")
                 ChartScreen()
-                    .tabItem { Label("Chart", systemImage: "chart.xyaxis.line")
+                    .tabItem {
+                        Label("Chart", systemImage: "chart.xyaxis.line")
+                            .accessibilityIdentifier("chart-tab")
                     }
                     .tag("chart")
                 HeatMapScreen()
                     .tabItem {
                         Label("Heat Map", systemImage: "thermometer.sun")
+                            .accessibilityIdentifier("heat-map-tab")
                     }
                     .tag("heatmap")
             }

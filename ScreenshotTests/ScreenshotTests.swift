@@ -24,29 +24,26 @@ final class ScreenshotTests: XCTestCase {
     }
 
     func chartScreen() throws {
-        tapTabBarButton(label: "Chart")
-        try textExists(
-            "Drag across the chart to see hourly details.",
-            wait: waitSeconds
-        )
+        tapTabBarButton(label: "chart-tab")
+        try textExists("drag-help", wait: waitSeconds)
         snapshot("3-chart")
     }
 
     func currentScreen() throws {
-        tapTabBarButton(label: "Current")
-        try textExists("Condition", wait: waitSeconds)
+        tapTabBarButton(label: "current-tab")
+        try textExists("condition-label", wait: waitSeconds)
         snapshot("1-current")
     }
 
     func forecastScreen() throws {
-        tapTabBarButton(label: "Forecast")
-        try textExists("Day/Time", wait: waitSeconds)
+        tapTabBarButton(label: "forecast-tab")
+        try textExists("day-time-label", wait: waitSeconds)
         snapshot("2-forecast")
     }
 
     func heatMapScreen() throws {
-        tapTabBarButton(label: "Heat Map")
-        try textExists("Today", wait: waitSeconds)
+        tapTabBarButton(label: "heat-map-tab")
+        try textExists("day-label", wait: waitSeconds)
         snapshot("4-heatmap")
     }
 }

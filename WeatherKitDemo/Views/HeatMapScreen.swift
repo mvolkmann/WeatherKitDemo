@@ -139,6 +139,7 @@ struct HeatMapScreen: View {
 
     private func dayLabel(_ day: String) -> some View {
         Text(day.localized)
+            .accessibilityIdentifier("day-label")
             .frame(height: heatMapDaysOnTop ? markHeight * 0.91 : markHeight)
             .rotationEffect(Angle.degrees(-90))
     }

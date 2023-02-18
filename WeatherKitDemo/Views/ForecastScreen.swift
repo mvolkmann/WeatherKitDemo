@@ -52,10 +52,14 @@ struct ForecastScreen: View {
     private var header: some View {
         HStack(spacing: 8) {
             Text("Day/Time").frame(width: dateWidth)
+                .accessibilityIdentifier("day-time-label")
             Text("").frame(width: symbolWidth)
             Text("Temp").frame(width: temperatureWidth)
+                .accessibilityIdentifier("temperature-label")
             Text("Wind").frame(width: windWidth)
+                .accessibilityIdentifier("wind-label")
             Text(isWide ? "Precip" : "Prec")
+                .accessibilityIdentifier("precipitation-label")
                 .frame(width: precipitationWidth)
             Spacer()
         }

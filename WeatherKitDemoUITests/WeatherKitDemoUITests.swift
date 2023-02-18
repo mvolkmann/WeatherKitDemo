@@ -27,39 +27,36 @@ final class WeatherKitDemoUITests: XCTestCase {
     }
 
     func chartScreen() throws {
-        tapTabBarButton(label: "Chart")
+        tapTabBarButton(label: "chart-tab")
         // Only passes with this wait.
-        try textExists(
-            "Drag across the chart to see hourly details.",
-            wait: waitSeconds
-        )
-        try textExists("Temperature")
+        try textExists("drag-help", wait: waitSeconds)
+        try textExists("temperature-label")
     }
 
     func currentScreen() throws {
-        tapTabBarButton(label: "Current")
+        tapTabBarButton(label: "current-tab")
         // Only passes with this wait.
-        try textExists("Condition", wait: waitSeconds)
-        try textExists("Temperature")
-        try textExists("Feels Like")
-        try textExists("Humidity")
-        try textExists("Winds")
+        try textExists("condition-label", wait: waitSeconds)
+        try textExists("temperature-label")
+        try textExists("feels-like-label")
+        try textExists("humidity-label")
+        try textExists("winds-label")
         // "Favorite Locations" is only present if
         // at least one location has been favorited.
     }
 
     func forecastScreen() throws {
-        tapTabBarButton(label: "Forecast")
+        tapTabBarButton(label: "forecast-tab")
         // Only passes with this wait.
-        try textExists("Day/Time", wait: waitSeconds)
-        try textExists("Temp")
-        try textExists("Wind")
-        try textExists("Prec")
+        try textExists("day-time-label", wait: waitSeconds)
+        try textExists("temperature-label")
+        try textExists("wind-label")
+        try textExists("precipitation-label")
     }
 
     func heatMapScreen() throws {
-        tapTabBarButton(label: "Heat Map")
+        tapTabBarButton(label: "heat-map-tab")
         // Only passes with this wait.
-        try textExists("Today", wait: waitSeconds)
+        try textExists("day-label", wait: waitSeconds)
     }
 }

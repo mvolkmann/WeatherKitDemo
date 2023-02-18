@@ -196,8 +196,11 @@ struct CurrentScreen: View {
                     }
                     VStack {
                         LabeledContent("Condition", value: summary.condition)
+                            .accessibilityIdentifier("condition-label")
                         LabeledContent("Temperature", value: formattedActual)
+                            .accessibilityIdentifier("temperature-label")
                         LabeledContent("Feels Like", value: formattedFeelsLike)
+                            .accessibilityIdentifier("feels-like-label")
 
                         let firstForecast = summary.hourlyForecast.first!
                         let humidity = firstForecast.humidity * 100
@@ -205,7 +208,9 @@ struct CurrentScreen: View {
                             "Humidity",
                             value: "\(String(format: "%.0f", humidity))%"
                         )
+                        .accessibilityIdentifier("humidity-label")
                         LabeledContent("Winds", value: summary.wind)
+                            .accessibilityIdentifier("winds-label")
                     }
                 }
             }

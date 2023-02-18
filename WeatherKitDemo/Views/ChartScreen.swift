@@ -46,11 +46,15 @@ struct ChartScreen: View {
             let futureForecast =
                 weatherVM.futureForecast.prefix(chartDays * 24)
             Text("drag-help")
+                .accessibilityIdentifier("drag-help")
                 .font(.subheadline)
                 .padding(.top)
             ZStack(alignment: .top) {
                 HStack {
-                    Text("Temperature").opacity(0.5).padding(.top, 45)
+                    Text("Temperature")
+                        .accessibilityIdentifier("temperature-label")
+                        .opacity(0.5)
+                        .padding(.top, 45)
                     Spacer()
                 }
 

@@ -61,9 +61,13 @@ class LocationViewModel: NSObject, ObservableObject {
     }
 
     var timeZoneDelta: Int {
-        let currentHours = TimeZone.current.hoursFromGMT()
-        let targetHours = timeZone?.hoursFromGMT() ?? 0
-        return targetHours - currentHours
+        #if targetEnvironment(simulator)
+            return 0
+        #else
+            let currentHours = TimeZone.current.hoursFromGMT()
+            let targetHours = timeZone?.hoursFromGMT() ?? 0
+            return targetHours - currentHours
+        #endif
     }
 
     var usingCurrent: Bool {
@@ -122,6 +126,7 @@ extension LocationViewModel: CLLocationManagerDelegate {
         guard currentPlacemark == nil else { return }
 
         if let location = locations.first {
+            print("LocationViewModel: calling reverseGeocodeLocation")
             CLGeocoder().reverseGeocodeLocation(
                 location
             ) { [weak self] placemarks, error in

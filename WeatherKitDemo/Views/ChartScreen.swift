@@ -6,7 +6,6 @@ struct ChartScreen: View {
     @AppStorage("chartDays") private var chartDays = WeatherService.days
     @Environment(\.colorScheme) private var colorScheme
     @State private var selectedDate: Date?
-    @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
 
     private let areaColor = LinearGradient(

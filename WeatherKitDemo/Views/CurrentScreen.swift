@@ -239,7 +239,6 @@ struct CurrentScreen: View {
             do {
                 let placemark = try await LocationService
                     .getPlacemark(from: address)
-                print("CurrentScreen: placemark =", placemark)
                 locationVM.select(placemark: placemark)
                 dismissKeyboard()
             } catch {

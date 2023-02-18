@@ -38,7 +38,7 @@ class WeatherViewModel: NSObject, ObservableObject {
         guard let forecasts = summary?.hourlyForecast, !forecasts.isEmpty else {
             return []
         }
-        let index = forecasts.firstIndex { $0.date >= Date.now } ?? 0
+        let index = forecasts.firstIndex { $0.date >= Date.current } ?? 0
         let count = WeatherService.days * 24
         let fiveDays = forecasts.dropFirst(index).prefix(count)
         return Array(fiveDays)
@@ -79,7 +79,7 @@ class WeatherViewModel: NSObject, ObservableObject {
         // The array summary.hourlyForecast holds
         // forecasts starting at the beginning of the day.
         // Drop the forecasts at the beginning for past hours.
-        let hour = Calendar.current.component(.hour, from: Date.now)
+        let hour = Calendar.current.component(.hour, from: Date.current)
         let forecasts = summary.hourlyForecast.dropFirst(hour + 1)
 
         return Array(forecasts)
@@ -155,16 +155,16 @@ class WeatherViewModel: NSObject, ObservableObject {
         // which is used in tests instead of making calls to WeatherKit.
         // dumpJSON(weatherSummary)
 
-        let path = ProcessInfo.processInfo
-            .environment["XCTestConfigurationFilePath"]
-        let inTest = path != nil
-
-        // The summary method is defined in WeatherServiceExtension.swift.
-        let weatherSummary = inTest ? loadFromJSON() :
-            try await WeatherService.shared.summary(
+        #if targetEnvironment(simulator)
+            print("WeatherViewModel: loading from JSON")
+            let weatherSummary = loadFromJSON()
+        #else
+            print("WeatherViewModel: loading from WeatherKit")
+            let weatherSummary = try await WeatherService.shared.summary(
                 for: location,
                 colorScheme: colorScheme
             )
+        #endif
 
         Task { @MainActor in
             summary = weatherSummary
@@ -178,7 +178,7 @@ class WeatherViewModel: NSObject, ObservableObject {
                 }
             }
 
-            timestamp = Date.now
+            timestamp = Date.current
         }
     }
 

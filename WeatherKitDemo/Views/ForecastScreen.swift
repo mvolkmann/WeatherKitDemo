@@ -40,11 +40,12 @@ struct ForecastScreen: View {
             return []
         }
 
-        let dropCountBegin = forecasts.firstIndex { $0.date > Date.now } ?? 0
+        let dropCountBegin =
+            forecasts.firstIndex { $0.date > Date.current } ?? 0
         let dropCountEnd =
             forecasts.count - dropCountBegin - WeatherService.days * 24
         let result = Array(
-            forecasts.dropFirst(dropCountBegin).dropLast(dropCountEnd)
+            forecasts.dropFirst(dropCountBegin).dropLast(max(0, dropCountEnd))
         )
         return result
     }

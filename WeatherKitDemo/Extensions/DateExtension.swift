@@ -1,6 +1,22 @@
 import Foundation
 
 extension Date {
+    static var current: Date {
+        #if targetEnvironment(simulator)
+            // Use the date/time when the JSON weather data was saved.
+            let components = DateComponents(
+                year: 2023,
+                month: 2,
+                day: 17,
+                hour: 15,
+                minute: 50
+            )
+            return Calendar.current.date(from: components)!
+        #else
+            return Date.now
+        #endif
+    }
+
     // Returns an abbreviated day of the week (ex. Sun).
     var dayOfWeek: String {
         let dateFormatter = DateFormatter()

@@ -234,11 +234,12 @@ struct CurrentScreen: View {
             weatherVM.temperatureUnitSymbol
     }
 
-    private func selectLocation(_ location: String) {
+    private func selectLocation(_ address: String) {
         Task {
             do {
                 let placemark = try await LocationService
-                    .getPlacemark(from: location)
+                    .getPlacemark(from: address)
+                print("CurrentScreen: placemark =", placemark)
                 locationVM.select(placemark: placemark)
                 dismissKeyboard()
             } catch {

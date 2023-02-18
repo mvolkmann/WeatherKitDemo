@@ -43,7 +43,7 @@ final class ScreenshotTests: XCTestCase {
 
     func heatMapScreen() throws {
         tapTabBarButton(label: "heat-map-tab")
-        try textExists("day-label", wait: waitSeconds)
+        try textExists("day-label-0", wait: waitSeconds)
         snapshot("4-heatmap")
     }
 }

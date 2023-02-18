@@ -5,14 +5,6 @@ import WeatherKit
 extension WeatherService {
     static let days = 5
 
-    func hourlyForecast(for location: CLLocation) async -> [HourWeather] {
-        let forecast = try? await weather(
-            for: location,
-            including: .hourly
-        )
-        return forecast?.forecast ?? []
-    }
-
     func summary(
         for location: CLLocation,
         colorScheme _: ColorScheme

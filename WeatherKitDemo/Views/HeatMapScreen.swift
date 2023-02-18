@@ -50,7 +50,9 @@ struct HeatMapScreen: View {
         days[WeatherService.days - 1] = "Today"
 
         return VStack(spacing: 0) {
-            ForEach(days, id: \.self) { day in dayLabel(day) }
+            ForEach(days.indices, id: \.self) { index in
+                dayLabel(index: index, day: days[index])
+            }
         }
     }
 
@@ -137,9 +139,9 @@ struct HeatMapScreen: View {
 
     // MARK: - Methods
 
-    private func dayLabel(_ day: String) -> some View {
+    private func dayLabel(index: Int, day: String) -> some View {
         Text(day.localized)
-            .accessibilityIdentifier("day-label")
+            .accessibilityIdentifier("day-label-\(index)")
             .frame(height: heatMapDaysOnTop ? markHeight * 0.91 : markHeight)
             .rotationEffect(Angle.degrees(-90))
     }

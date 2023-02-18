@@ -57,6 +57,6 @@ final class WeatherKitDemoUITests: XCTestCase {
     func heatMapScreen() throws {
         tapTabBarButton(label: "heat-map-tab")
         // Only passes with this wait.
-        try textExists("day-label", wait: waitSeconds)
+        try textExists("day-label-0", wait: waitSeconds)
     }
 }

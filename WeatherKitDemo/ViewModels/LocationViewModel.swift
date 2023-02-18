@@ -126,7 +126,6 @@ extension LocationViewModel: CLLocationManagerDelegate {
         guard currentPlacemark == nil else { return }
 
         if let location = locations.first {
-            print("LocationViewModel: calling reverseGeocodeLocation")
             CLGeocoder().reverseGeocodeLocation(
                 location
             ) { [weak self] placemarks, error in

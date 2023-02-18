@@ -76,6 +76,7 @@ struct ContentView: View {
                         Button(action: { isInfoPresented = true }) {
                             Image(systemName: "info.circle")
                         }
+                        .accessibilityIdentifier("info-button")
                         if let appInfo {
                             Link(destination: URL(
                                 string: appInfo.supportURL
@@ -98,6 +99,7 @@ struct ContentView: View {
                         }) {
                             Image(systemName: "gear")
                         }
+                        .accessibilityIdentifier("settings-button")
                     }
                 }
             }

@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct Info: View {
+    @Environment(\.dismiss) private var dismiss
+
     let appInfo: AppInfo?
 
     init(appInfo: AppInfo?) {
@@ -16,11 +18,23 @@ struct Info: View {
         return UIImage(named: icon)
     }
 
+    // Used by a UI test to dismiss the sheet that renders this view.
+    private var dismissButton: some View {
+        Button(" ") { dismiss() } // fails if empty string
+            .accessibilityIdentifier("dismiss-button")
+            .frame(width: 2, height: 2) // fails if < 2
+    }
+
     var body: some View {
         VStack(spacing: 20) {
             if let appInfo {
                 let title = appInfo.name + " " + appInfo.installedVersion
-                Text(title).font(.headline)
+                ZStack {
+                    Text(title)
+                        .accessibilityIdentifier("info-title")
+                        .font(.headline)
+                    dismissButton
+                }
                 // Image("AppIcon") // doesn't work
                 if let appIcon {
                     Image(uiImage: appIcon)

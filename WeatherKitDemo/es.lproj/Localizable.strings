@@ -29,6 +29,7 @@
 "relative-help" = "En modo relativo, el azul representa la temperatura más baja durante los próximos cinco días y el rojo representa la temperatura más alta durante los próximos cinco días.";
 "Relative Colors" = "Colores relativos";
 "Sat" = "sáb";
+"Settings" = "Ajustes";
 "Sun" = "dom";
 "Temp" = "La temp";
 "Temperature" = "La temperatura";

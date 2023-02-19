@@ -29,6 +29,7 @@
 "relative-help" = "En mode relatif, le bleu représente la température la plus basse au cours des cinq prochains jours et le rouge représente la température la plus élevée au cours des cinq prochains jours.";
 "Relative Colors" = "Couleurs relatives";
 "Sat" = "sam";
+"Settings" = "Paramètres";
 "Sun" = "dim";
 "Temp" = "Temp";
 "Temperature" = "Température";

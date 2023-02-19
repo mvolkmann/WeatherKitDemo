@@ -53,12 +53,13 @@ final class ScreenshotTests: XCTestCase {
         tapButton(label: "info-button") // opens sheet
         try textExists("info-title", wait: waitSeconds)
         snapshot("1-info")
-        tapButton(label: "dismiss-button")
+        Self.app.staticTexts["info-title"].swipeDown()
     }
 
     func settingsSheet() throws {
         tapButton(label: "settings-button") // opens sheet
+        try textExists("settings-title", wait: waitSeconds)
         snapshot("5-settings")
-        tapButton(label: "dismiss-button")
+        Self.app.staticTexts["settings-title"].swipeDown()
     }
 }

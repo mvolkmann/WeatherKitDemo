@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct Info: View {
+    @Environment(\.dismiss) private var dismiss
+
     let appInfo: AppInfo?
 
     init(appInfo: AppInfo?) {
@@ -16,32 +18,39 @@ struct Info: View {
         return UIImage(named: icon)
     }
 
+    // Used by a UI test to dismiss the sheet that renders this view.
+    private var dismissButton: some View {
+        Button(" ") { dismiss() } // fails if empty string
+            .accessibilityIdentifier("dismiss-button")
+            .frame(width: 2, height: 2) // fails if < 2
+    }
+
     var body: some View {
         VStack(spacing: 20) {
             if let appInfo {
-                let title = appInfo.name + " " + appInfo.installedVersion
-                Text(title)
-                    .accessibilityIdentifier("info-title")
-                    .font(.headline)
+                let title = appInfo.name.localized + " " +
+                    appInfo.installedVersion
+                ZStack {
+                    Text(title)
+                        .accessibilityIdentifier("info-title")
+                        .font(.headline)
+                    dismissButton
+                }
                 // Image("AppIcon") // doesn't work
                 if let appIcon {
                     Image(uiImage: appIcon)
                         .resizable()
                         .frame(width: 100, height: 100)
                 }
-                Text("Created by R. Mark Volkmann")
+                Text("Created by".localized + " R. Mark Volkmann")
             } else {
                 Text("Failed to access AppInfo.")
             }
 
-            Text("""
-            This app was originally created to learn about WeatherKit. \
-            It was then expanded to learn about Swift Charts. \
-            Now it is a useful app, not just a learning exercise.
-            """)
-            .lineLimit(5)
+            Text("why-created")
+                .lineLimit(5)
             Link(
-                "GitHub repository",
+                "GitHub Repository",
                 destination: URL(
                     string: "https://github.com/mvolkmann/WeatherKitDemo"
                 )!

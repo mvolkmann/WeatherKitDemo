@@ -62,7 +62,7 @@ struct Template<Content: View>: View {
                 }
                 .font(.system(size: 16))
                 let tempKind = showFeel ? "feels like" : "actual"
-                Text("showing \(tempKind) temperatures")
+                Text("showing \(tempKind) temperatures".localized)
             }
         }
     }

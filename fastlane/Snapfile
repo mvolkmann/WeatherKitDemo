@@ -3,15 +3,17 @@ devices([
   # "iPhone 14"
   "iPhone 8 Plus",
   "iPhone 11 Pro Max",
-  # "iPhone 13 Pro Max",
+  # "iPhone 13 Pro Max"
   "iPad Pro (12.9-inch) (2nd generation)",
   "iPad Pro (12.9-inch) (6th generation)"
 ])
 
 languages([
-  "en-US", # English USA
-  "fr-FR", # French France
-  "es-ES" # Spanish Spain
+  "en-US", # English - USA
+  "zh-CN", # Chinese Simplified - China
+  "hi-IN", # Hindi - India
+  "es-ES", # Spanish - Spain
+  "fr-FR" # French - France
 ])
 
 # The name of the scheme which contains the UI Tests

@@ -104,6 +104,8 @@
 		1A0D14152988B0250087474E /* ActualFeelToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActualFeelToggle.swift; sourceTree = "<group>"; };
 		1A0D1421298AEDC80087474E /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		1A0D1423298AEE1B0087474E /* ColorToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorToggle.swift; sourceTree = "<group>"; };
+		1A0F9E1729A2660D0004C225 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		1A0F9E1829A266140004C225 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1A17C8B329954A0500A24566 /* CLLocationCoordinate2DExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocationCoordinate2DExtension.swift; sourceTree = "<group>"; };
 		1A292E4C299E929D0050AC39 /* WeatherKitDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherKitDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A292E4E299E929D0050AC39 /* WeatherKitDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherKitDemoTests.swift; sourceTree = "<group>"; };
@@ -191,6 +193,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A0F9E1929A26DE20004C225 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				1A713EBA28F9DFD000AEA66B /* ChartScreen.swift */,
+				1A713EB428F9DCDA00AEA66B /* CurrentScreen.swift */,
+				1A713EBE28FA0A4B00AEA66B /* ForecastScreen.swift */,
+				1A79703528FDE9BC00569E68 /* HeatMapScreen.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
 		1A292E4D299E929D0050AC39 /* WeatherKitDemoTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -274,6 +287,7 @@
 				1AB0621128D64CB100602C7B /* Extensions */,
 				1AB0621628D6571200602C7B /* Models */,
 				1A84529728D37DAA00C28047 /* Preview Content */,
+				1A0F9E1929A26DE20004C225 /* Screens */,
 				1A713EC628FC5C4000AEA66B /* Services */,
 				1AB0620F28D64C1A00602C7B /* ViewModels */,
 				1AB0621028D64C3900602C7B /* Views */,
@@ -303,12 +317,8 @@
 			children = (
 				1A0D14152988B0250087474E /* ActualFeelToggle.swift */,
 				1A6BAC1C2992CE5C00035DE7 /* ChartDaysSlider.swift */,
-				1A713EBA28F9DFD000AEA66B /* ChartScreen.swift */,
 				1A0D1423298AEE1B0087474E /* ColorToggle.swift */,
 				1A84529328D37DA900C28047 /* ContentView.swift */,
-				1A713EB428F9DCDA00AEA66B /* CurrentScreen.swift */,
-				1A713EBE28FA0A4B00AEA66B /* ForecastScreen.swift */,
-				1A79703528FDE9BC00569E68 /* HeatMapScreen.swift */,
 				1A7861C0298D756B009D03F7 /* HeatMapToggle.swift */,
 				1A6BAC16298ECD5200035DE7 /* Info.swift */,
 				1A5A7235297F033A00BC1EC9 /* LottieView.swift */,
@@ -459,6 +469,8 @@
 				Base,
 				fr,
 				es,
+				"zh-Hans",
+				hi,
 			);
 			mainGroup = 1A84528528D37DA900C28047;
 			packageReferences = (
@@ -629,6 +641,8 @@
 				1AB73A90297D8BCC00DCF9A9 /* en */,
 				1AB73A92297D8BD500DCF9A9 /* fr */,
 				1AB73A93297D8BD600DCF9A9 /* es */,
+				1A0F9E1729A2660D0004C225 /* zh-Hans */,
+				1A0F9E1829A266140004C225 /* hi */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -641,7 +655,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 4BG3523GAZ;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
@@ -660,7 +674,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 4BG3523GAZ;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
@@ -678,7 +692,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 4BG3523GAZ;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
@@ -696,7 +710,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 4BG3523GAZ;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
@@ -714,7 +728,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 4BG3523GAZ;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
@@ -732,7 +746,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 4BG3523GAZ;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
@@ -868,7 +882,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = WeatherKitDemo/WeatherKitDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherKitDemo/Preview Content\"";
 				DEVELOPMENT_TEAM = 4BG3523GAZ;
 				ENABLE_PREVIEWS = YES;
@@ -879,18 +893,19 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to get local weather data.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.7;
+				MARKETING_VERSION = 1.4.8;
 				PRODUCT_BUNDLE_IDENTIFIER = "r.mark.volkmann-gmail.com.FeatherWeather";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
@@ -902,7 +917,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = WeatherKitDemo/WeatherKitDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherKitDemo/Preview Content\"";
 				DEVELOPMENT_TEAM = 4BG3523GAZ;
 				ENABLE_PREVIEWS = YES;
@@ -913,18 +928,19 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to get local weather data.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.7;
+				MARKETING_VERSION = 1.4.8;
 				PRODUCT_BUNDLE_IDENTIFIER = "r.mark.volkmann-gmail.com.FeatherWeather";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};

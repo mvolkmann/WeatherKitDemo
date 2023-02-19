@@ -19,8 +19,10 @@ platform :ios do
 
   desc "Deploy to TestFlight"
   lane :beta do
-    sync_code_signing(type: "appstore") # see code signing guide for more info
+    # sync_code_signing(type: "appstore") # see code signing guide for more info
     build_app(scheme: "WeatherKitDemo")
+    # increment_build_number # NOT WORKING!
+    # increment_version_number(bump_type: "patch") # NOT WORKING!
     upload_to_testflight
   end
 

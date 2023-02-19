@@ -3,3 +3,4 @@
 "drag-help" = "Drag across the chart to see hourly details.";
 "relative-help" = "In relative mode, blue represents the lowest temperature over the next five days and red represents the highest temperature over the next five days.";
 "weatherkit-slow" = "WeatherKit is taking longer than usual to return weather data.";
+"why-created" = "This app was originally created to learn about WeatherKit. It was then expanded to learn about Swift Charts. Now it is a useful app, not just a learning exercise.";

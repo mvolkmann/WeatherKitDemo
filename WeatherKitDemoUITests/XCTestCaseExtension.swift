@@ -39,7 +39,7 @@ extension XCTestCase {
     }
 
     /*
-     func labelExists(_ text: String, wait: Double = 0) throws {
+     func labelExists(_ text: String, wait: TimeInterval = 0) throws {
          let element = Self.app.label[text]
          let exists = element.waitForExistence(timeout: wait)
          XCTAssertTrue(exists)
@@ -47,30 +47,25 @@ extension XCTestCase {
      */
 
     // Taps a `Button` with a given label.
-    func tapButton(label: String) {
-        Self.app.buttons[label].tap()
+    func tapButton(label: String, wait: TimeInterval = 0) {
+        let button = Self.app.buttons[label]
+        let exists = button.waitForExistence(timeout: wait)
+        XCTAssertTrue(exists)
+        button.tap()
     }
 
-    func tapTabBarButton(label: String) {
+    func tapTabBarButton(label: String, wait: TimeInterval = 0) {
         let tabBar = Self.app.tabBars.element
         let button = tabBar.buttons[label]
+        let exists = button.waitForExistence(timeout: wait)
+        XCTAssertTrue(exists)
         button.tap()
     }
 
     // Searches for text anywhere on the screen.
-    func textExists(_ text: String) throws {
-        XCTAssertTrue(Self.app.staticTexts[text].exists)
-    }
-
-    func textExists(_ text: String, wait: Double = 0) throws {
+    func textExists(_ text: String, wait: TimeInterval = 0) throws {
         let element = Self.app.staticTexts[text]
         let exists = element.waitForExistence(timeout: wait)
         XCTAssertTrue(exists)
-    }
-
-    // Searches for text in a view with a specific `accessibilityIdentifier`.
-    func textExists(identifier: String, text: String) throws {
-        let actual = Self.app.staticTexts[identifier].label
-        XCTAssertEqual(text, actual)
     }
 }

@@ -4,6 +4,7 @@ import WeatherKit
 
 struct ChartScreen: View {
     @AppStorage("chartDays") private var chartDays = WeatherService.days
+    @AppStorage("showFahrenheit") private var showFahrenheit = false
     @Environment(\.colorScheme) private var colorScheme
     @State private var selectedDate: Date?
     @StateObject private var weatherVM = WeatherViewModel.shared
@@ -38,6 +39,24 @@ struct ChartScreen: View {
         let fillColor: Color = colorScheme == .light ?
             .white : Color(.secondarySystemBackground)
         return fillColor.shadow(.drop(radius: 3))
+    }
+
+    private var temperatureDomain: ClosedRange<Double> {
+        var low = weatherVM.forecastTempMin
+        if !showFahrenheit { low = fToC(low) }
+        var high = weatherVM.forecastTempMax
+        if !showFahrenheit { high = fToC(high) }
+        return min(0, low) ... high
+    }
+
+    private func fToC(_ fahrenheit: Double) -> Double {
+        var measurement =
+            Measurement<UnitTemperature>(
+                value: fahrenheit,
+                unit: .fahrenheit
+            )
+        measurement.convert(to: .celsius)
+        return measurement.value
     }
 
     var body: some View {
@@ -92,9 +111,10 @@ struct ChartScreen: View {
                     }
                 }
                 .padding(.top, 80) // leaves room for top annotation
-                .chartYAxis {
-                    AxisMarks(position: .leading)
-                }
+                .chartYAxis { AxisMarks(position: .leading) }
+                // This fixes the chart jump issue during dragging.
+                // See https://developer.apple.com/forums/thread/724770.
+                .chartYScale(domain: temperatureDomain)
                 .chartOverlay { proxy in chartOverlay(proxy: proxy) }
             }
         }

@@ -59,7 +59,7 @@ final class ScreenshotTests: XCTestCase {
          XCTAssertTrue(element.exists)
          element.swipeDown()
          */
-        tapButton(label: "dismiss-button")
+        tapText(label: "info-title")
     }
 
     func settingsSheet() throws {
@@ -71,6 +71,6 @@ final class ScreenshotTests: XCTestCase {
          XCTAssertTrue(element.exists)
          element.swipeDown()
          */
-        tapButton(label: "dismiss-button")
+        tapText(label: "settings-title")
     }
 }

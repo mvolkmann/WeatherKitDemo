@@ -46,7 +46,6 @@ extension XCTestCase {
      }
      */
 
-    // Taps a `Button` with a given label.
     func tapButton(label: String, wait: TimeInterval = 0) {
         let button = Self.app.buttons[label]
         let exists = button.waitForExistence(timeout: wait)
@@ -60,6 +59,13 @@ extension XCTestCase {
         let exists = button.waitForExistence(timeout: wait)
         XCTAssertTrue(exists)
         button.tap()
+    }
+
+    func tapText(label: String, wait: TimeInterval = 0) {
+        let text = Self.app.staticTexts[label]
+        let exists = text.waitForExistence(timeout: wait)
+        XCTAssertTrue(exists)
+        text.tap()
     }
 
     // Searches for text anywhere on the screen.

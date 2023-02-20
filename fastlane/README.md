@@ -15,6 +15,22 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
+### ios sync_profiles
+
+```sh
+[bundle exec] fastlane ios sync_profiles
+```
+
+Sync profiles
+
+### ios build
+
+```sh
+[bundle exec] fastlane ios build
+```
+
+Create ipa
+
 ### ios beta
 
 ```sh
@@ -38,6 +54,14 @@ Run all tests
 ```
 
 Generate localized screenshots
+
+### ios upload
+
+```sh
+[bundle exec] fastlane ios upload
+```
+
+Upload localized screenshots
 
 ----
 

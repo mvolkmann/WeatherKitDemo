@@ -20,8 +20,8 @@ platform :ios do
   desc "Sync profiles"
   lane :sync_profiles do
     # read-only disables overriding existing profiles.
-    # match({readonly: true, type: "appstore"})
-    match({type: "appstore"})
+    match({readonly: true, type: "appstore"})
+    # match({type: "appstore"})
   end
 
   desc "Create ipa"

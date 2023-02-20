@@ -1,0 +1,15 @@
+scheme("WeatherKitDemo")
+
+# Provide provisioning profiles to use.
+export_options({
+   method: "app-store",
+   provisioningProfiles: {
+     "r.mark.volkmann-gmail.com.FeatherWeather" => "match AppStore r.mark.volkmann-gmail.com.FeatherWeather",
+   }
+})
+
+# Specify the path to store .ipa file.
+output_directory("./fastlane/builds")
+
+include_bitcode(false)
+include_symbols(false)

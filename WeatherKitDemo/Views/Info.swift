@@ -49,12 +49,20 @@ struct Info: View {
 
             Text("why-created")
                 .lineLimit(5)
-            Link(
-                "GitHub Repository",
-                destination: URL(
-                    string: "https://github.com/mvolkmann/WeatherKitDemo"
-                )!
-            )
+
+            HStack {
+                if let summary = WeatherViewModel.shared.summary {
+                    Link(destination: summary.attributionPageURL) {
+                        Text("Data Sources")
+                    }
+                }
+                Link(
+                    "GitHub Repository",
+                    destination: URL(
+                        string: "https://github.com/mvolkmann/WeatherKitDemo"
+                    )!
+                )
+            }
 
             let appReview = AppReview.shared
             if !appReview.haveNewVersion {

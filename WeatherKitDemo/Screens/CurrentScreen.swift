@@ -163,23 +163,14 @@ struct CurrentScreen: View {
 
     @ViewBuilder
     private func attributionLink() -> some View {
-        if let summary = weatherVM.summary {
-            HStack(alignment: .bottom, spacing: 20) {
-                AsyncImage(
-                    url: attributionLogoURL,
-                    content: { image in image.resizable() },
-                    placeholder: { ProgressView() }
-                )
-                .aspectRatio(contentMode: .fit)
-                .opacity(0.3)
-                .frame(height: 20)
-                Link(destination: summary.attributionPageURL) {
-                    Text("Other Data Sources")
-                }
-            }
-        } else {
-            EmptyView()
-        }
+        AsyncImage(
+            url: attributionLogoURL,
+            content: { image in image.resizable() },
+            placeholder: { ProgressView() }
+        )
+        .aspectRatio(contentMode: .fit)
+        .opacity(0.3)
+        .frame(height: 20)
     }
 
     // Cannot return different kinds of views from a computed property.

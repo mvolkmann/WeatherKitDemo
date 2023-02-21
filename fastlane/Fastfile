@@ -16,33 +16,15 @@
 default_platform(:ios)
 
 platform :ios do
-
-  desc "Sync profiles"
-  lane :sync_profiles do
-    # read-only disables overriding existing profiles.
-    match({readonly: true, type: "appstore"})
-    # match({type: "appstore"})
+  desc "Automatically creates a signing certificate and provisioning profile"
+  lane :certs do
+    get_certificates(development: true)
+    get_provisioning_profile(development: true)
   end
 
-  desc "Create ipa"
-  lane :build do
-    sync_profiles
-    increment_build_number
-    gym # creates a signed file
-  end
-
-  desc "Deploy to TestFlight"
-  lane :beta do
-    # sync_code_signing(type: "appstore") # see code signing guide for more info
-    build_app(scheme: "WeatherKitDemo")
-    # increment_build_number # NOT WORKING!
-    # increment_version_number(bump_type: "patch") # NOT WORKING!
-    upload_to_testflight
-  end
-
-  # This fails and I don't know why.
-  # The same tests pass when run from Xcode.
-  desc "Run all tests"
+  desc "Runs all unit and UI tests"
+  # This works despite warnings that say
+  # "deviceType from ... was NULL when -platform called".
   lane :tests do
     run_tests(
       devices: ["iPhone 14 Pro"],
@@ -50,16 +32,44 @@ platform :ios do
     )
   end
 
-  desc "Generate localized screenshots"
+  desc "Generates localized screenshots"
   lane :screenshots do
     capture_screenshots(scheme: "ScreenshotTests")
-    # upload_to_app_store(skip_binary_upload: true, skip_metadata: true)
   end
 
-  desc "Upload localized screenshots"
-  # Need to rename the "hi-IN" directory to "hi"
+  desc "Creates new screenshots from existing ones that have device frames"
+  # The PNG files this produces have sizes that App Store doesn't accept!
+  # See https://github.com/fastlane/fastlane/issues/21067.
+  lane :frames do
+    frame_screenshots(is_complex_framing_mode: true)
+  end
+
+  desc "Uploads localized screenshots to App Store"
+  # I needed to rename the "hi-IN" directory to "hi"
   # and the "zh-CN" directory to "zh-Hans".
   lane :upload do
-    upload_to_app_store(skip_binary_upload: true, skip_metadata: true)
+    # Only uploading screenshots.
+    upload_to_app_store(
+      skip_app_version_update: true,
+      skip_binary_upload: true,
+      skip_metadata: true
+    )
   end
+
+  desc "Builds the app and produces symbol and ipa files."
+  lane :build do
+    build_app
+  end
+
+  desc "Deploys app to TestFlight"
+  # THIS DOES NOT WORK!
+  lane :beta do
+    # increment_build_number # NOT WORKING!
+    # increment_version_number(bump_type: "patch") # NOT WORKING!
+    upload_to_testflight(
+      ipa: './fastlane/builds/WeatherKitDemo.ipa',
+      skip_submission: true
+    )
+  end
+
 end

@@ -15,29 +15,13 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
-### ios sync_profiles
+### ios certs
 
 ```sh
-[bundle exec] fastlane ios sync_profiles
+[bundle exec] fastlane ios certs
 ```
 
-Sync profiles
-
-### ios build
-
-```sh
-[bundle exec] fastlane ios build
-```
-
-Create ipa
-
-### ios beta
-
-```sh
-[bundle exec] fastlane ios beta
-```
-
-Deploy to TestFlight
+Automatically creates a signing certificate and provisioning profile
 
 ### ios tests
 
@@ -45,7 +29,7 @@ Deploy to TestFlight
 [bundle exec] fastlane ios tests
 ```
 
-Run all tests
+Runs all unit and UI tests
 
 ### ios screenshots
 
@@ -53,7 +37,15 @@ Run all tests
 [bundle exec] fastlane ios screenshots
 ```
 
-Generate localized screenshots
+Generates localized screenshots
+
+### ios frames
+
+```sh
+[bundle exec] fastlane ios frames
+```
+
+Creates new screenshots from existing ones that have device frames
 
 ### ios upload
 
@@ -61,7 +53,23 @@ Generate localized screenshots
 [bundle exec] fastlane ios upload
 ```
 
-Upload localized screenshots
+Uploads localized screenshots to App Store
+
+### ios build
+
+```sh
+[bundle exec] fastlane ios build
+```
+
+Builds the app and produces symbol and ipa files.
+
+### ios beta
+
+```sh
+[bundle exec] fastlane ios beta
+```
+
+Deploys app to TestFlight
 
 ----
 

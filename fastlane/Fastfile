@@ -1,34 +1,41 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
-default_platform(:ios)
+default_platform :ios
 
 platform :ios do
-  desc "Automatically creates a signing certificate and provisioning profile"
-  lane :certs do
-    get_certificates(development: true)
-    get_provisioning_profile(development: true)
-  end
 
   desc "Runs all unit and UI tests"
   # This works despite warnings that say
   # "deviceType from ... was NULL when -platform called".
   lane :tests do
     run_tests(
-      devices: ["iPhone 14 Pro"],
+      devices: ["iPhone 8 Plus", "iPhone 13 Pro Max"],
       scheme: "WeatherKitDemo"
+    )
+  end
+
+  desc "Creates a signing certificate and provisioning profile"
+  lane :certs do
+    get_certificates(development: true)
+    get_provisioning_profile(development: true)
+  end
+
+  desc "Builds the app and produces symbol and ipa files."
+  lane :build do
+    build_app
+  end
+
+  desc "Uploads the app to TestFlight"
+  lane :beta do
+    # I prefer to update the Version and Build numbers manually in Xcode.
+    # increment_build_number
+    # increment_version_number(bump_type: "patch")
+    upload_to_testflight(
+      ipa: './fastlane/builds/WeatherKitDemo.ipa',
+      # I prefer to submit manually on the App Store Connect web page
+      # so I can enter a description of what changed in this version.
+      skip_submission: true
     )
   end
 
@@ -38,16 +45,14 @@ platform :ios do
   end
 
   desc "Creates new screenshots from existing ones that have device frames"
-  # The PNG files this produces have sizes that App Store doesn't accept!
-  # See https://github.com/fastlane/fastlane/issues/21067.
   lane :frames do
-    frame_screenshots(is_complex_framing_mode: true)
+    frame_screenshots
   end
 
   desc "Uploads localized screenshots to App Store"
   # I needed to rename the "hi-IN" directory to "hi"
   # and the "zh-CN" directory to "zh-Hans".
-  lane :upload do
+  lane :upload_screenshots do
     # Only uploading screenshots.
     upload_to_app_store(
       skip_app_version_update: true,
@@ -56,20 +61,15 @@ platform :ios do
     )
   end
 
-  desc "Builds the app and produces symbol and ipa files."
-  lane :build do
-    build_app
+  desc "Call Comet"
+  lane :comet do
+    say "Comet, wanna treat?"
   end
+end
 
-  desc "Deploys app to TestFlight"
-  # THIS DOES NOT WORK!
-  lane :beta do
-    # increment_build_number # NOT WORKING!
-    # increment_version_number(bump_type: "patch") # NOT WORKING!
-    upload_to_testflight(
-      ipa: './fastlane/builds/WeatherKitDemo.ipa',
-      skip_submission: true
-    )
-  end
-
+desc "Prints the version and build number"
+lane :version do
+  version = get_version_number
+  build = get_build_number
+  puts "version #{version}, build #{build}"
 end

@@ -31,6 +31,8 @@ struct HeatMapScreen: View {
 
     // MARK: - Properties
 
+    private var currentHour: Int { Date().hour }
+
     private var dayLabels: some View {
         // Create an array of the day abbreviations to appear in the heat map.
         var days: [String] = []
@@ -170,6 +172,7 @@ struct HeatMapScreen: View {
                     let index = axisValue.index
                     let mod = index % 12
                     let hour = mod == 0 ? 12 : mod
+                    let isCurrentHour = index == currentHour
 
                     // This honors the Settings ... General ...
                     // Date & Time ... 24-Hour Time switch.
@@ -178,6 +181,8 @@ struct HeatMapScreen: View {
                         (index == 0 ? "12" : "\(index)") :
                         "\(hour)\n\(index < 12 ? "AM" : "PM")"
                     Text(text)
+                        .fontWeight(isCurrentHour ? .bold : .regular)
+                        .foregroundColor(isCurrentHour ? .blue : .black)
                         .multilineTextAlignment(.center)
                         .frame(
                             width: heatMapDaysOnTop ?
@@ -202,6 +207,7 @@ struct HeatMapScreen: View {
         let measurement = showFeel ?
             forecast.apparentTemperature : forecast.temperature
         let temperature = measurement.converted
+        let isCurrentHour = date.hour == currentHour
 
         return Plot {
             RectangleMark(
@@ -220,6 +226,7 @@ struct HeatMapScreen: View {
                     "\(String(format: "%.0f", temperature))" +
                         weatherVM.temperatureUnitSymbol
                 )
+                .fontWeight(isCurrentHour ? .bold : .regular)
                 .rotationEffect(.degrees(-90))
                 // .font(.body)
                 .font(.system(size: heatMapDaysOnTop ? 13 : 17))

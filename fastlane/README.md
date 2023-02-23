@@ -13,6 +13,17 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
+### version
+
+```sh
+[bundle exec] fastlane version
+```
+
+Prints the version and build number
+
+----
+
+
 ## iOS
 
 ### ios certs
@@ -21,7 +32,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane ios certs
 ```
 
-Automatically creates a signing certificate and provisioning profile
+Creates a signing certificate and provisioning profile
 
 ### ios tests
 
@@ -70,6 +81,14 @@ Builds the app and produces symbol and ipa files.
 ```
 
 Deploys app to TestFlight
+
+### ios comet
+
+```sh
+[bundle exec] fastlane ios comet
+```
+
+Call Comet
 
 ----
 

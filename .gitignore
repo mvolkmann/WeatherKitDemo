@@ -26,6 +26,8 @@ fastlane/screenshots/**/*.png
 fastlane/test_output
 fastlane/AuthKey_*.p8
 fastlane/.env.default
+*.cer
+*.mobileprovision
 
 iOSInjectionProject/
 

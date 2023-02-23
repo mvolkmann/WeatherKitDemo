@@ -26,6 +26,14 @@ Prints the version and build number
 
 ## iOS
 
+### ios tests
+
+```sh
+[bundle exec] fastlane ios tests
+```
+
+Runs all unit and UI tests
+
 ### ios certs
 
 ```sh
@@ -34,13 +42,21 @@ Prints the version and build number
 
 Creates a signing certificate and provisioning profile
 
-### ios tests
+### ios build
 
 ```sh
-[bundle exec] fastlane ios tests
+[bundle exec] fastlane ios build
 ```
 
-Runs all unit and UI tests
+Builds the app and produces symbol and ipa files.
+
+### ios beta
+
+```sh
+[bundle exec] fastlane ios beta
+```
+
+Uploads the app to TestFlight
 
 ### ios screenshots
 
@@ -58,29 +74,21 @@ Generates localized screenshots
 
 Creates new screenshots from existing ones that have device frames
 
-### ios upload
+### ios upload_screenshots
 
 ```sh
-[bundle exec] fastlane ios upload
+[bundle exec] fastlane ios upload_screenshots
 ```
 
 Uploads localized screenshots to App Store
 
-### ios build
+### ios prod
 
 ```sh
-[bundle exec] fastlane ios build
+[bundle exec] fastlane ios prod
 ```
 
-Builds the app and produces symbol and ipa files.
 
-### ios beta
-
-```sh
-[bundle exec] fastlane ios beta
-```
-
-Deploys app to TestFlight
 
 ### ios comet
 

@@ -88,7 +88,7 @@ Uploads localized screenshots to App Store
 [bundle exec] fastlane ios prod
 ```
 
-
+Uploads the app to the App Store
 
 ### ios comet
 

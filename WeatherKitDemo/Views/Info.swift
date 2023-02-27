@@ -23,6 +23,7 @@ struct Info: View {
             if let appInfo {
                 let title = appInfo.name.localized + " " +
                     appInfo.installedVersion
+                // + " " + appInfo.storeVersion
                 Text(title)
                     .accessibilityIdentifier("info-title")
                     .font(.headline)

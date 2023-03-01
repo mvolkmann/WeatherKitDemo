@@ -128,6 +128,12 @@ extension Date {
         Calendar.current.startOfDay(for: self)
     }
 
+    var time: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "h:m a"
+        return dateFormatter.string(from: self)
+    }
+
     var timeZoneOffset: Double {
         let currentSeconds = TimeZone.current.secondsFromGMT(for: self)
         let locationVM = LocationViewModel.shared

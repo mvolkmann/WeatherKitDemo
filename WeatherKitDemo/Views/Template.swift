@@ -142,13 +142,12 @@ struct Template<Content: View>: View {
             .padding(.horizontal)
         }
 
-        // To get old and new values ... add to blog.
-        // .onChange(of: scenePhase) { [scenePhase] newPhase in
         .onChange(of: scenePhase) { _ in
             // This is invoked once for each screen in the app
             // because every screen uses this Template struct.
             // But we only want to process this once.
             guard parent == "current" else { return }
+
             // Check for change from .background to .inactive.
             if lastScenePhase == .background, scenePhase == .inactive {
                 lastScenePhase = scenePhase

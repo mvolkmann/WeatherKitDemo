@@ -202,6 +202,16 @@ struct CurrentScreen: View {
                         .accessibilityIdentifier("humidity-label")
                         LabeledContent("Winds", value: summary.wind)
                             .accessibilityIdentifier("winds-label")
+
+                        if let sunrise = weatherVM.dayWeather?.sun.sunrise {
+                            LabeledContent("Sunrise", value: sunrise.time)
+                                .accessibilityIdentifier("sunrise-label")
+                        }
+
+                        if let sunset = weatherVM.dayWeather?.sun.sunset {
+                            LabeledContent("Sunset", value: sunset.time)
+                                .accessibilityIdentifier("sunset-label")
+                        }
                     }
                 }
             }

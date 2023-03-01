@@ -5,6 +5,11 @@ import WeatherKit
 extension WeatherService {
     static let days = 5
 
+    func dayWeather(for location: CLLocation) async throws -> DayWeather? {
+        let forecast = try await weather(for: location, including: .daily)
+        return forecast.first
+    }
+
     func summary(
         for location: CLLocation,
         colorScheme _: ColorScheme

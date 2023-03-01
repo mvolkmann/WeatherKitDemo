@@ -18,6 +18,8 @@ class WeatherViewModel: NSObject, ObservableObject {
     @Published var dateToTemperatureMap: [Date: Measurement<UnitTemperature>] =
         [:]
 
+    @Published var dayWeather: DayWeather?
+
     // When true a message is displayed that informs the user
     // that WeatherKit is taking longer than usual to return data.
     @Published var isSlow = false
@@ -158,16 +160,22 @@ class WeatherViewModel: NSObject, ObservableObject {
         #if targetEnvironment(simulator)
             print("WeatherViewModel: loading from JSON")
             let weatherSummary = loadFromJSON()
+            let dayWeatherTemp = nil // TODO: Load from JSON.
         #else
             print("WeatherViewModel: loading from WeatherKit")
             let weatherSummary = try await WeatherService.shared.summary(
                 for: location,
                 colorScheme: colorScheme
             )
+
+            let dayWeatherTemp = try await WeatherService.shared.dayWeather(
+                for: location
+            )
         #endif
 
         Task { @MainActor in
             summary = weatherSummary
+            dayWeather = dayWeatherTemp
             isSlow = false
 
             dateToTemperatureMap = [:]

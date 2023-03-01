@@ -203,14 +203,8 @@ struct CurrentScreen: View {
                         LabeledContent("Winds", value: summary.wind)
                             .accessibilityIdentifier("winds-label")
 
-                        if let sunrise = weatherVM.dayWeather?.sun.sunrise {
-                            LabeledContent("Sunrise", value: sunrise.time)
-                                .accessibilityIdentifier("sunrise-label")
-                        }
-
-                        if let sunset = weatherVM.dayWeather?.sun.sunset {
-                            LabeledContent("Sunset", value: sunset.time)
-                                .accessibilityIdentifier("sunset-label")
+                        if let dayWeather = weatherVM.dayWeather {
+                            sunriseSunset(dayWeather: dayWeather)
                         }
                     }
                 }
@@ -251,5 +245,32 @@ struct CurrentScreen: View {
     private func selectPlacemark(_ placemark: CLPlacemark) {
         locationVM.select(placemark: placemark)
         dismissKeyboard()
+    }
+
+    private func sunriseSunset(dayWeather: DayWeather) -> some View {
+        let date = Date.current
+        let currentOffset =
+            TimeZone.current.hoursFromGMT(for: date)
+        let targetOffset =
+            LocationViewModel.shared.timeZone?
+                .hoursFromGMT(for: date) ?? 0
+        let deltaOffset = targetOffset - currentOffset
+
+        return Group {
+            if let sunrise = dayWeather.sun.sunrise {
+                LabeledContent(
+                    "Sunrise",
+                    value: sunrise.hoursAfter(deltaOffset).time
+                )
+                .accessibilityIdentifier("sunrise-label")
+            }
+            if let sunset = dayWeather.sun.sunset {
+                LabeledContent(
+                    "Sunset",
+                    value: sunset.hoursAfter(deltaOffset).time
+                )
+                .accessibilityIdentifier("sunset-label")
+            }
+        }
     }
 }

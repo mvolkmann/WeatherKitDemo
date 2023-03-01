@@ -153,14 +153,10 @@ class WeatherViewModel: NSObject, ObservableObject {
             summary = nil
         }
 
-        // This is used to create Data/weather-summary.json
-        // which is used in tests instead of making calls to WeatherKit.
-        // dumpJSON(weatherSummary)
-
         #if targetEnvironment(simulator)
             print("WeatherViewModel: loading from JSON")
-            let weatherSummary = loadFromJSON()
-            let dayWeatherTemp = nil // TODO: Load from JSON.
+            let weatherSummary = loadWeatherFromJSON()
+            let dayWeatherTemp = loadDayFromJSON()
         #else
             print("WeatherViewModel: loading from WeatherKit")
             let weatherSummary = try await WeatherService.shared.summary(
@@ -172,6 +168,11 @@ class WeatherViewModel: NSObject, ObservableObject {
                 for: location
             )
         #endif
+
+        // This is used to create Data/weather-summary.json
+        // which is used in tests instead of making calls to WeatherKit.
+        // if let dayWeatherTemp { dumpJSON(dayWeatherTemp) }
+        // dumpJSON(weatherSummary)
 
         Task { @MainActor in
             summary = weatherSummary
@@ -190,7 +191,24 @@ class WeatherViewModel: NSObject, ObservableObject {
         }
     }
 
-    // This is used to capture the weather summary as JSON
+    // This is used to capture the DayWeather as JSON
+    // so it can be used in tests and avoid using WeatherKit.
+    func dumpJSON(_ dayWeather: DayWeather) {
+        print("\(#fileID) \(#function) entered")
+        let encoder = JSONEncoder()
+        do {
+            let encoded = try encoder.encode(dayWeather)
+            if let json = String(data: encoded, encoding: .utf8) {
+                print(json)
+            } else {
+                print("WeatherViewModel.dumpJSON: failed to encode JSON")
+            }
+        } catch {
+            print("WeatherViewModel.dumpJSON: failed to save JSON")
+        }
+    }
+
+    // This is used to capture the WeatherSummary as JSON
     // so it can be used in tests and avoid using WeatherKit.
     func dumpJSON(_ summary: WeatherSummary) {
         let encoder = JSONEncoder()
@@ -199,14 +217,21 @@ class WeatherViewModel: NSObject, ObservableObject {
             if let json = String(data: encoded, encoding: .utf8) {
                 print(json)
             } else {
-                print("WeatherViewModel.load: failed to encode JSON")
+                print("WeatherViewModel.dumpJSON: failed to encode JSON")
             }
         } catch {
-            print("WeatherViewModel.load: failed to save JSON")
+            print("WeatherViewModel.dumpJSON: failed to save JSON")
         }
     }
 
-    func loadFromJSON() -> WeatherSummary {
+    func loadDayFromJSON() -> DayWeather {
+        Bundle.main.decode(
+            DayWeather.self,
+            from: "day-weather.json"
+        )
+    }
+
+    func loadWeatherFromJSON() -> WeatherSummary {
         Bundle.main.decode(
             WeatherSummary.self,
             from: "weather-summary.json"

@@ -55,6 +55,7 @@
 		1A713EC328FC3EF900AEA66B /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A713EC228FC3EF900AEA66B /* StringExtension.swift */; };
 		1A713EC528FC4E5700AEA66B /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A713EC428FC4E5700AEA66B /* ViewExtension.swift */; };
 		1A713EC828FC5C5000AEA66B /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A713EC728FC5C5000AEA66B /* LocationService.swift */; };
+		1A71952E29B005DB00B19F88 /* day-weather.json in Resources */ = {isa = PBXBuildFile; fileRef = 1A71952D29B001C700B19F88 /* day-weather.json */; };
 		1A74091529A03096001C14F3 /* BundleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A74091429A03096001C14F3 /* BundleExtension.swift */; };
 		1A74091729A0317E001C14F3 /* weather-summary.json in Resources */ = {isa = PBXBuildFile; fileRef = 1A74091629A0317E001C14F3 /* weather-summary.json */; };
 		1A7861C1298D756B009D03F7 /* HeatMapToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7861C0298D756B009D03F7 /* HeatMapToggle.swift */; };
@@ -135,6 +136,7 @@
 		1A713EC228FC3EF900AEA66B /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		1A713EC428FC4E5700AEA66B /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
 		1A713EC728FC5C5000AEA66B /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		1A71952D29B001C700B19F88 /* day-weather.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "day-weather.json"; sourceTree = "<group>"; };
 		1A74091429A03096001C14F3 /* BundleExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleExtension.swift; sourceTree = "<group>"; };
 		1A74091629A0317E001C14F3 /* weather-summary.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "weather-summary.json"; sourceTree = "<group>"; };
 		1A7861C0298D756B009D03F7 /* HeatMapToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatMapToggle.swift; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 			isa = PBXGroup;
 			children = (
 				1A74091629A0317E001C14F3 /* weather-summary.json */,
+				1A71952D29B001C700B19F88 /* day-weather.json */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -515,6 +518,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A71952E29B005DB00B19F88 /* day-weather.json in Resources */,
 				1A84529928D37DAA00C28047 /* Preview Assets.xcassets in Resources */,
 				1A74091729A0317E001C14F3 /* weather-summary.json in Resources */,
 				1AB73A8F297D8BCC00DCF9A9 /* Localizable.strings in Resources */,
@@ -883,7 +887,7 @@
 				CODE_SIGN_ENTITLEMENTS = WeatherKitDemo/WeatherKitDemo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 31;
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherKitDemo/Preview Content\"";
 				DEVELOPMENT_TEAM = 4BG3523GAZ;
 				ENABLE_PREVIEWS = YES;
@@ -900,7 +904,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.5;
+				MARKETING_VERSION = 1.5.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "r.mark.volkmann-gmail.com.FeatherWeather";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -920,7 +924,7 @@
 				CODE_SIGN_ENTITLEMENTS = WeatherKitDemo/WeatherKitDemo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 31;
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherKitDemo/Preview Content\"";
 				DEVELOPMENT_TEAM = 4BG3523GAZ;
 				ENABLE_PREVIEWS = YES;
@@ -937,7 +941,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.5;
+				MARKETING_VERSION = 1.5.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "r.mark.volkmann-gmail.com.FeatherWeather";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -40,6 +40,8 @@
 "showing actual temperatures" = "显示实际温度";
 "showing feels like temperatures" = "显示感觉像温度";
 "Sun" = "星期日"; // abbreviation for Sunday
+"Sunrise" = "日出";
+"Sunset" = "日落";
 "Temp" = "温度"; // abbreviation for Temperature
 "Temperature" = "温度";
 "Thu" = "星期四"; // abbreviation for Thursday

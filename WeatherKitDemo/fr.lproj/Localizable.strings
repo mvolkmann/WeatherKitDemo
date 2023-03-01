@@ -40,6 +40,8 @@
 "showing actual temperatures" = "montrant les températures réelles";
 "showing feels like temperatures" = "montrant des sensations de température";
 "Sun" = "dim"; // abbreviation for Sunday
+"Sunrise" = "Lever du soleil";
+"Sunset" = "Coucher de soleil";
 "Temp" = "Temp"; // abbreviation for Temperature
 "Temperature" = "Température";
 "Thu" = "jeu"; // abbreviation for Thursday

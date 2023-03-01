@@ -40,6 +40,8 @@
 "showing actual temperatures" = "वास्तविक तापमान दिखा रहा है";
 "showing feels like temperatures" = "दिखाने से तापमान जैसा महसूस होता है";
 "Sun" = "रवि"; // abbreviation for Sunday
+"Sunrise" = "सूर्योदय";
+"Sunset" = "सूर्यास्त";
 "Temp" = "ताप";
 "Temperature" = "तापमान"; // abbreviation for Temperature
 "Thu" = "गुरु"; // abbreviation for Thursday

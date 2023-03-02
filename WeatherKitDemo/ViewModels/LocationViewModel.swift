@@ -60,16 +60,6 @@ class LocationViewModel: NSObject, ObservableObject {
         selectedPlacemark?.timeZone
     }
 
-    var timeZoneDelta: Int {
-        #if targetEnvironment(simulator)
-            return 0
-        #else
-            let currentHours = TimeZone.current.hoursFromGMT()
-            let targetHours = timeZone?.hoursFromGMT() ?? 0
-            return targetHours - currentHours
-        #endif
-    }
-
     var usingCurrent: Bool {
         selectedPlacemark != nil && selectedPlacemark == currentPlacemark
     }

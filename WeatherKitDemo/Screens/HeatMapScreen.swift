@@ -36,7 +36,8 @@ struct HeatMapScreen: View {
     private var dayLabels: some View {
         // Create an array of the day abbreviations to appear in the heat map.
         var days: [String] = []
-        let targetDate = Date.current.hoursAfter(locationVM.timeZoneDelta)
+        let date = Date.current
+        let targetDate = date.hoursAfter(date.timeZoneOffset)
         let startDayNumber = targetDate.dayOfWeekNumber
         let endDayNumber = startDayNumber + WeatherService.days
         for dayNumber in stride(
@@ -203,7 +204,7 @@ struct HeatMapScreen: View {
     // This creates an individual cell in the heat map.
     private func mark(forecast: HourWeather) -> some ChartContent {
         let date = forecast.date
-        let day = date.hoursAfter(locationVM.timeZoneDelta).dayOfWeek
+        let day = date.hoursAfter(date.timeZoneOffset).dayOfWeek
         let measurement = showFeel ?
             forecast.apparentTemperature : forecast.temperature
         let temperature = measurement.converted

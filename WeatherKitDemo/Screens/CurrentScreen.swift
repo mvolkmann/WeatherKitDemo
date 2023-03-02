@@ -248,26 +248,18 @@ struct CurrentScreen: View {
     }
 
     private func sunriseSunset(dayWeather: DayWeather) -> some View {
-        let date = Date.current
-        let currentOffset =
-            TimeZone.current.hoursFromGMT(for: date)
-        let targetOffset =
-            LocationViewModel.shared.timeZone?
-                .hoursFromGMT(for: date) ?? 0
-        let deltaOffset = targetOffset - currentOffset
-
         return Group {
-            if let sunrise = dayWeather.sun.sunrise {
+            if let sunrise = dayWeather.sun.sunrise,
+               let sunset = dayWeather.sun.sunset {
+                let offset = sunrise.timeZoneOffset
                 LabeledContent(
                     "Sunrise",
-                    value: sunrise.hoursAfter(deltaOffset).time
+                    value: sunrise.hoursAfter(offset).time
                 )
                 .accessibilityIdentifier("sunrise-label")
-            }
-            if let sunset = dayWeather.sun.sunset {
                 LabeledContent(
                     "Sunset",
-                    value: sunset.hoursAfter(deltaOffset).time
+                    value: sunset.hoursAfter(offset).time
                 )
                 .accessibilityIdentifier("sunset-label")
             }

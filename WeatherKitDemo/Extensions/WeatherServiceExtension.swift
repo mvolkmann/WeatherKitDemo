@@ -29,12 +29,7 @@ extension WeatherService {
         let timeZone = LocationViewModel.shared.timeZone!
         var startDate = timeZone.date.startOfDay
 
-        let date = Date.current
-        let currentOffset = TimeZone.current.hoursFromGMT(for: date)
-        let targetOffset = LocationViewModel.shared.timeZone?
-            .hoursFromGMT(for: date) ?? 0
-        let deltaOffset = targetOffset - currentOffset
-        startDate = startDate.hoursBefore(deltaOffset)
+        startDate = startDate.hoursBefore(Date.current.timeZoneOffset)
 
         // The +1 ensures we have enough data for Self.days
         // regardless of which hour we start on the first day.

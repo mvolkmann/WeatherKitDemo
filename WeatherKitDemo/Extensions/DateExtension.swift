@@ -134,6 +134,8 @@ extension Date {
         return dateFormatter.string(from: self)
     }
 
+    // Gets the time zone offset of selected location
+    // from current location in hours.
     var timeZoneOffset: Double {
         let currentSeconds = TimeZone.current.secondsFromGMT(for: self)
         let locationVM = LocationViewModel.shared

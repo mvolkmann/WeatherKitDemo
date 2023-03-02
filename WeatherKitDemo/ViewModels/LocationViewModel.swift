@@ -60,13 +60,11 @@ class LocationViewModel: NSObject, ObservableObject {
         selectedPlacemark?.timeZone
     }
 
-    var timeZoneDelta: Int {
+    var timeZoneDelta: Double {
         #if targetEnvironment(simulator)
             return 0
         #else
-            let currentHours = TimeZone.current.hoursFromGMT()
-            let targetHours = timeZone?.hoursFromGMT() ?? 0
-            return targetHours - currentHours
+            return Date.current.timeZoneOffset
         #endif
     }
 

@@ -60,6 +60,7 @@ class LocationViewModel: NSObject, ObservableObject {
         selectedPlacemark?.timeZone
     }
 
+    // TODO: Do you need this?
     var timeZoneDelta: Double {
         #if targetEnvironment(simulator)
             return 0

@@ -1,12 +1,10 @@
 import Foundation
 
 extension TimeZone {
-    // Gets the current date in this time zone.
+    // Gets current date in time zone of selected location.
     var date: Date {
         let date = Date.current
-        let currentOffset = TimeZone.current.hoursFromGMT(for: date)
-        let thisOffset = hoursFromGMT(for: date)
-        return date.hoursAfter(thisOffset - currentOffset)
+        return date.hoursAfter(date.timeZoneOffset)
     }
 
     // Gets the number of hours from GMT to this time zone.

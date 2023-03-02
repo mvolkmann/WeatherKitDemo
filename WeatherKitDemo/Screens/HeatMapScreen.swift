@@ -24,14 +24,10 @@ struct HeatMapScreen: View {
     private static let daysOfWeek =
         ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
-    // private static let gradientColors: [Color] =
-    //     [.blue, .green, .yellow, .orange, .red]
-    // The above looks better than using [.blue, .yellow, .red].
-    // private static let gradient = Gradient(colors: hueColors)
-
-    // MARK: - Properties
-
-    private var currentHour: Int { Date().hour }
+    private var currentHour: Int {
+        let date = Date.current
+        return (date.hour + Int(date.timeZoneOffset)) % 24
+    }
 
     private var dayLabels: some View {
         // Create an array of the day abbreviations to appear in the heat map.
@@ -152,7 +148,7 @@ struct HeatMapScreen: View {
         Chart {
             ForEach(hourlyForecast.reversed().indices, id: \.self) { index in
                 let forecast = hourlyForecast[index]
-                mark(forecast: forecast)
+                mark(hourIndex: index % 24, forecast: forecast)
             }
         }
         .chartForegroundStyleScale(range: weatherVM.gradient)
@@ -201,13 +197,16 @@ struct HeatMapScreen: View {
     }
 
     // This creates an individual cell in the heat map.
-    private func mark(forecast: HourWeather) -> some ChartContent {
+    private func mark(
+        hourIndex: Int,
+        forecast: HourWeather
+    ) -> some ChartContent {
         let date = forecast.date
         let day = date.hoursAfter(locationVM.timeZoneDelta).dayOfWeek
         let measurement = showFeel ?
             forecast.apparentTemperature : forecast.temperature
         let temperature = measurement.converted
-        let isCurrentHour = date.hour == currentHour
+        let isCurrentHour = hourIndex == currentHour
 
         return Plot {
             RectangleMark(

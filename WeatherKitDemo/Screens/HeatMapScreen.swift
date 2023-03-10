@@ -15,6 +15,7 @@ struct HeatMapScreen: View {
     @Environment(
         \.horizontalSizeClass
     ) var horizontalSizeClass: UserInterfaceSizeClass?
+    @State private var currentHour = 0
     @State private var hourlyForecast: [HourWeather] = []
     @StateObject private var locationVM = LocationViewModel.shared
     @StateObject private var weatherVM = WeatherViewModel.shared
@@ -25,11 +26,6 @@ struct HeatMapScreen: View {
         ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
     // MARK: - Methods and Computed Properties
-
-    private var currentHour: Int {
-        let date = Date.current
-        return (date.hour + Int(date.timeZoneOffset)) % 24
-    }
 
     private func dayLabel(index: Int, day: String) -> some View {
         Text(day.localized)
@@ -67,7 +63,7 @@ struct HeatMapScreen: View {
         Chart {
             ForEach(hourlyForecast.reversed().indices, id: \.self) { index in
                 let forecast = hourlyForecast[index]
-                mark(hourIndex: index % 24, forecast: forecast)
+                mark(forecastIndex: index, forecast: forecast)
             }
         }
         .chartForegroundStyleScale(range: weatherVM.gradient)
@@ -144,9 +140,12 @@ struct HeatMapScreen: View {
 
     // This creates an individual cell in the heat map.
     private func mark(
-        hourIndex: Int,
+        forecastIndex: Int,
         forecast: HourWeather
     ) -> some ChartContent {
+        let dayIndex = forecastIndex / 24
+        let hourIndex = forecastIndex % 24
+
         let date = forecast.date
         let day = date.hoursAfter(locationVM.timeZoneDelta).dayOfWeek
         let measurement = showFeel ?
@@ -157,8 +156,8 @@ struct HeatMapScreen: View {
         return Plot {
             RectangleMark(
                 // Why do String values work, but Int values do not?
-                x: PlottableValue.value("Time", "\(date.hour)"),
-                y: PlottableValue.value("Day", day),
+                x: PlottableValue.value("Time", "\(hourIndex)"),
+                y: PlottableValue.value("Day", "\(dayIndex)"),
                 width: .ratio(1),
                 height: .ratio(1)
             )
@@ -208,6 +207,7 @@ struct HeatMapScreen: View {
                     dayLabels
                     ScrollView(.horizontal) {
                         heatMap(hourlyForecast: sortedHourlyForecast)
+                            // heatMap(hourlyForecast: hourlyForecast)
                             // Prevent scrollbar from overlapping legend.
                             .padding(.bottom, heatMapDaysOnTop ? 0 : 10)
                     }
@@ -233,6 +233,9 @@ struct HeatMapScreen: View {
         }
         // Run this closure again every time the selected placemark changes.
         .task(id: weatherVM.summary) {
+            let now = Date.current
+            currentHour = (now.hour + Int(now.timeZoneOffset)) % 24
+
             if let summary = weatherVM.summary {
                 hourlyForecast = summary.hourlyForecast
             }

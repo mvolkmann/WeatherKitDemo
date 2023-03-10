@@ -101,7 +101,7 @@ struct HeatMapScreen: View {
                         .multilineTextAlignment(.center)
                         .frame(
                             width: heatMapDaysOnTop ?
-                                (is24Hour ? 22 : 28) : nil,
+                                (is24Hour ? 22 : 30) : nil,
                             height: heatMapDaysOnTop && is24Hour ? 22 : nil
                         )
                 }

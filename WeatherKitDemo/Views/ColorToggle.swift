@@ -1,5 +1,6 @@
 import SwiftUI
 
+// This is used in the Settings screen to toggle the Heat Map color option.
 struct ColorToggle: View {
     @AppStorage("showAbsoluteColors") private var showAbsoluteColors = false
     @AppStorage("showFahrenheit") private var showFahrenheit = false

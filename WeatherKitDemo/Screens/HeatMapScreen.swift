@@ -24,9 +24,18 @@ struct HeatMapScreen: View {
     private static let daysOfWeek =
         ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
+    // MARK: - Methods and Computed Properties
+
     private var currentHour: Int {
         let date = Date.current
         return (date.hour + Int(date.timeZoneOffset)) % 24
+    }
+
+    private func dayLabel(index: Int, day: String) -> some View {
+        Text(day.localized)
+            .accessibilityIdentifier("day-label-\(index)")
+            .frame(height: heatMapDaysOnTop ? markHeight * 0.91 : markHeight)
+            .rotationEffect(Angle.degrees(-90))
     }
 
     private var dayLabels: some View {
@@ -52,96 +61,6 @@ struct HeatMapScreen: View {
                 dayLabel(index: index, day: days[index])
             }
         }
-    }
-
-    private var heatMapHeight: Double {
-        // TODO: Change 350 to something based on the screen width.
-        let result = heatMapDaysOnTop ? 350 : // markWidth * 24 :
-            // The + 1 is for the x-axis labels and the key.
-            Double(WeatherService.days + 1) * markHeight
-        return result
-    }
-
-    private var heatMapWidth: Double {
-        // TODO: Can this value be calculated instead of using 700?
-        let result = heatMapDaysOnTop ? 700 :
-            // The + 1 is for the x-axis labels and the key.
-            // Double(WeatherService.days + 1) * markHeight :
-            markWidth * 24
-        return result
-    }
-
-    private var helpText: some View {
-        let low = showFahrenheit ? "0℉" : "-17.8℃"
-        let high = showFahrenheit ? "100℉" : "37.8℃"
-        return showAbsoluteColors ?
-            Text("absolute-help \(low) \(high)") :
-            Text("relative-help")
-    }
-
-    private var isWide: Bool { horizontalSizeClass != .compact }
-
-    // This reorders the hourly forecasts so the dates are in reverse order.
-    // It is needed so the bottom row can be for today
-    // and the top row can be for four days later.
-    private var sortedHourlyForecast: [HourWeather] {
-        var sorted: [HourWeather] = []
-        let days = WeatherService.days
-        for index in 0 ..< days {
-            let startIndex = (days - 1 - index) * 24
-            let slice = hourlyForecast[startIndex ..< startIndex + 24]
-            sorted.append(contentsOf: slice)
-        }
-        return sorted
-    }
-
-    var body: some View {
-        Template(parent: "heatmap") {
-            if hourlyForecast.isEmpty {
-                ProgressView()
-            } else {
-                HStack(alignment: .top, spacing: 0) {
-                    dayLabels
-                    ScrollView(.horizontal) {
-                        heatMap(hourlyForecast: sortedHourlyForecast)
-                            // Prevent scrollbar from overlapping legend.
-                            .padding(.bottom, heatMapDaysOnTop ? 0 : 10)
-                    }
-
-                    // TODO: Why does this cause dayLabels to disappear?
-                    // .frame(width: daysOnTop ? 500 : nil)
-
-                    .if(isWide) { view in
-                        view.frame(
-                            width: heatMapWidth,
-                            height: heatMapHeight
-                        )
-                    }
-                }
-                .rotationEffect(
-                    .degrees(heatMapDaysOnTop ? 90 : 0)
-                    // The default anchor value is .center and
-                    // that seems much better than all the other options.
-                )
-                // .offset(y: daysOnTop ? 150 : 0)
-                .padding(.top)
-            }
-        }
-        // Run this closure again every time the selected placemark changes.
-        .task(id: weatherVM.summary) {
-            if let summary = weatherVM.summary {
-                hourlyForecast = summary.hourlyForecast
-            }
-        }
-    }
-
-    // MARK: - Methods
-
-    private func dayLabel(index: Int, day: String) -> some View {
-        Text(day.localized)
-            .accessibilityIdentifier("day-label-\(index)")
-            .frame(height: heatMapDaysOnTop ? markHeight * 0.91 : markHeight)
-            .rotationEffect(Angle.degrees(-90))
     }
 
     private func heatMap(hourlyForecast: [HourWeather]) -> some View {
@@ -182,7 +101,7 @@ struct HeatMapScreen: View {
                         .multilineTextAlignment(.center)
                         .frame(
                             width: heatMapDaysOnTop ?
-                                (is24Hour ? 22 : 27) : nil,
+                                (is24Hour ? 22 : 28) : nil,
                             height: heatMapDaysOnTop && is24Hour ? 22 : nil
                         )
                 }
@@ -195,6 +114,33 @@ struct HeatMapScreen: View {
 
         .frame(width: heatMapWidth, height: heatMapHeight)
     }
+
+    private var heatMapHeight: Double {
+        // TODO: Change 350 to something based on the screen width.
+        let result = heatMapDaysOnTop ? 350 : // markWidth * 24 :
+            // The + 1 is for the x-axis labels and the key.
+            Double(WeatherService.days + 1) * markHeight
+        return result
+    }
+
+    private var heatMapWidth: Double {
+        // TODO: Can this value be calculated instead of using 700?
+        let result = heatMapDaysOnTop ? 700 :
+            // The + 1 is for the x-axis labels and the key.
+            // Double(WeatherService.days + 1) * markHeight :
+            markWidth * 24
+        return result
+    }
+
+    private var helpText: some View {
+        let low = showFahrenheit ? "0℉" : "-17.8℃"
+        let high = showFahrenheit ? "100℉" : "37.8℃"
+        return showAbsoluteColors ?
+            Text("absolute-help \(low) \(high)") :
+            Text("relative-help")
+    }
+
+    private var isWide: Bool { horizontalSizeClass != .compact }
 
     // This creates an individual cell in the heat map.
     private func mark(
@@ -235,5 +181,61 @@ struct HeatMapScreen: View {
         .accessibilityLabel("\(date.md) \(date.h)")
         .accessibilityValue("\(temperature)" + weatherVM.temperatureUnitSymbol)
         .accessibilityHidden(false)
+    }
+
+    // This reorders the hourly forecasts so the dates are in reverse order.
+    // It is needed so the bottom row can be for today
+    // and the top row can be for four days later.
+    private var sortedHourlyForecast: [HourWeather] {
+        var sorted: [HourWeather] = []
+        let days = WeatherService.days
+        for index in 0 ..< days {
+            let startIndex = (days - 1 - index) * 24
+            let slice = hourlyForecast[startIndex ..< startIndex + 24]
+            sorted.append(contentsOf: slice)
+        }
+        return sorted
+    }
+
+    // MARK: - body
+
+    var body: some View {
+        Template(parent: "heatmap") {
+            if hourlyForecast.isEmpty {
+                ProgressView()
+            } else {
+                HStack(alignment: .top, spacing: 0) {
+                    dayLabels
+                    ScrollView(.horizontal) {
+                        heatMap(hourlyForecast: sortedHourlyForecast)
+                            // Prevent scrollbar from overlapping legend.
+                            .padding(.bottom, heatMapDaysOnTop ? 0 : 10)
+                    }
+
+                    // TODO: Why does this cause dayLabels to disappear?
+                    // .frame(width: daysOnTop ? 500 : nil)
+
+                    .if(isWide) { view in
+                        view.frame(
+                            width: heatMapWidth,
+                            height: heatMapHeight
+                        )
+                    }
+                }
+                .rotationEffect(
+                    .degrees(heatMapDaysOnTop ? 90 : 0)
+                    // The default anchor value is .center and
+                    // that seems much better than all the other options.
+                )
+                // .offset(y: daysOnTop ? 150 : 0)
+                .padding(.top)
+            }
+        }
+        // Run this closure again every time the selected placemark changes.
+        .task(id: weatherVM.summary) {
+            if let summary = weatherVM.summary {
+                hourlyForecast = summary.hourlyForecast
+            }
+        }
     }
 }

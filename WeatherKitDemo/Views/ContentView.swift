@@ -177,15 +177,18 @@ struct ContentView: View {
     }
 
     private func customizeNavBar() {
-        let navigationAppearance = UINavigationBarAppearance()
-        navigationAppearance.titleTextAttributes = [
-            .foregroundColor: UIColor.systemBlue,
-            // When the font size is 30 or more, this causes the error
-            // "[LayoutConstraints] Unable to simultaneously
-            // satisfy constraints", but it still works.
-            .font: UIFont.systemFont(ofSize: 24, weight: .bold)
-        ]
-        UINavigationBar.appearance().standardAppearance = navigationAppearance
+        #if os(iOS)
+            let navigationAppearance = UINavigationBarAppearance()
+            navigationAppearance.titleTextAttributes = [
+                .foregroundColor: UIColor.systemBlue,
+                // When the font size is 30 or more, this causes the error
+                // "[LayoutConstraints] Unable to simultaneously
+                // satisfy constraints", but it still works.
+                .font: UIFont.systemFont(ofSize: 24, weight: .bold)
+            ]
+            UINavigationBar.appearance()
+                .standardAppearance = navigationAppearance
+        #endif
     }
 
     private func refreshForecast() {

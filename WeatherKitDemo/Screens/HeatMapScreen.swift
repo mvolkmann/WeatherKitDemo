@@ -97,7 +97,7 @@ struct HeatMapScreen: View {
                         "\(hour)\n\(index < 12 ? "AM" : "PM")"
                     Text(text)
                         .fontWeight(isCurrentHour ? .bold : .regular)
-                        .foregroundColor(isCurrentHour ? .red : .black)
+                        .foregroundColor(isCurrentHour ? .red : .primary)
                         .multilineTextAlignment(.center)
                         .frame(
                             width: heatMapDaysOnTop ?

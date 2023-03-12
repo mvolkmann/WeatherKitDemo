@@ -28,7 +28,10 @@ class LocationViewModel: NSObject, ObservableObject {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.distanceFilter = kCLDistanceFilterNone
         locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
+
+        #if os(iOS)
+            locationManager.startUpdatingLocation()
+        #endif
 
         cancellable = $searchQuery.assign(to: \.queryFragment, on: completer)
         completer.delegate = self

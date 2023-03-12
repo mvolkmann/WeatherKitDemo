@@ -2,7 +2,9 @@ import SwiftUI
 
 @main
 struct WeatherKitDemoApp: App {
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    #if os(iOS)
+        @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    #endif
 
     var body: some Scene {
         WindowGroup {

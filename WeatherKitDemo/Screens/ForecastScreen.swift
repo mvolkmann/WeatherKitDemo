@@ -5,9 +5,12 @@ struct ForecastScreen: View {
     // MARK: - State
 
     @AppStorage("showFeel") private var showFeel = false
-    @Environment(
-        \.horizontalSizeClass
-    ) var horizontalSizeClass: UserInterfaceSizeClass?
+
+    #if os(iOS)
+        @Environment(
+            \.horizontalSizeClass
+        ) var horizontalSizeClass: UserInterfaceSizeClass?
+    #endif
 
     // MARK: - Initializer
 
@@ -69,7 +72,13 @@ struct ForecastScreen: View {
         .padding(.leading)
     }
 
-    private var isWide: Bool { horizontalSizeClass != .compact }
+    private var isWide: Bool {
+        #if os(iOS)
+            horizontalSizeClass != .compact
+        #else
+            true
+        #endif
+    }
 
     private var listWidth: Double {
         let extra = 25.0
@@ -110,7 +119,13 @@ struct ForecastScreen: View {
 
             Text(formatTemperature(forecast: forecast))
                 .dynamicTypeSize(...DynamicTypeSize.medium) // not working!
+
+            #if os(iOS)
                 .foregroundColor(Color(UIColor.systemBackground))
+            #else
+                .foregroundColor(.black)
+            #endif
+
                 .frame(width: temperatureWidth)
                 .padding(.vertical, 5)
                 .background(

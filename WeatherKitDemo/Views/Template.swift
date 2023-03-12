@@ -114,10 +114,12 @@ struct Template<Content: View>: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .pickerStyle(.menu)
-        .onChange(of: selectedLocation) { _ in
-            selectLocation(selectedLocation)
-        }
+        #if os(iOS)
+            .pickerStyle(.menu)
+        #endif
+            .onChange(of: selectedLocation) { _ in
+                selectLocation(selectedLocation)
+            }
     }
 
     var body: some View {

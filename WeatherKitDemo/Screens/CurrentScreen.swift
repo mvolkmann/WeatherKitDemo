@@ -1,5 +1,7 @@
 import CoreLocation
-import CoreLocationUI // for LocationButton
+#if os(iOS)
+    import CoreLocationUI // for LocationButton
+#endif
 import MapKit
 import SwiftUI
 import WeatherKit
@@ -11,9 +13,11 @@ struct CurrentScreen: View {
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
-    @Environment(
-        \.horizontalSizeClass
-    ) var horizontalSizeClass: UserInterfaceSizeClass?
+    #if os(iOS)
+        @Environment(
+            \.horizontalSizeClass
+        ) var horizontalSizeClass: UserInterfaceSizeClass?
+    #endif
 
     @FocusState private var isTextFieldFocused: Bool
 
@@ -37,13 +41,17 @@ struct CurrentScreen: View {
     }
 
     private var currentLocationButton: some View {
-        LocationButton {
-            if let placemark = locationVM.currentPlacemark {
-                selectPlacemark(placemark)
+        #if os(iOS)
+            LocationButton {
+                if let placemark = locationVM.currentPlacemark {
+                    selectPlacemark(placemark)
+                }
             }
-        }
-        .cornerRadius(10)
-        .foregroundColor(.white)
+            .cornerRadius(10)
+            .foregroundColor(.white)
+        #else
+            EmptyView()
+        #endif
     }
 
     private var favoriteLocations: some View {
@@ -79,7 +87,13 @@ struct CurrentScreen: View {
         formatTemperature(weatherVM.summary?.apparentTemperature)
     }
 
-    private var isWide: Bool { horizontalSizeClass != .compact }
+    private var isWide: Bool {
+        #if os(iOS)
+            horizontalSizeClass != .compact
+        #else
+            true
+        #endif
+    }
 
     private var matchedLocations: some View {
         List {
@@ -105,14 +119,16 @@ struct CurrentScreen: View {
                     RoundedRectangle(cornerRadius: 10).fill(.background)
                 )
                 .foregroundColor(.primary)
-            if isTextFieldFocused {
-                Button(action: dismissKeyboard) {
-                    Image(
-                        systemName: "keyboard.chevron.compact.down"
-                    )
+            #if os(iOS)
+                if isTextFieldFocused {
+                    Button(action: dismissKeyboard) {
+                        Image(
+                            systemName: "keyboard.chevron.compact.down"
+                        )
+                    }
+                    .font(.title)
                 }
-                .font(.title)
-            }
+            #endif
         }
         .padding(.top, 10)
     }
@@ -235,7 +251,10 @@ struct CurrentScreen: View {
                 let placemark = try await LocationService
                     .getPlacemark(from: address)
                 locationVM.select(placemark: placemark)
-                dismissKeyboard()
+
+                #if os(iOS)
+                    dismissKeyboard()
+                #endif
             } catch {
                 Log.error("error getting placemark: \(error)")
             }
@@ -244,7 +263,10 @@ struct CurrentScreen: View {
 
     private func selectPlacemark(_ placemark: CLPlacemark) {
         locationVM.select(placemark: placemark)
-        dismissKeyboard()
+
+        #if os(iOS)
+            dismissKeyboard()
+        #endif
     }
 
     private func sunriseSunset(dayWeather: DayWeather) -> some View {

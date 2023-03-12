@@ -14,7 +14,10 @@ struct ContentView: View {
     @Environment(\.openURL) var openURL
 
     // This must be called from inside a view.
-    @Environment(\.requestReview) var requestReview
+
+    #if os(iOS)
+        @Environment(\.requestReview) var requestReview
+    #endif
 
     @State private var appInfo: AppInfo?
     @State private var isInfoPresented = false
@@ -57,52 +60,56 @@ struct ContentView: View {
                     .tag("heatmap")
             }
             .navigationTitle("Feather Weather")
-            .navigationBarTitleDisplayMode(.inline)
-            .onChange(of: selectedTab) { _ in
-                switch selectedTab {
-                case "chart": chartVisits += 1
-                case "current": currentVisits += 1
-                case "forecast": forecastVisits += 1
-                case "heatmap": heatMapVisits += 1
-                default: break
-                }
+            #if os(iOS)
+                .navigationBarTitleDisplayMode(.inline)
+            #endif
+                .onChange(of: selectedTab) { _ in
+                    switch selectedTab {
+                    case "chart": chartVisits += 1
+                    case "current": currentVisits += 1
+                    case "forecast": forecastVisits += 1
+                    case "heatmap": heatMapVisits += 1
+                    default: break
+                    }
 
-                appReview()
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    // Using HStack to reduce space between toolbar items.
-                    HStack(spacing: 0) {
-                        Button(action: { isInfoPresented = true }) {
-                            Image(systemName: "info.circle")
-                        }
-                        .accessibilityIdentifier("info-button")
-                        if let appInfo {
-                            Link(destination: URL(
-                                string: appInfo.supportURL
-                            )!) {
-                                Image(systemName: "questionmark.circle")
+                    appReview()
+                }
+            #if os(iOS)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        // Using HStack to reduce space between toolbar items.
+                        HStack(spacing: 0) {
+                            Button(action: { isInfoPresented = true }) {
+                                Image(systemName: "info.circle")
+                            }
+                            .accessibilityIdentifier("info-button")
+                            if let appInfo {
+                                Link(destination: URL(
+                                    string: appInfo.supportURL
+                                )!) {
+                                    Image(systemName: "questionmark.circle")
+                                }
                             }
                         }
                     }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    // Using HStack to reduce space between toolbar items.
-                    HStack(spacing: 0) {
-                        Button(action: refreshForecast) {
-                            Image(systemName: "arrow.clockwise")
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        // Using HStack to reduce space between toolbar items.
+                        HStack(spacing: 0) {
+                            Button(action: refreshForecast) {
+                                Image(systemName: "arrow.clockwise")
+                            }
+                            Button(action: {
+                                settingsVisits += 1
+                                isSettingsPresented = true
+                                appReview()
+                            }) {
+                                Image(systemName: "gear")
+                            }
+                            .accessibilityIdentifier("settings-button")
                         }
-                        Button(action: {
-                            settingsVisits += 1
-                            isSettingsPresented = true
-                            appReview()
-                        }) {
-                            Image(systemName: "gear")
-                        }
-                        .accessibilityIdentifier("settings-button")
                     }
                 }
-            }
+            #endif
         }
 
         .sheet(isPresented: $isInfoPresented) {
@@ -155,16 +162,18 @@ struct ContentView: View {
     }
 
     private func appReview() {
-        guard AppReview.shared.shouldRequest else { return }
+        #if os(iOS)
+            guard AppReview.shared.shouldRequest else { return }
 
-        Task {
-            // Wait 3 seconds before requesting an app review.
-            try await Task.sleep(
-                until: .now + .seconds(3),
-                clock: .suspending
-            )
-            requestReview()
-        }
+            Task {
+                // Wait 3 seconds before requesting an app review.
+                try await Task.sleep(
+                    until: .now + .seconds(3),
+                    clock: .suspending
+                )
+                requestReview()
+            }
+        #endif
     }
 
     private func customizeNavBar() {

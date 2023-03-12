@@ -36,8 +36,12 @@ struct ChartScreen: View {
     }
 
     private var annotationFill: some ShapeStyle {
-        let fillColor: Color = colorScheme == .light ?
-            .white : Color(.secondarySystemBackground)
+        #if os(iOS)
+            let fillColor: Color = colorScheme == .light ?
+                .white : Color(.secondarySystemBackground)
+        #else
+            let fillColor: Color = .white
+        #endif
         return fillColor.shadow(.drop(radius: 3))
     }
 
@@ -132,12 +136,14 @@ struct ChartScreen: View {
 
     private func chartOverlay(proxy: ChartProxy) -> some View {
         GeometryReader { geometry in // of the overlay view
-            let origin = geometry[proxy.plotAreaFrame].origin
+            #if os(iOS)
+                let origin = geometry[proxy.plotAreaFrame].origin
+            #endif
             Rectangle()
                 .fill(.clear)
                 .contentShape(Rectangle())
 
-                // Handle drag gestures.
+            #if os(iOS)
                 .gesture(
                     DragGesture()
                         .onChanged { value in
@@ -157,6 +163,7 @@ struct ChartScreen: View {
                             selectedDate = nil
                         }
                 )
+            #endif
         }
     }
 }

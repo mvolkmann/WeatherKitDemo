@@ -12,9 +12,13 @@ struct HeatMapScreen: View {
     @AppStorage("showAbsoluteColors") private var showAbsoluteColors = false
     @AppStorage("showFahrenheit") private var showFahrenheit = false
     @AppStorage("showFeel") private var showFeel = false
-    @Environment(
-        \.horizontalSizeClass
-    ) var horizontalSizeClass: UserInterfaceSizeClass?
+
+    #if os(iOS)
+        @Environment(
+            \.horizontalSizeClass
+        ) var horizontalSizeClass: UserInterfaceSizeClass?
+    #endif
+
     @State private var currentHour = 0
     @State private var hourlyForecast: [HourWeather] = []
     @StateObject private var locationVM = LocationViewModel.shared
@@ -136,7 +140,13 @@ struct HeatMapScreen: View {
             Text("relative-help")
     }
 
-    private var isWide: Bool { horizontalSizeClass != .compact }
+    private var isWide: Bool {
+        #if os(iOS)
+            horizontalSizeClass != .compact
+        #else
+            true
+        #endif
+    }
 
     // This creates an individual cell in the heat map.
     private func mark(
@@ -147,7 +157,6 @@ struct HeatMapScreen: View {
         let hourIndex = forecastIndex % 24
 
         let date = forecast.date
-        let day = date.hoursAfter(locationVM.timeZoneDelta).dayOfWeek
         let measurement = showFeel ?
             forecast.apparentTemperature : forecast.temperature
         let temperature = measurement.converted

@@ -4,11 +4,14 @@ import SwiftUI
 // See the "Hacking With Swift" page
 // https://www.hackingwithswift.com/quick-start/swiftui/how-to-detect-device-rotation
 struct DeviceRotationViewModifier: ViewModifier {
-    let action: (UIDeviceOrientation) -> Void
+    #if os(iOS)
+        let action: (UIDeviceOrientation) -> Void
+    #endif
 
     func body(content: Content) -> some View {
         content
             .onAppear()
+        #if os(iOS)
             .onReceive(
                 NotificationCenter.default
                     .publisher(
@@ -17,6 +20,7 @@ struct DeviceRotationViewModifier: ViewModifier {
             ) { _ in
                 action(UIDevice.current.orientation)
             }
+        #endif
     }
 }
 
@@ -50,9 +54,11 @@ extension View {
         }
     }
 
-    func onRotate(
-        perform action: @escaping (UIDeviceOrientation) -> Void
-    ) -> some View {
-        modifier(DeviceRotationViewModifier(action: action))
-    }
+    #if os(iOS)
+        func onRotate(
+            perform action: @escaping (UIDeviceOrientation) -> Void
+        ) -> some View {
+            modifier(DeviceRotationViewModifier(action: action))
+        }
+    #endif
 }

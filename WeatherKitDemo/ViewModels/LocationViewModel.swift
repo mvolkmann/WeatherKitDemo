@@ -9,6 +9,8 @@ import SwiftUI
 class LocationViewModel: NSObject, ObservableObject {
     // MARK: - State
 
+    @EnvironmentObject private var errorVM: ErrorViewModel
+
     @Published var authorized: Bool = false
     @Published var searchLocations: [String] = []
     @Published var currentPlacemark: CLPlacemark?
@@ -31,6 +33,10 @@ class LocationViewModel: NSObject, ObservableObject {
 
         #if os(iOS)
             locationManager.startUpdatingLocation()
+        #endif
+
+        #if os(tvOS)
+            locationManager.requestLocation()
         #endif
 
         cancellable = $searchQuery.assign(to: \.queryFragment, on: completer)
@@ -117,6 +123,16 @@ extension LocationViewModel: CLLocationManagerDelegate {
     ) {
         authorized =
             status == .authorizedAlways || status == .authorizedWhenInUse
+    }
+
+    func locationManager(
+        _ manager: CLLocationManager,
+        didFailWithError error: Error
+    ) {
+        errorVM.alert(
+            error: error,
+            message: "Failed to get location."
+        )
     }
 
     func locationManager(

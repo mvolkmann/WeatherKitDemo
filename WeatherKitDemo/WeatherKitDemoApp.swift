@@ -9,6 +9,7 @@ struct WeatherKitDemoApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(ErrorViewModel())
         }
     }
 }

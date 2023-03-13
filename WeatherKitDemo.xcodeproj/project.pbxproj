@@ -29,6 +29,7 @@
 		1A0F9E1329A158FB0004C225 /* LocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A50CC3128D381CC005B1D36 /* LocationViewModel.swift */; };
 		1A0F9E1429A1590B0004C225 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A713EC728FC5C5000AEA66B /* LocationService.swift */; };
 		1A17C8B429954A0500A24566 /* CLLocationCoordinate2DExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A17C8B329954A0500A24566 /* CLLocationCoordinate2DExtension.swift */; };
+		1A1E8AE729BF80C700BAA531 /* ErrorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1E8AE629BF80C700BAA531 /* ErrorViewModel.swift */; };
 		1A292E4F299E929D0050AC39 /* WeatherKitDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A292E4E299E929D0050AC39 /* WeatherKitDemoTests.swift */; };
 		1A292E56299E9ACE0050AC39 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A713EC228FC3EF900AEA66B /* StringExtension.swift */; };
 		1A292E5E299EA0000050AC39 /* WeatherKitDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A292E5D299EA0000050AC39 /* WeatherKitDemoUITests.swift */; };
@@ -108,6 +109,7 @@
 		1A0F9E1729A2660D0004C225 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		1A0F9E1829A266140004C225 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1A17C8B329954A0500A24566 /* CLLocationCoordinate2DExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocationCoordinate2DExtension.swift; sourceTree = "<group>"; };
+		1A1E8AE629BF80C700BAA531 /* ErrorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViewModel.swift; sourceTree = "<group>"; };
 		1A292E4C299E929D0050AC39 /* WeatherKitDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherKitDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A292E4E299E929D0050AC39 /* WeatherKitDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherKitDemoTests.swift; sourceTree = "<group>"; };
 		1A292E5B299EA0000050AC39 /* WeatherKitDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherKitDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -311,6 +313,7 @@
 			children = (
 				1A50CC3128D381CC005B1D36 /* LocationViewModel.swift */,
 				1A713EB628F9DD4100AEA66B /* WeatherViewModel.swift */,
+				1A1E8AE629BF80C700BAA531 /* ErrorViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -589,6 +592,7 @@
 				1A713EBF28FA0A4B00AEA66B /* ForecastScreen.swift in Sources */,
 				1A713EBB28F9DFD000AEA66B /* ChartScreen.swift in Sources */,
 				1A708AFC2995DB7700A462D8 /* Log.swift in Sources */,
+				1A1E8AE729BF80C700BAA531 /* ErrorViewModel.swift in Sources */,
 				1AB0621528D64E8500602C7B /* ImageExtension.swift in Sources */,
 				1A74091529A03096001C14F3 /* BundleExtension.swift in Sources */,
 				1AB0621828D6572200602C7B /* WeatherSummary.swift in Sources */,
@@ -904,7 +908,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.10;
+				MARKETING_VERSION = 1.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "r.mark.volkmann-gmail.com.FeatherWeather";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -944,7 +948,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.10;
+				MARKETING_VERSION = 1.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "r.mark.volkmann-gmail.com.FeatherWeather";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

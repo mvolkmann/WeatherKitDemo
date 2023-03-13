@@ -9,6 +9,8 @@ struct Template<Content: View>: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.scenePhase) var scenePhase
 
+    @EnvironmentObject private var errorVM: ErrorViewModel
+
     @State private var selectedLocation: String = ""
     @State private var locations: [String] = []
     @State private var isLiked: Bool = false
@@ -204,7 +206,10 @@ struct Template<Content: View>: View {
                     .getPlacemark(from: location)
                 locationVM.select(placemark: placemark)
             } catch {
-                Log.error("error getting placemark: \(error)")
+                errorVM.alert(
+                    error: error,
+                    message: "Failed to get placemark."
+                )
             }
         }
     }

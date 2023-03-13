@@ -14,6 +14,8 @@ class WeatherViewModel: NSObject, ObservableObject {
     @AppStorage("showFeel") private var showFeel = false
     @AppStorage("heatMapDaysOnTop") private var heatMapDaysOnTop = false
 
+    @EnvironmentObject private var errorVM: ErrorViewModel
+
     // This is used by ChartScreen.
     @Published var dateToTemperatureMap: [Date: Measurement<UnitTemperature>] =
         [:]
@@ -204,7 +206,10 @@ class WeatherViewModel: NSObject, ObservableObject {
                 print("WeatherViewModel.dumpJSON: failed to encode JSON")
             }
         } catch {
-            print("WeatherViewModel.dumpJSON: failed to save JSON")
+            errorVM.alert(
+                error: error,
+                message: "Failed to save JSON."
+            )
         }
     }
 
@@ -220,7 +225,10 @@ class WeatherViewModel: NSObject, ObservableObject {
                 print("WeatherViewModel.dumpJSON: failed to encode JSON")
             }
         } catch {
-            print("WeatherViewModel.dumpJSON: failed to save JSON")
+            errorVM.alert(
+                error: error,
+                message: "Failed to save JSON."
+            )
         }
     }
 

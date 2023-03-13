@@ -19,6 +19,8 @@ struct CurrentScreen: View {
         ) var horizontalSizeClass: UserInterfaceSizeClass?
     #endif
 
+    @EnvironmentObject private var errorVM: ErrorViewModel
+
     @FocusState private var isTextFieldFocused: Bool
 
     @StateObject private var locationVM = LocationViewModel.shared
@@ -256,7 +258,10 @@ struct CurrentScreen: View {
                     dismissKeyboard()
                 #endif
             } catch {
-                Log.error("error getting placemark: \(error)")
+                errorVM.alert(
+                    error: error,
+                    message: "Failed to get placemark."
+                )
             }
         }
     }

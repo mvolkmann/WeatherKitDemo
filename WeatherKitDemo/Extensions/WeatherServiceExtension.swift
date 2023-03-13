@@ -26,7 +26,7 @@ extension WeatherService {
 
         // But we want to start at midnight in the timezone
         // of the given location, so we need another weather query.
-        let timeZone = LocationViewModel.shared.timeZone!
+        let timeZone = await LocationViewModel.shared.timeZone!
         var startDate = timeZone.date.startOfDay
 
         startDate = startDate.hoursBefore(Date.current.timeZoneOffset)

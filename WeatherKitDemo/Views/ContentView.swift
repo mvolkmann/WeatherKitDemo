@@ -13,6 +13,8 @@ struct ContentView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.openURL) var openURL
 
+    @EnvironmentObject private var errorVM: ErrorViewModel
+
     // This must be called from inside a view.
 
     #if os(iOS)
@@ -147,7 +149,10 @@ struct ContentView: View {
             } catch {
                 // TODO: Why do we sometimes get a "cancelled" error?
                 if error.localizedDescription != "cancelled" {
-                    Log.error("error loading forecast: \(error)")
+                    errorVM.alert(
+                        error: error,
+                        message: "Failed to load forecast."
+                    )
                 }
             }
         }
@@ -156,7 +161,10 @@ struct ContentView: View {
             do {
                 appInfo = try await AppInfo.create()
             } catch {
-                Log.error("error getting AppInfo: \(error)")
+                errorVM.alert(
+                    error: error,
+                    message: "Failed to get AppInfo."
+                )
             }
         }
     }

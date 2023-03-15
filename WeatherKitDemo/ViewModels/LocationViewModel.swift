@@ -129,10 +129,17 @@ extension LocationViewModel: CLLocationManagerDelegate {
         _ manager: CLLocationManager,
         didFailWithError error: Error
     ) {
-        errorVM.alert(
-            error: error,
-            message: "Failed to get location."
-        )
+        // Sometimes this is called before WeatherKitDemoApp has
+        // created and registered an instance of ErrorViewModel.
+        // When this happens, the call to errorVM.alert causes the app to crash.
+        // So I switched back to just using Log.error for now.
+        /*
+         errorVM.alert(
+             error: error,
+             message: "Failed to get location."
+         )
+         */
+        Log.error("Failed to get location: \(error)")
     }
 
     func locationManager(

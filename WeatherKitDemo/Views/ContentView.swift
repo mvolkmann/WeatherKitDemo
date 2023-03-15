@@ -33,6 +33,116 @@ struct ContentView: View {
         customizeNavBar()
     }
 
+    private func appReview() {
+        #if os(iOS)
+            guard AppReview.shared.shouldRequest else { return }
+
+            Task {
+                // Wait 3 seconds before requesting an app review.
+                try await Task.sleep(
+                    until: .now + .seconds(3),
+                    clock: .suspending
+                )
+                requestReview()
+            }
+        #endif
+    }
+
+    private func coordinateChanged() async {
+        guard let location = locationVM.selectedPlacemark?.location else {
+            return
+        }
+
+        do {
+            try await weatherVM.load(
+                location: location,
+                colorScheme: colorScheme
+            )
+        } catch {
+            // TODO: Why do we sometimes get a "cancelled" error?
+            if error.localizedDescription != "cancelled" {
+                errorVM.alert(
+                    error: error,
+                    message: "Failed to load forecast."
+                )
+            }
+        }
+    }
+
+    private func customizeNavBar() {
+        #if os(iOS)
+            let navigationAppearance = UINavigationBarAppearance()
+            navigationAppearance.titleTextAttributes = [
+                .foregroundColor: UIColor.systemBlue,
+                // When the font size is 30 or more, this causes the error
+                // "[LayoutConstraints] Unable to simultaneously
+                // satisfy constraints", but it still works.
+                .font: UIFont.systemFont(ofSize: 24, weight: .bold)
+            ]
+            UINavigationBar.appearance()
+                .standardAppearance = navigationAppearance
+        #endif
+    }
+
+    private var navBarLeading: some View {
+        // Using HStack to reduce space between toolbar items.
+        HStack(spacing: 0) {
+            Button(action: { isInfoPresented = true }) {
+                Image(systemName: "info.circle")
+            }
+            .accessibilityIdentifier("info-button")
+            if let appInfo {
+                Link(destination: URL(
+                    string: appInfo.supportURL
+                )!) {
+                    Image(systemName: "questionmark.circle")
+                }
+            }
+        }
+    }
+
+    private var navBarTrailing: some View {
+        // Using HStack to reduce space between toolbar items.
+        HStack(spacing: 0) {
+            Button(action: refreshForecast) {
+                Image(systemName: "arrow.clockwise")
+            }
+            Button(action: {
+                settingsVisits += 1
+                isSettingsPresented = true
+                appReview()
+            }) {
+                Image(systemName: "gear")
+            }
+            .accessibilityIdentifier("settings-button")
+        }
+    }
+
+    private func refreshForecast() {
+        guard let location = locationVM.selectedPlacemark?.location else {
+            return
+        }
+
+        Task {
+            try? await weatherVM.load(
+                location: location,
+                colorScheme: colorScheme
+            )
+        }
+    }
+
+    private func tabSelected() {
+        switch selectedTab {
+        case "chart": chartVisits += 1
+        case "current": currentVisits += 1
+        case "forecast": forecastVisits += 1
+        case "heatmap": heatMapVisits += 1
+        default: break
+        }
+
+        appReview()
+    }
+
     var body: some View {
         NavigationStack {
             TabView(selection: $selectedTab) {
@@ -65,50 +175,14 @@ struct ContentView: View {
             #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
             #endif
-                .onChange(of: selectedTab) { _ in
-                    switch selectedTab {
-                    case "chart": chartVisits += 1
-                    case "current": currentVisits += 1
-                    case "forecast": forecastVisits += 1
-                    case "heatmap": heatMapVisits += 1
-                    default: break
-                    }
-
-                    appReview()
-                }
+                .onChange(of: selectedTab) { _ in tabSelected() }
             #if os(iOS)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        // Using HStack to reduce space between toolbar items.
-                        HStack(spacing: 0) {
-                            Button(action: { isInfoPresented = true }) {
-                                Image(systemName: "info.circle")
-                            }
-                            .accessibilityIdentifier("info-button")
-                            if let appInfo {
-                                Link(destination: URL(
-                                    string: appInfo.supportURL
-                                )!) {
-                                    Image(systemName: "questionmark.circle")
-                                }
-                            }
-                        }
+                        navBarLeading
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        // Using HStack to reduce space between toolbar items.
-                        HStack(spacing: 0) {
-                            Button(action: refreshForecast) {
-                                Image(systemName: "arrow.clockwise")
-                            }
-                            Button(action: {
-                                settingsVisits += 1
-                                isSettingsPresented = true
-                                appReview()
-                            }) {
-                                Image(systemName: "gear")
-                            }
-                            .accessibilityIdentifier("settings-button")
-                        }
+                        navBarTrailing
                     }
                 }
             #endif
@@ -144,24 +218,7 @@ struct ContentView: View {
             id: locationVM.selectedPlacemark?.location?.coordinate,
             priority: .background
         ) {
-            guard let location = locationVM.selectedPlacemark?.location else {
-                return
-            }
-
-            do {
-                try await weatherVM.load(
-                    location: location,
-                    colorScheme: colorScheme
-                )
-            } catch {
-                // TODO: Why do we sometimes get a "cancelled" error?
-                if error.localizedDescription != "cancelled" {
-                    errorVM.alert(
-                        error: error,
-                        message: "Failed to load forecast."
-                    )
-                }
-            }
+            await coordinateChanged()
         }
 
         .task {
@@ -173,49 +230,6 @@ struct ContentView: View {
                     message: "Failed to get AppInfo."
                 )
             }
-        }
-    }
-
-    private func appReview() {
-        #if os(iOS)
-            guard AppReview.shared.shouldRequest else { return }
-
-            Task {
-                // Wait 3 seconds before requesting an app review.
-                try await Task.sleep(
-                    until: .now + .seconds(3),
-                    clock: .suspending
-                )
-                requestReview()
-            }
-        #endif
-    }
-
-    private func customizeNavBar() {
-        #if os(iOS)
-            let navigationAppearance = UINavigationBarAppearance()
-            navigationAppearance.titleTextAttributes = [
-                .foregroundColor: UIColor.systemBlue,
-                // When the font size is 30 or more, this causes the error
-                // "[LayoutConstraints] Unable to simultaneously
-                // satisfy constraints", but it still works.
-                .font: UIFont.systemFont(ofSize: 24, weight: .bold)
-            ]
-            UINavigationBar.appearance()
-                .standardAppearance = navigationAppearance
-        #endif
-    }
-
-    private func refreshForecast() {
-        guard let location = locationVM.selectedPlacemark?.location else {
-            return
-        }
-
-        Task {
-            try? await weatherVM.load(
-                location: location,
-                colorScheme: colorScheme
-            )
         }
     }
 }
